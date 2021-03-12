@@ -1,0 +1,53 @@
+[alias]
+  ### ALIAS MANAGEMENT ###
+
+  # Show our defined alias list
+  aliases = "!git config --get-regexp '^alias\\.' | cut -c 7- | sed 's/ / = /'"
+
+  ### LOOKUP ALIASES ###
+
+  # whois: given a string for an author, try to figure out full name and email:
+  whois = "!sh -c 'git log --regexp-ignore-case -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+
+  # Given any git object, try to show it briefly
+  whatis = show --no-patch --pretty='tformat:%h (%s, %ad)' --date=short
+
+  # Show who contributed with summarized changes
+  who = shortlog --summary --
+
+  # Show who contributed, in descending order by number of commits
+  whorank = shortlog --summary --numbered --no-merges
+
+  ### WORKFLOW ALIASES ###
+
+  # Discard changes in a (list of) file(s) in working tree
+  discard = checkout --
+
+  # Clean and discard changes and untracked files in working tree
+  cleanout = !git clean -df && git checkout -- .
+
+  # Publish the current branch by pushing it to the remote "origin",
+  # and setting the current branch to track the upstream branch.
+  publish = !"git push --set-upstream origin $(git branch-name)"
+
+  # Unpublish the current branch by deleting the
+  # remote version of the current branch.
+  unpublish = !"git push origin :$(git branch-name)"
+
+  uncommit = reset --soft HEAD~1
+  unadd = reset HEAD
+
+  ### SHELL SCRIPTING ALIASES ###
+
+  # Get the top level directory name
+  top-name = rev-parse --show-toplevel
+
+  # Get the current branch name
+  branch-name = rev-parse --abbrev-ref HEAD
+
+  # Get the upstream branch name
+  upstream-name = !git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)
+
+  # Execute shell scripts. Git always runs scripts in the top directory.
+  # For example "git exec pwd" will always show you the top directory.
+  exec = ! exec
