@@ -1,0 +1,17 @@
+# Create media Tab
+new_tab media
+layout tall
+# Create a window
+launch
+
+# Create dev Tab
+new_tab dev
+focus
+layout tall
+# Create a window
+cd ~/private/dev/Personal Website/eckertalex.dev
+launch
+
+# Create a window
+cd ~/private/dev/Personal Website/eckertalex.dev
+launch
