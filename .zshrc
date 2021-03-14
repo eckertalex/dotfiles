@@ -123,7 +123,7 @@ DEFAULT_USER=`whoami`
 
 . $(brew --prefix)/etc/profile.d/z.sh
 
-eval "$(fnm env --multi)"
+eval "$(fnm env)"
 
 eval $(thefuck --alias)
 
