@@ -121,11 +121,18 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 # https://github.com/bhilburn/powerlevel9k/blob/next/segments/context/README.md
 DEFAULT_USER=`whoami`
 
-. $(brew --prefix)/etc/profile.d/z.sh
-
-eval "$(fnm env)"
+source ~/.common_profile
+export BASH_ENV='~/.bashenv'
 
 eval $(thefuck --alias)
+
+source $ZSH_CUSTOM/plugins/zsh-z/zsh-z.plugin.zsh
+
+# fnm
+export PATH=/home/lex/.fnm:$PATH
+eval "`fnm env`"
+
+zstyle ':completion:*' menu select
 
 autoload -Uz compinit
 compinit
