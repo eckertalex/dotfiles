@@ -128,6 +128,11 @@ if [ "$system_type" = "Darwin" ]; then
     export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 fi
 
+if type rg &> /dev/null; then
+    export FZF_DEFAULT_COMMAND='rg --files'
+    export FZF_DEFAULT_OPTS='-m --height 50% --border'
+fi
+
 source ~/.common_profile
 export BASH_ENV='~/.bashenv'
 
@@ -148,3 +153,5 @@ compinit
 
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
