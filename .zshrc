@@ -121,6 +121,12 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 # https://github.com/bhilburn/powerlevel9k/blob/next/segments/context/README.md
 DEFAULT_USER=`whoami`
 
+system_type=$(uname -s)
+if [ "$system_type" = "Darwin" ]; then
+    export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+fi
+
+
 source ~/.common_profile
 export BASH_ENV='~/.bashenv'
 
