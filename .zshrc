@@ -64,6 +64,8 @@ ZSH_THEME="spaceship"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 VSCODE=code-insiders
+export EDITOR=$VSCODE
+export VISUAL=vim
 
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
