@@ -126,13 +126,14 @@ if [ "$system_type" = "Darwin" ]; then
     export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 fi
 
-
 source ~/.common_profile
 export BASH_ENV='~/.bashenv'
 
 eval $(thefuck --alias)
 
 source $ZSH_CUSTOM/plugins/zsh-z/zsh-z.plugin.zsh
+
+alias rm=trash
 
 # fnm
 export PATH=/home/lex/.fnm:$PATH
