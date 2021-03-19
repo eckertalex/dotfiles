@@ -57,7 +57,9 @@ colorscheme night-owl
 let g:lightline = { 'colorscheme': 'nightowl' }
 
 " FZF
+nnoremap <silent> <Leader>o :Files ~<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <C-p> :GFiles<CR>
 nnoremap <silent> <C-f> :Files<CR>
 nnoremap <silent> <Leader>f :Rg<CR>
 nnoremap <silent> <Leader>/ :BLines<CR>

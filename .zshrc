@@ -128,10 +128,9 @@ if [ "$system_type" = "Darwin" ]; then
     export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 fi
 
-if type rg &> /dev/null; then
-    export FZF_DEFAULT_COMMAND='rg --files'
-    export FZF_DEFAULT_OPTS='-m --height 50% --border'
-fi
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_DEFAULT_OPTS='-m --height 50% --border --reverse --preview "bat {}"'
+alias nvimi='nvim $(fzf)'
 
 source ~/.common_profile
 export BASH_ENV='~/.bashenv'
