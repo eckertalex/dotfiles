@@ -1,0 +1,92 @@
+/*
+ * author: Alexander Eckert <https://github.com/eckertalex>
+ *
+ * Check http://doc.qt.io/qt-5/stylesheet-syntax.html especially the subtopics:
+ * The Style Sheet Syntax (http://doc.qt.io/qt-5/stylesheet-syntax.html)
+ * Qt Style Sheets Reference (http://doc.qt.io/qt-5/stylesheet-reference.html)
+ *
+ * Install:
+ * sudo cp ~/.config/albert/themes/NightOwl.qss /usr/share/albert/org.albert.frontend.widgetboxmodel/themes/NightOwl.qss
+ */
+
+* {
+    border: none;
+    color : #C792EA;
+    background-color: #011627;
+}
+
+#frame {
+    padding: 6px 0px;
+    border-radius: 8px;
+    background-color: #011627;
+    min-width:640px;
+    max-width:640px;
+}
+
+#inputLine {
+    padding: 0px 8px;
+    font-size: 36px;
+    selection-color: #C792EA;
+    selection-background-color: #0B2841;
+    background-color: transparent;
+}
+
+#settingsButton {
+    margin: 6px 6px 0px 0px;
+    color: #084D81;
+    background-color: transparent;
+    padding: 2px;
+    min-width:14px;
+    min-height:14px;
+    max-width:14px;
+    max-height:14px;
+}
+
+/********** ListViews ************/
+
+QListView {
+    background: transparent;
+    selection-color: #ADDB67;
+    color: #7FDBCA
+}
+
+QListView::item:selected {
+    background: #0B2841;
+}
+
+QListView QScrollBar:vertical  {
+    width: 3px;
+    background: transparent;
+}
+
+QListView QScrollBar::handle:vertical  {
+    background: #084D81;
+    border-radius: 1px;
+    min-height: 24px;
+}
+
+QListView QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+QListView QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical,
+QListView QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    border: 0px;
+    width: 0px;
+    height: 0px;
+    background: transparent;
+}
+
+/********** resultsList **********/
+
+QListView#resultsList {
+    icon-size: 40px;
+    font-size: 24px;
+}
+
+QListView#resultsList::item{
+    padding: 8px 0px 0px 0px;
+}
+
+/********** actionList **********/
+
+QListView#actionList {
+    font-size: 20px;
+}
