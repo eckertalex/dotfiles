@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="spaceship"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -65,8 +65,7 @@ ZSH_THEME="spaceship"
 
 VSCODE=code-insiders
 export EDITOR=$VSCODE
-export VISUAL=vim
-
+export VISUAL=nvim
 # Which plugins would you like to load?
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -85,7 +84,6 @@ plugins=(
     zsh-syntax-highlighting
     you-should-use
     thefuck
-    themes
     vscode
     wd
 )
@@ -126,6 +124,8 @@ DEFAULT_USER=`whoami`
 system_type=$(uname -s)
 if [ "$system_type" = "Darwin" ]; then
     export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+elif [ "$system_type" = "Linux" ]; then
+    export BROWSER=/usr/bin/firefox-developer-edition
 fi
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
@@ -144,6 +144,9 @@ alias rm=trash
 # fnm
 export PATH=/home/lex/.fnm:$PATH
 eval "`fnm env`"
+
+# Starship
+eval "$(starship init zsh)"
 
 zstyle ':completion:*' menu select
 
