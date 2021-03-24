@@ -1,0 +1,91 @@
+#!/bin/sh
+
+system_type=$(uname -s)
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installing oh-my-zsh"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+  echo "Installing plugin zsh-aliases-exa"
+  git clone https://github.com/DarringTisdale/zsh-aliases-exa ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-aliases-exa
+
+  echo "Installing plugin you-should-use"
+  git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/you-should-use
+
+  echo "Installing plugin zsh-autosuggestions"
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-autosuggestions
+
+  echo "Installing plugin zsh-completions"
+  git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-completions
+
+  echo "Installing plugin zsh-syntax-highlighting"
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-syntax-highlighting
+
+  echo "Installing plugin zsh-z"
+  git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-z
+fi
+
+if [ "$system_type"="Darwin" ]; then
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  if ! command -v yadm >/dev/null 2>&1; then
+    echo "Installing YADM"
+    brew install yadm
+  fi
+
+  if [ ! -d "$HOME/.config/yadm" ] ; then
+  echo "Cloning dotfiles"
+  yadm clone https://github.com/eckertalex/dotfiles.git
+  fi
+
+  if [ -f "$HOME/.Brewfile" ]; then
+    echo "Updating homebrew bundle"
+    brew upgrade
+    brew bundle --global
+  fi
+
+  if [ -f "$HOME/.macos" ]; then
+    ./.macos
+  fi
+fi
+
+echo "Decrypt dotfiles"
+yadm decrypt
+
+echo "Updating the yadm repo origin URL to use SSH"
+yadm remote set-url origin "git@github.com:eckertalex/dotfiles.git"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "Installing Node.js LTS"
+  fnm install --lts
+fi
+
+if ! command -v trash >/dev/null 2>&1; then
+  echo "Installing trash-cli"
+  npm install --global trash-cli
+fi
+
+if [ ! -d "$HOME/.cache/dein" ]; then
+  echo "Installing Dein Plugin Manager"
+  curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+  sh ./installer.sh ~/.cache/dein
+if
+
+echo "Installing dein plugins"
+nvim '+:call dein#install()'
+
+echo "Installing neovim for node"
+npm install --global neovim
+
+if [ "$system_type"="Darwin" ]; then
+  echo "Installing neovim for python2 and python3"
+  python2 -m ensurepip --user --default-pip
+  python2 -m pip install --user --upgrade pip
+  python2 -m pip install --user --upgrade neovim
+  python3 -m pip install --user --upgrade neovim
+fi
+
+echo "Done!"
