@@ -1,0 +1,16 @@
+{
+  "pro": false,
+  "community": true,
+  "node": "~/.fnm/node-versions/v14.16.0/installation/bin/node",
+  "plugins": ["jsdom-quokka-plugin"],
+  "jsdom": {
+    "userAgent": "quokka.js",
+    "html": "<html><head></head><body><div id=\"root\"></div></body></html>",
+    "config": {
+      "pretendToBeVisual": true,
+      "runScripts": "dangerously",
+      "url": "http://localhost/"
+    }
+  }
+}
+
