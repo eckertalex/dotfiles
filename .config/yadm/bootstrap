@@ -21,8 +21,8 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing plugin zsh-syntax-highlighting"
   git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-syntax-highlighting
 
-  echo "Installing plugin zsh-z"
-  git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-z
+  echo "Installing plugin timewarrior"
+  git clone https://github.com/svenXY/timewarrior ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/timewarrior
 fi
 
 if [ "$system_type"="Darwin" ]; then
@@ -92,6 +92,11 @@ if [ "$system_type"="Darwin"]; then
   echo "Install dependencies for ranger"
   python -m pip install Pillow
   python -m pip install chardet
+fi
+
+if [ "$system_type"="Darwin"]; then
+  cp ~/.timewarrior/themes/night_owl.theme /usr/local/share/doc/timew/doc/themes/
+  cp ~/.timewarrior/holidays/holidays.de-DE /usr/local/share/doc/timew/doc/holidays/
 fi
 
 echo "Done!"

@@ -86,6 +86,7 @@ plugins=(
     git
     npm
     ripgrep
+    timewarrior
     vscode
     you-should-use
     z

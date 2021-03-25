@@ -1,0 +1,43 @@
+# MacOS:
+# cp ~/.timewarrior/holidays/holidays.de-DE /usr/local/share/doc/timew/doc/holidays/
+
+define holidays:
+  de-DE:
+    2021_01_01 = Neujahr
+    2021_01_06 = Heilige drei Könige
+    2021_04_02 = Karfreitag
+    2021_04_05 = Ostermontag
+    2021_05_01 = Tag der Arbeit
+    2021_05_13 = Christi Himmelfahrt
+    2021_05_24 = Pfingstmontag
+    2021_06_03 = Fronleichnam
+    2021_10_03 = Tag der Deutschen Einheit
+    2021_11_01 = Allerheiligen
+    2021_12_25 = Weihnachtstag
+    2021_12_26 = Zweiter Weihnachtstag
+
+    2022_01_01 = Neujahr
+    2022_01_06 = Heilige drei Könige
+    2022_04_15 = Karfreitag
+    2022_04_18 = Ostermontag
+    2022_05_01 = Tag der Arbeit
+    2022_05_26 = Christi Himmelfahrt
+    2022_06_06 = Pfingstmontag
+    2022_06_16 = Fronleichnam
+    2022_10_03 = Tag der Deutschen Einheit
+    2022_11_01 = Allerheiligen
+    2022_12_25 = Weihnachtstag
+    2022_12_26 = Zweiter Weihnachtstag
+
+    2023_01_01 = Neujahr
+    2023_01_06 = Heilige drei Könige
+    2023_04_07 = Karfreitag
+    2023_04_10 = Ostermontag
+    2023_05_01 = Tag der Arbeit
+    2023_05_18 = Christi Himmelfahrt
+    2023_05_29 = Pfingstmontag
+    2023_06_08 = Fronleichnam
+    2023_10_03 = Tag der Deutschen Einheit
+    2023_11_01 = Allerheiligen
+    2023_12_25 = Weihnachtstag
+    2023_12_26 = Zweiter Weihnachtstag
