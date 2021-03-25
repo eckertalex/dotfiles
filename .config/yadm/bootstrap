@@ -88,4 +88,10 @@ if [ "$system_type"="Darwin" ]; then
   python3 -m pip install --user --upgrade neovim
 fi
 
+if [ "$system_type"="Darwin"]; then
+  echo "Install dependencies for ranger"
+  python -m pip install Pillow
+  python -m pip install chardet
+fi
+
 echo "Done!"
