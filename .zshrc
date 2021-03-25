@@ -75,24 +75,26 @@ export VISUAL=nvim
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+    brew
+    colored-man-pages
+    command-not-found
+    common-aliases
+    docker
+    docker-compose
+    fd
+    fzf
     git
     npm
-    colored-man-pages
-    colorize
-    common-aliases
-    history-substring-search
-    zsh-aliases-exa
-    zsh-completions
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    you-should-use
-    thefuck
+    ripgrep
     vscode
-    wd
+    you-should-use
+    z
+    zsh-aliases-exa
+    zsh-autosuggestions
+    zsh-completions
+    zsh-syntax-highlighting
 )
 
-ZSH_DISABLE_COMPFIX=true
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -120,23 +122,27 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-
 system_type=$(uname -s)
 if [ "$system_type" = "Darwin" ]; then
     export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 fi
 
+# for docker plugin
+zstyle ':completion:*:*:docker:*' option-stacking yes
+zstyle ':completion:*:*:docker-*:*' option-stacking yes
+
+# FZF uses ripgrep
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
 export FZF_DEFAULT_OPTS='-m --height 50% --border --reverse --preview "bat {}"'
 alias nvimi='nvim $(fzf)'
 
+# load omz
+ZSH_DISABLE_COMPFIX=true
+source $ZSH/oh-my-zsh.sh
+
+# trash cli
 source ~/.common_profile
 export BASH_ENV='~/.bashenv'
-
-eval $(thefuck --alias)
-
-source $ZSH_CUSTOM/plugins/zsh-z/zsh-z.plugin.zsh
-
 alias rm=trash
 
 # fnm
@@ -148,10 +154,11 @@ eval "$(starship init zsh)"
 
 zstyle ':completion:*' menu select
 
+# Kitty
 autoload -Uz compinit
 compinit
-
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
 
+# FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

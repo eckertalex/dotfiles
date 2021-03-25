@@ -41,7 +41,7 @@ if [ "$system_type"="Darwin" ]; then
   yadm clone https://github.com/eckertalex/dotfiles.git
   fi
 
-  if [ -f "$HOME/.Brewfile" ]; then
+  if [ -f "$HOME/Brewfile" ]; then
     echo "Updating homebrew bundle"
     brew upgrade
     brew bundle --global
