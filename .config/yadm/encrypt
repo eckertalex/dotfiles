@@ -1,4 +1,2 @@
 .gitconfig
 .ssh/id_rsa*
-.config/git/personal.gitconfig
-.config/git/work.gitconfig
