@@ -146,6 +146,9 @@ source ~/.common_profile
 export BASH_ENV='~/.bashenv'
 alias rm=trash
 
+# bitwarden
+eval "$(bw completion --shell zsh); compdef _bw bw;"
+
 # fnm
 export PATH=/home/lex/.fnm:$PATH
 eval "`fnm env`"
