@@ -1,56 +1,45 @@
 #!/bin/sh
 
-system_type=$(uname -s)
-
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   echo "Installing oh-my-zsh"
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-aliases-exa" ]]; then
   echo "Installing plugin zsh-aliases-exa"
-  git clone https://github.com/DarringTisdale/zsh-aliases-exa ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-aliases-exa
+  git clone https://github.com/DarrinTisdale/zsh-aliases-exa $HOME/.oh-my-zsh/custom/plugins/zsh-aliases-exa
+fi
 
+
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/you-should-use" ]]; then
   echo "Installing plugin you-should-use"
-  git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/you-should-use
+  git clone https://github.com/MichaelAquilina/zsh-you-should-use $HOME/.oh-my-zsh/custom/plugins/you-should-use
+fi
 
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]]; then
   echo "Installing plugin zsh-autosuggestions"
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+fi
 
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]]; then
   echo "Installing plugin zsh-completions"
-  git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-completions
+  git clone https://github.com/zsh-users/zsh-completions $HOME/.oh-my-zsh/custom/plugins/zsh-completions
+fi
 
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]]; then
   echo "Installing plugin zsh-syntax-highlighting"
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM=~/.oh-my-zsh/custom/}/plugins/zsh-syntax-highlighting
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+fi
 
+if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/timewarrior" ]]; then
   echo "Installing plugin timewarrior"
-  git clone https://github.com/svenXY/timewarrior ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/timewarrior
+  git clone https://github.com/svenXY/timewarrior $HOME/.oh-my-zsh/custom/plugins/timewarrior
 fi
 
-if [ "$system_type"="Darwin" ]; then
-  if ! command -v brew >/dev/null 2>&1; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
 
-  if ! command -v yadm >/dev/null 2>&1; then
-    echo "Installing YADM"
-    brew install yadm
-  fi
-
-  if [ ! -d "$HOME/.config/yadm" ] ; then
-  echo "Cloning dotfiles"
-  yadm clone https://github.com/eckertalex/dotfiles.git
-  fi
-
-  if [ -f "$HOME/Brewfile" ]; then
-    echo "Updating homebrew bundle"
-    brew upgrade
-    brew bundle --global
-  fi
-
-  if [ -f "$HOME/.macos" ]; then
-    ./.macos
-  fi
-fi
+echo "Updating homebrew bundle"
+brew upgrade
+brew bundle --global
 
 echo "Decrypt dotfiles"
 yadm decrypt
@@ -58,45 +47,36 @@ yadm decrypt
 echo "Updating the yadm repo origin URL to use SSH"
 yadm remote set-url origin "git@github.com:eckertalex/dotfiles.git"
 
-if ! command -v node >/dev/null 2>&1; then
-  echo "Installing Node.js LTS"
-  fnm install --lts
-fi
+echo "Copy timewarrior theme and holidays"
+cp ~/.timewarrior/themes/night_owl.theme /usr/local/share/doc/timew/doc/themes/
+cp ~/.timewarrior/holidays/holidays.de-DE /usr/local/share/doc/timew/doc/holidays/
 
-if ! command -v trash >/dev/null 2>&1; then
-  echo "Installing trash-cli"
-  npm install --global trash-cli
-fi
+echo "Installing Node.js LTS"
+fnm install --lts
 
-if [ ! -d "$HOME/.cache/dein" ]; then
+echo "Installing trash-cli"
+npm install --global trash-cli
+
+echo "Installing neovim for node, python2, and python3"
+npm install --global neovim
+python2 -m ensurepip --user --default-pip
+python2 -m pip install --user --upgrade pip
+python2 -m pip install --user --upgrade neovim
+python3 -m pip install --user --upgrade neovim
+
+echo "Install dependencies for ranger"
+python -m pip install Pillow
+python -m pip install chardet
+
+if [[ ! -d "$HOME/.cache/dein" ]]; then
   echo "Installing Dein Plugin Manager"
-  curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-  sh ./installer.sh ~/.cache/dein
-if
+  curl -fsSL https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | bash -s ~/.cache/dein
+fi
 
 echo "Installing dein plugins"
 nvim '+:call dein#install()'
 
-echo "Installing neovim for node"
-npm install --global neovim
-
-if [ "$system_type"="Darwin" ]; then
-  echo "Installing neovim for python2 and python3"
-  python2 -m ensurepip --user --default-pip
-  python2 -m pip install --user --upgrade pip
-  python2 -m pip install --user --upgrade neovim
-  python3 -m pip install --user --upgrade neovim
-fi
-
-if [ "$system_type"="Darwin"]; then
-  echo "Install dependencies for ranger"
-  python -m pip install Pillow
-  python -m pip install chardet
-fi
-
-if [ "$system_type"="Darwin"]; then
-  cp ~/.timewarrior/themes/night_owl.theme /usr/local/share/doc/timew/doc/themes/
-  cp ~/.timewarrior/holidays/holidays.de-DE /usr/local/share/doc/timew/doc/holidays/
-fi
+echo "Configure MacOS"
+/bin/bash ~/.macos
 
 echo "Done!"
