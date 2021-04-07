@@ -79,11 +79,4 @@ nvim '+:call dein#install()'
 echo "Configure MacOS"
 /bin/bash ~/.macos
 
-echo "Create project structure"
-mkdir -p ~/code/private
-
-if [[ ! -d "$HOME/code/private/eckertalex.dev" ]]; then
-  git clone git@github.com:eckertalex/eckertalex.dev.git ~/code/private/eckertalex.dev
-fi
-
 echo "Done!"

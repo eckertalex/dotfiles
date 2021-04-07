@@ -20,11 +20,6 @@ call dein#add('jeffkreeftmeijer/neovim-sensible')
 call dein#add('itchyny/lightline.vim')
 call dein#add('haishanh/night-owl.vim')
 
-call dein#add('preservim/nerdtree')
-call dein#add('Xuyuanp/nerdtree-git-plugin')
-call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
-call dein#add('ryanoasis/vim-devicons')
-
 call dein#add('airblade/vim-gitgutter')
 
 call dein#add('preservim/nerdcommenter')
@@ -71,21 +66,6 @@ nnoremap <silent> <Leader>h: :History:<CR>
 nnoremap <silent> <Leader>h/ :History/<CR>
 
 set grepprg=rg\ --vimgrep\ --smart-case\ --follow
-
-" NERD TREE
-nnoremap <C-b> :NERDTreeToggle<CR>
-
-let g:NERDTreeGitStatusWithFlags = 1
-let g:NERDTreeIgnore = ['^node_modules$']
-let g:NERDTreeWinPos = 'right'
-
-" Exit Vim if NERDTree is the only window left.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 " NERD COMMENTER
 " Weird issue, where vim recognizes key sequence Ctrl / as <C-_>
