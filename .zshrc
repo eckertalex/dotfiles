@@ -86,7 +86,6 @@ plugins=(
     git
     npm
     ripgrep
-    timewarrior
     vscode
     you-should-use
     z
@@ -125,8 +124,12 @@ plugins=(
 
 system_type=$(uname -s)
 if [ "$system_type" = "Darwin" ]; then
-    export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+    export PATH="/usr/local/opt/openssl@1.1/bin:/usr/local/opt/crowdin@2/bin:$PATH"
 fi
+
+# for spicetify-cli
+export SPICETIFY_INSTALL="$HOME/spicetify-cli"
+export PATH="$SPICETIFY_INSTALL:$PATH"
 
 # for docker plugin
 zstyle ':completion:*:*:docker:*' option-stacking yes
@@ -146,10 +149,6 @@ source ~/.common_profile
 export BASH_ENV='~/.bashenv'
 alias rm=trash
 
-# fnm
-export PATH=/home/lex/.fnm:$PATH
-eval "`fnm env`"
-
 # Starship
 eval "$(starship init zsh)"
 
@@ -163,3 +162,5 @@ kitty + complete setup zsh | source /dev/stdin
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"

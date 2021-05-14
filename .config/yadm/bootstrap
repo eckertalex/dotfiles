@@ -31,12 +31,6 @@ if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]]; then
   git clone https://github.com/zsh-users/zsh-syntax-highlighting $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
 
-if [[ ! -d "$HOME/.oh-my-zsh/custom/plugins/timewarrior" ]]; then
-  echo "Installing plugin timewarrior"
-  git clone https://github.com/svenXY/timewarrior $HOME/.oh-my-zsh/custom/plugins/timewarrior
-fi
-
-
 echo "Updating homebrew bundle"
 brew upgrade
 brew bundle --global
@@ -51,8 +45,11 @@ echo "Copy timewarrior theme and holidays"
 cp ~/.timewarrior/themes/night_owl.theme /usr/local/share/doc/timew/doc/themes/
 cp ~/.timewarrior/holidays/holidays.de-DE /usr/local/share/doc/timew/doc/holidays/
 
-echo "Installing Node.js LTS"
-fnm install --lts
+echo "Install Volta"
+curl https://get.volta.sh | bash
+
+echo "Install Node"
+volta install node
 
 echo "Installing trash-cli"
 npm install --global trash-cli
