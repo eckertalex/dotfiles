@@ -1,0 +1,18 @@
+return {
+  { "catppuccin/nvim", as = "catppuccin" },
+  { "gpanders/editorconfig.nvim" },
+  ["declancm/cinnamon.nvim"] = require "user.plugins.cinnamon",
+  ["danymat/neogen"] = require "user.plugins.neogen",
+  ["ethanholz/nvim-lastplace"] = require "user.plugins.nvim-lastplace",
+  ["folke/zen-mode.nvim"] = require "user.plugins.zen-mode",
+  ["hrsh7th/cmp-calc"] = require "user.plugins.cmp-calc",
+  ["hrsh7th/cmp-emoji"] = require "user.plugins.cmp-emoji",
+  ["jose-elias-alvarez/typescript.nvim"] = require "user.plugins.typescript",
+  ["lukas-reineke/headlines.nvim"] = require "user.plugins.headlines",
+  ["nvim-telescope/telescope-file-browser.nvim"] = require "user.plugins.telescope-file-browser",
+  ["nvim-telescope/telescope-hop.nvim"] = require "user.plugins.telescope-hop",
+  ["nvim-telescope/telescope-media-files.nvim"] = require "user.plugins.telescope-media-files",
+  ["nvim-telescope/telescope-project.nvim"] = require "user.plugins.telescope-project",
+  ["phaazon/hop.nvim"] = require "user.plugins.hop",
+  ["simrat39/rust-tools.nvim"] = require "user.plugins.rust-tools",
+}

@@ -1,0 +1,22 @@
+[delta]
+    navigate = true
+
+[delta "delta-theme"]
+    # author: https://github.com/eckertalex
+    dark = true
+    syntax-theme = "Catppuccin-macchiato"
+    plus-style = syntax "#003800"
+    minus-style = syntax "#3f0001"
+    features = side-by-side line-numbers decorations
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
+    hunk-header-decoration-style = cyan box ul
+
+[delta "line-numbers"]
+    line-numbers-left-style = cyan
+    line-numbers-right-style = cyan
+    line-numbers-minus-style = 124
+    line-numbers-plus-style = 28
