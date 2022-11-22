@@ -36,7 +36,6 @@ brew "gitui"
 brew "git-interactive-rebase-tool"
 brew "rm-improved"
 brew "dust"
-brew "openssl@3"
 
 # Tap "crowdin/crowdin"
 brew "crowdin@2"

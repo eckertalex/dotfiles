@@ -26,7 +26,6 @@ export -UT INFOPATH infopath  # -T creates a "tied" pair; see below.
 path=(
     $path
     ~/.local/bin
-    /usr/local/opt/openssl@1.1/bin
     /usr/local/opt/crowdin@2/bin
     ~/.cargo/bin
     $VOLTA_HOME/bin
