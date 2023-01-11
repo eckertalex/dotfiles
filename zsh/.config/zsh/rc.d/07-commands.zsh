@@ -40,7 +40,6 @@ alias \
 # Aliases
 #
 
-. "$ZDOTDIR/rc.d/git.zsh"
 . "$ZDOTDIR/rc.d/kitty.zsh"
 . "$ZDOTDIR/rc.d/lsd.zsh"
 . "$ZDOTDIR/rc.d/yarn.zsh"
@@ -52,3 +51,11 @@ alias \
 #
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+alias fco="git branch --all --format=\"%(refname:short)\" | fzf --height 10% --layout=reverse --border | xargs git checkout"
+
+##
+# Pnpm
+#
+
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true

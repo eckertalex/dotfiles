@@ -7,6 +7,7 @@
 export EDITOR=nvim
 export VISUAL=nvim
 export VOLTA_HOME="$HOME/.volta"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 
 # FZF
 export FZF_DEFAULT_OPTS="\
@@ -26,9 +27,11 @@ export -UT INFOPATH infopath  # -T creates a "tied" pair; see below.
 path=(
     $path
     ~/.local/bin
-    /usr/local/opt/crowdin@2/bin
     ~/.cargo/bin
     $VOLTA_HOME/bin
+    $PNPM_HOME
+    /usr/local/opt/crowdin@3/bin
+    ~/.adb-fastboot
 )
 
 # Add your functions to your $fpath, so you can autoload them.

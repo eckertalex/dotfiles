@@ -1,0 +1,143 @@
+{
+  // Window
+  "window.title": "${activeEditorMedium}${separator}${rootName} ${dirty}",
+  "window.newWindowDimensions": "inherit",
+  // Explorer
+  "explorer.openEditors.visible": 0,
+  "explorer.excludeGitIgnore": false,
+  // Problems
+  "problems.decorations.enabled": false,
+  // Workbench
+  "workbench.editor.enablePreview": false,
+  "workbench.editor.enablePreviewFromQuickOpen": false,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.perEditorGroup": false,
+  "workbench.editor.limit.value": 10,
+  "workbench.tips.enabled": false,
+  "workbench.settings.editor": "json",
+  "workbench.panel.defaultLocation": "bottom",
+  "workbench.sideBar.location": "right",
+  "workbench.startupEditor": "none",
+  "workbench.editor.showTabs": false,
+  "workbench.colorTheme": "Catppuccin Macchiato",
+  "workbench.iconTheme": "material-icon-theme",
+  // Editor
+  "editor.copyWithSyntaxHighlighting": false,
+  "editor.emptySelectionClipboard": false,
+  "editor.detectIndentation": false,
+  "editor.inlineSuggest.enabled": false,
+  "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+  "editor.quickSuggestionsDelay": 0,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.formatOnPaste": false,
+  "editor.codeLens": false,
+  "editor.guides.bracketPairs": false,
+  "editor.colorDecorators": false,
+  "editor.lightbulb.enabled": false,
+  "editor.overviewRulerBorder": false,
+  "editor.occurrencesHighlight": false,
+  "editor.gotoLocation.multipleReferences": "goto",
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.gotoLocation.multipleDeclarations": "goto",
+  "editor.gotoLocation.multipleImplementations": "goto",
+  "editor.gotoLocation.multipleTypeDefinitions": "goto",
+  "editor.minimap.enabled": false,
+  "editor.snippetSuggestions": "top",
+  "editor.suggestSelection": "recentlyUsedByPrefix",
+  "editor.wordBasedSuggestions": false,
+  "editor.suggest.showKeywords": false,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.trimAutoWhitespace": true,
+  "editor.wordWrapColumn": 120,
+  "editor.dragAndDrop": false,
+  "editor.formatOnSave": true,
+  "editor.semanticHighlighting.enabled": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  // Diff Editor
+  "diffEditor.ignoreTrimWhitespace": false,
+  "diffEditor.renderSideBySide": false,
+  // Editor Font
+  "editor.fontFamily": "'JetBrains Mono', 'Dank Mono'",
+  "editor.fontSize": 18,
+  "editor.lineHeight": 28,
+  "editor.letterSpacing": 0.5,
+  "editor.suggestFontSize": 14,
+  "editor.suggestLineHeight": 25,
+  "editor.fontLigatures": true,
+  "editor.glyphMargin": true,
+  "editor.fontWeight": "normal",
+  // Editor Cursor
+  "editor.cursorStyle": "line",
+  "editor.cursorBlinking": "solid",
+  "editor.cursorWidth": 3,
+  "editor.hideCursorInOverviewRuler": false,
+  "editor.cursorSmoothCaretAnimation": true,
+  "editor.smoothScrolling": true,
+  // Editor Rendering
+  "editor.minimap.showSlider": "always",
+  "editor.mouseWheelZoom": false,
+  "editor.renderControlCharacters": false,
+  "editor.renderWhitespace": "all",
+  "editor.renderLineHighlight": "none",
+  "editor.lineNumbers": "on",
+  "editor.rulers": [80, 100, 120],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // Zen mode
+  "zenMode.fullScreen": false,
+  // Files
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.hotExit": "onExit",
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false,
+  // Debug
+  "debug.javascript.codelens.npmScripts": "never",
+  // scm
+  "scm.diffDecorations": "none",
+  // Git
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.decorations.enabled": false,
+  "git.mergeEditor": true,
+  // Terminal
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.scrollback": 100000,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorBlinking": false,
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font', 'Dank Mono'",
+  "terminal.integrated.fontSize": 18,
+  "terminal.integrated.confirmOnExit": "never",
+  // Search
+  "search.useIgnoreFiles": false,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/coverage": true,
+    "**/dist": true,
+    "**/build": true
+  },
+  // Security
+  "security.workspace.trust.untrustedFiles": "open",
+  // Telemetry
+  "telemetry.telemetryLevel": "off",
+  "workbench.enableExperiments": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  //
+  // Extensions
+  //
+  // Disable Ligatures
+  "disableLigatures.mode": "Cursor",
+  // Eslint
+  "eslint.packageManager": "pnpm",
+  // Tailwind
+  "tailwindCSS.emmetCompletions": true,
+  "workbench.statusBar.visible": false,
+  "workbench.activityBar.visible": false
+}

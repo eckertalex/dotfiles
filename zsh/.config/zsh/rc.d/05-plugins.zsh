@@ -17,6 +17,7 @@ local -a plugins=(
     romkatv/powerlevel10k                      # prompt
     hlissner/zsh-autopair
     davidde/git
+    baliestri/pnpm.plugin.zsh
 )
 
 zstyle ':completion:*' completer \

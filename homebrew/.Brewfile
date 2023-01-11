@@ -11,64 +11,83 @@ tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "crowdin/crowdin"
 
-######
-# APPS
-######
+brew "coreutils"
+brew "imagemagick"
+
+# Git
 
 brew "git-lfs"
-brew "coreutils"
-brew "gcc"
-brew "stow"
+brew "gitui"
+brew "git-interactive-rebase-tool"
+
+# Clis
+
 brew "bat"
-brew "fd"
+brew "stow"
 brew "fzf"
-brew "git-delta"
+brew "fd"
 brew "ripgrep"
+brew "git-delta"
+brew "zoxide"
+brew "bottom"
+brew "rm-improved"
+brew "dust"
 brew "tealdeer"
 brew "wget"
-brew "yadm"
+brew "ffmpeg"
+
+# Neovim
+
 brew "neovim"
 brew "tree-sitter"
 brew "luajit"
-brew "zoxide"
-brew "bottom"
-brew "gitui"
-brew "git-interactive-rebase-tool"
-brew "rm-improved"
-brew "dust"
+brew "luarocks"
 
-# Tap "crowdin/crowdin"
-brew "crowdin@2"
-brew "openjdk"
+# "crowdin/crowdin"
+brew "crowdin@3"
 
-#######
 # CASKS
-#######
+
+# Development
 
 cask "kitty"
 cask "visual-studio-code"
 cask "sublime-merge"
 cask "sublime-text"
-cask "balenaetcher"
 cask "keepingyouawake"
 cask "postman"
+
+# MacroPad
+
+cask "vial"
+
+# Keyboard
+
+cask "bettertouchtool"
+
+# Browser
 
 cask "firefox"
 cask "google-chrome"
 cask "microsoft-edge"
 
+# Productivity
+
 cask "rectangle"
 cask "dozer"
-cask "bettertouchtool"
 cask "raycast"
 cask "kap"
 cask "mpv"
+
+# Media
 
 cask "spotify"
 cask "slack"
 cask "discord"
 cask "signal"
 cask "calibre"
+cask "balenaetcher"
 
 # Tap "homebrew/cask-fonts"
 cask "font-jetbrains-mono-nerd-font"
+
