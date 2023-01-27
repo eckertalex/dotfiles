@@ -1,4 +1,4 @@
-######
+####
 # TAPS
 ######
 
@@ -17,7 +17,7 @@ brew "imagemagick"
 # Git
 
 brew "git-lfs"
-brew "gitui"
+brew "lazygit"
 brew "git-interactive-rebase-tool"
 
 # Clis
@@ -31,7 +31,7 @@ brew "git-delta"
 brew "zoxide"
 brew "bottom"
 brew "rm-improved"
-brew "dust"
+brew "gdu"
 brew "tealdeer"
 brew "wget"
 brew "ffmpeg"
@@ -42,6 +42,7 @@ brew "neovim"
 brew "tree-sitter"
 brew "luajit"
 brew "luarocks"
+brew "stylua"
 
 # "crowdin/crowdin"
 brew "crowdin@3"
