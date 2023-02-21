@@ -34,6 +34,8 @@ brew "rm-improved"
 brew "gdu"
 brew "tealdeer"
 brew "wget"
+brew "fx"
+brew "jq"
 brew "ffmpeg"
 
 # Neovim
@@ -77,7 +79,6 @@ cask "microsoft-edge"
 cask "rectangle"
 cask "dozer"
 cask "raycast"
-cask "kap"
 cask "mpv"
 
 # Media
