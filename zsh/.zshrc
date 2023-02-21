@@ -128,8 +128,8 @@ local -a plugins=(
     zsh-users/zsh-syntax-highlighting          # Command-line syntax highlighting
     romkatv/powerlevel10k                      # prompt
     hlissner/zsh-autopair
-    davidde/git
-    baliestri/pnpm.plugin.zsh
+    eckertalex/git.plugin.zsh
+    eckertalex/pnpm.plugin.zsh
 )
 
 zstyle ':completion:*' completer \
