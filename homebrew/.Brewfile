@@ -16,6 +16,7 @@ brew "imagemagick"
 
 # Git
 
+brew "git"
 brew "git-lfs"
 brew "lazygit"
 brew "git-interactive-rebase-tool"

@@ -14,4 +14,4 @@ git:
 disableStartupPopups: true
 notARepository: skip # one of: 'prompt' | 'create' | 'skip'
 os:
-  editCommand: lvim
+  editCommand: nvim
