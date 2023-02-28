@@ -12,6 +12,7 @@ tap "homebrew/cask-versions"
 tap "crowdin/crowdin"
 
 brew "coreutils"
+brew "gnu-sed"
 brew "imagemagick"
 
 # Git
