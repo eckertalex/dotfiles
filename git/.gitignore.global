@@ -1,0 +1,12 @@
+*~
+.DS_Store
+*.pyc
+.git/
+/bower_components/
+/log
+/node_modules/
+/tmp
+/vendor
+db/*.sqlite3
+log/*.log
+tmp/**/*

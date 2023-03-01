@@ -1,0 +1,29 @@
+[include]
+  path = ~/.gitconfig.local
+[init]
+  defaultBranch = main
+[include]
+  path = ~/.config/delta/config
+[core]
+  editor = nvim
+  excludesfile = ~/.gitignore.global
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  features = delta-theme
+  navigate = true
+  hyperlinks = true
+[merge]
+  ff = only
+  conflictstyle = diff3
+[diff]
+	colorMoved = default
+[pull]
+  rebase = false
+[fetch]
+  prune = true
+[commit]
+  template = ~/.gitmessage
+[sequence]
+  editor = interactive-rebase-tool
