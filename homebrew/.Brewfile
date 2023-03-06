@@ -3,13 +3,16 @@
 ######
 
 # General
+tap "homebrew/core"
 tap "homebrew/bundle"
 tap "homebrew/cask"
-tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
+tap "buo/cask-upgrade"
 tap "crowdin/crowdin"
+
+brew "mas"
 
 brew "coreutils"
 brew "gnu-sed"
@@ -90,7 +93,6 @@ cask "slack"
 cask "discord"
 cask "signal"
 cask "calibre"
-cask "balenaetcher"
 
 # Tap "homebrew/cask-fonts"
 cask "font-jetbrains-mono-nerd-font"
