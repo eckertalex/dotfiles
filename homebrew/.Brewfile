@@ -59,6 +59,7 @@ brew "crowdin@3"
 # Development
 
 cask "kitty"
+cask "alacritty"
 cask "visual-studio-code"
 cask "sublime-merge"
 cask "sublime-text"
