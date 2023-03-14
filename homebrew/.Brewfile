@@ -27,6 +27,8 @@ brew "git-interactive-rebase-tool"
 
 # Clis
 
+brew "tmux"
+brew "n"
 brew "bat"
 brew "stow"
 brew "fzf"

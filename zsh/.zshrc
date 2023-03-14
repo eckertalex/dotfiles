@@ -65,7 +65,12 @@ setopt AUTO_CD
 
 export EDITOR=nvim
 export VISUAL=nvim
-export PNPM_HOME="$HOME/.local/share/pnpm"
+
+# n
+export N_PREFIX=$HOME/.n
+
+# pnpm
+export PNPM_HOME=$HOME/.local/share/pnpm
 
 # FZF
 export FZF_DEFAULT_OPTS="\
@@ -85,8 +90,9 @@ export -UT INFOPATH infopath  # -T creates a "tied" pair; see below.
 path=(
     $path
     ~/.local/bin
-    ~/.cargo/bin
+    $N_PREFIX/bin
     $PNPM_HOME
+    ~/.cargo/bin
     /usr/local/opt/crowdin@3/bin
     ~/.adb-fastboot
 )
@@ -301,10 +307,4 @@ fzf-git-checkout() {
 }
 
 alias fgsw='fzf-git-checkout'
-
-##
-# Pnpm
-#
-
-[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
 
