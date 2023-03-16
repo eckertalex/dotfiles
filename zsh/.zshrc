@@ -19,6 +19,16 @@ SAVEHIST=$(( 10 * 1000 ))       # Use multiplication for readability.
 # Larger than $SAVEHIST for HIST_EXPIRE_DUPS_FIRST to work
 HISTSIZE=$(( 1.2 * SAVEHIST ))  # Zsh recommended value
 
+
+##
+# TMUX
+#
+
+if [ -z "$TMUX" ] && [ ${UID} != 0 ]
+then
+    tmux new-session -A -s main
+fi
+
 ##
 # Prompt
 #
