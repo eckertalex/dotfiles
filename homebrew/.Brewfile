@@ -44,6 +44,7 @@ brew "wget"
 brew "fx"
 brew "jq"
 brew "ffmpeg"
+brew "spotify-tui"
 
 # Neovim
 
