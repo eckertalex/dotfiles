@@ -33,7 +33,7 @@ return {
     ---@type TSConfig
     opts = {
       highlight = { enable = true },
-      indent = { enable = true, disable = { "python" } },
+      indent = { enable = true },
       context_commentstring = { enable = true, enable_autocmd = false },
       ensure_installed = {
         "bash",
@@ -42,12 +42,14 @@ return {
         "html",
         "javascript",
         "json",
+        "json",
+        "json5",
+        "jsonc",
         "lua",
         "luadoc",
         "luap",
         "markdown",
         "markdown_inline",
-        "python",
         "query",
         "regex",
         "tsx",

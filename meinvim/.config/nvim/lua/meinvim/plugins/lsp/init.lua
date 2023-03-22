@@ -14,6 +14,8 @@ return {
           return require("meinvim.util").has("nvim-cmp")
         end,
       },
+      { "b0o/SchemaStore.nvim", version = false }, -- last release is way too old
+      { "jose-elias-alvarez/typescript.nvim" },
     },
     ---@class PluginLspOpts
     opts = {
@@ -36,7 +38,32 @@ return {
       -- LSP Server Settings
       ---@type lspconfig.options
       servers = {
-        jsonls = {},
+        tsserver = {
+          settings = {
+            completions = {
+              completeFunctionCalls = true,
+            },
+          },
+        },
+        eslint = {
+          settings = {
+            workingDirectory = { mode = "auto" },
+          },
+        },
+        jsonls = {
+          on_new_config = function(new_config)
+            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+            vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+          end,
+          settings = {
+            json = {
+              format = {
+                enable = true,
+              },
+              validate = { enable = true },
+            },
+          },
+        },
         lua_ls = {
           -- mason = false, -- set to false if you don't want this server to be installed with mason
           settings = {
@@ -55,11 +82,35 @@ return {
       -- return true if you don't want this server to be setup with lspconfig
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
-        -- example to setup with typescript.nvim
-        -- tsserver = function(_, opts)
-        --   require("typescript").setup({ server = opts })
-        --   return true
-        -- end,
+        tsserver = function(_, opts)
+          require("meinvim.util").on_attach(function(client, buffer)
+            if client.name == "tsserver" then
+              vim.keymap.set(
+                "n",
+                "<leader>co",
+                "<cmd>TypescriptOrganizeImports<CR>",
+                { buffer = buffer, desc = "Organize Imports" }
+              )
+              vim.keymap.set(
+                "n",
+                "<leader>cR",
+                "<cmd>TypescriptRenameFile<CR>",
+                { desc = "Rename File", buffer = buffer }
+              )
+            end
+          end)
+          require("typescript").setup({ server = opts })
+          return true
+        end,
+        eslint = function()
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            callback = function(event)
+              if require("lspconfig.util").get_active_client_by_name(event.buf, "eslint") then
+                vim.cmd("EslintFixAll")
+              end
+            end,
+          })
+        end,
         -- Specify * to use this function as a fallback for any server
         -- ["*"] = function(server, opts) end,
       },
@@ -75,7 +126,7 @@ return {
       end)
 
       -- diagnostics
-      for name, icon in pairs(require("meinvim.config.icons").diagnostics) do
+      for name, icon in pairs(require("meinvim.icons").diagnostics) do
         name = "DiagnosticSign" .. name
         vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
       end
@@ -138,11 +189,10 @@ return {
       return {
         root_dir = require("null-ls.utils").root_pattern(".null-ls-root", ".neoconf.json", "Makefile", ".git"),
         sources = {
-          nls.builtins.formatting.fish_indent,
-          nls.builtins.diagnostics.fish,
           nls.builtins.formatting.stylua,
           nls.builtins.formatting.shfmt,
-          nls.builtins.diagnostics.flake8,
+          nls.builtins.formatting.prettierd,
+          require("typescript.extensions.null-ls.code-actions"),
         },
       }
     end,
@@ -158,7 +208,7 @@ return {
       ensure_installed = {
         "stylua",
         "shfmt",
-        "flake8",
+        "prettierd",
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
