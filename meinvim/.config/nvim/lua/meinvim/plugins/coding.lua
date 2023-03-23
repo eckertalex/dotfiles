@@ -30,6 +30,16 @@ return {
     },
   },
 
+  -- colorizer
+  {
+    "NvChad/nvim-colorizer.lua",
+    opts = {
+      user_default_options = {
+        tailwind = true,
+      },
+    },
+  },
+
   -- auto completion
   {
     "hrsh7th/nvim-cmp",
@@ -40,6 +50,7 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
+      { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
     },
     opts = function()
       local cmp = require("cmp")
@@ -72,12 +83,12 @@ return {
           { name = "path" },
         }),
         formatting = {
-          format = function(_, item)
+          format = function(entry, item)
             local icons = require("meinvim.icons").kinds
             if icons[item.kind] then
               item.kind = icons[item.kind] .. item.kind
             end
-            return item
+            return require("tailwindcss-colorizer-cmp").formatter(entry, item)
           end,
         },
         experimental = {

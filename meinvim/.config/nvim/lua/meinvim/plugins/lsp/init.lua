@@ -64,6 +64,7 @@ return {
             },
           },
         },
+        tailwindcss = {},
         lua_ls = {
           -- mason = false, -- set to false if you don't want this server to be installed with mason
           settings = {
@@ -206,9 +207,21 @@ return {
     keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
     opts = {
       ensure_installed = {
-        "stylua",
-        "shfmt",
+        "bash-language-server",
+        "eslint_d",
+        "eslint-lsp",
+        "graphql-language-service-cli",
+        "groovy-language-server",
+        "json-lsp",
+        "lua-language-server",
         "prettierd",
+        "prisma-language-server",
+        "rust-analyzer",
+        "shfmt",
+        "stylua",
+        "svelte-language-server",
+        "tailwindcss-language-server",
+        "typescript-language-server",
       },
     },
     ---@param opts MasonSettings | {ensure_installed: string[]}
