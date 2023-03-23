@@ -12,6 +12,7 @@ return {
       },
     },
     opts = {
+      top_down = false,
       timeout = 3000,
       max_height = function()
         return math.floor(vim.o.lines * 0.75)
@@ -200,6 +201,9 @@ return {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = {
+      cmdline = {
+        view = "cmdline",
+      },
       lsp = {
         override = {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,

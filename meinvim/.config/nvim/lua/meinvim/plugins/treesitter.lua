@@ -37,11 +37,9 @@ return {
       context_commentstring = { enable = true, enable_autocmd = false },
       ensure_installed = {
         "bash",
-        "c",
         "help",
         "html",
         "javascript",
-        "json",
         "json",
         "json5",
         "jsonc",
