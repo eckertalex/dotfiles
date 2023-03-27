@@ -61,8 +61,7 @@ brew "crowdin@3"
 
 # Development
 
-cask "kitty"
-cask "alacritty"
+cask "wezterm"
 cask "visual-studio-code"
 cask "sublime-merge"
 cask "sublime-text"
@@ -100,4 +99,5 @@ cask "calibre"
 
 # Tap "homebrew/cask-fonts"
 cask "font-jetbrains-mono-nerd-font"
+cask "font-symbols-only-nerd-font"
 
