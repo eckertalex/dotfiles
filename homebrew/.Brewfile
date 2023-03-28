@@ -29,6 +29,7 @@ brew "git-interactive-rebase-tool"
 
 brew "tmux"
 brew "n"
+brew "lsd"
 brew "bat"
 brew "stow"
 brew "fzf"
