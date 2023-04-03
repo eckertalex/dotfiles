@@ -84,7 +84,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    opts = function(plugin)
+    opts = function()
       local icons = require("meinvim.icons")
 
       local function fg(name)
@@ -99,7 +99,7 @@ return {
         options = {
           theme = "auto",
           globalstatus = true,
-          disabled_filetypes = { statusline = { "dashboard", "lazy", "alpha" } },
+          disabled_filetypes = { statusline = { "dashboard", "alpha" } },
         },
         sections = {
           lualine_a = { "mode" },
@@ -116,11 +116,6 @@ return {
             },
             { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
             { "filename", path = 1, symbols = { modified = "  ", readonly = "", unnamed = "" } },
-            -- stylua: ignore
-            {
-              function() return require("nvim-navic").get_location() end,
-              cond = function() return package.loaded["nvim-navic"] and require("nvim-navic").is_available() end,
-            },
           },
           lualine_x = {
             -- stylua: ignore
@@ -155,7 +150,7 @@ return {
             end,
           },
         },
-        extensions = { "neo-tree" },
+        extensions = { "neo-tree", "lazy" },
       }
     end,
   },
@@ -273,28 +268,6 @@ return {
           opts.section.footer.opts.hl = "DashboardFooter"
         end,
       })
-    end,
-  },
-
-  -- lsp symbol navigation for lualine
-  {
-    "SmiteshP/nvim-navic",
-    lazy = true,
-    init = function()
-      vim.g.navic_silence = true
-      require("meinvim.util").on_attach(function(client, buffer)
-        if client.server_capabilities.documentSymbolProvider then
-          require("nvim-navic").attach(client, buffer)
-        end
-      end)
-    end,
-    opts = function()
-      return {
-        separator = " ",
-        highlight = true,
-        depth_limit = 5,
-        icons = require("meinvim.icons").kinds,
-      }
     end,
   },
 

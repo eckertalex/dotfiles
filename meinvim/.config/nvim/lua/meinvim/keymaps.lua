@@ -11,6 +11,13 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
+-- Better half page scroll
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+
+-- keep old paste
+map("x", "<leader>p", '"_dP')
+
 -- better up/down
 map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
