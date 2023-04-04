@@ -17,7 +17,6 @@ opt.fillchars = "eob: " -- Don't show `~` outside of buffer
 opt.formatoptions = "jcroqlnt1" -- This is a sequence of letters which describes how automatic formatting is to be done
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
-opt.guicursor = ""
 opt.ignorecase = true -- ignore case in search patterns
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.incsearch = true -- Show search results while typing

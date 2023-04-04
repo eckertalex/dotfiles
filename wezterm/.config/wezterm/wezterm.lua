@@ -4,6 +4,7 @@ return {
 	window_close_confirmation = "NeverPrompt",
 	window_decorations = "RESIZE",
 	color_scheme = "Catppuccin Macchiato",
+	default_cursor_style = "SteadyBar",
 	font = wezterm.font_with_fallback({ "Dank Mono", { family = "Symbols Nerd Font Mono", scale = 0.75 } }),
 	use_cap_height_to_scale_fallback_fonts = true,
 	font_size = 22,
