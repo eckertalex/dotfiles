@@ -37,7 +37,6 @@ return {
       context_commentstring = { enable = true, enable_autocmd = false },
       ensure_installed = {
         "bash",
-        "help",
         "html",
         "javascript",
         "json",
@@ -48,11 +47,13 @@ return {
         "luap",
         "markdown",
         "markdown_inline",
+        "python",
         "query",
         "regex",
         "tsx",
         "typescript",
         "vim",
+        "vimdoc",
         "yaml",
       },
       incremental_selection = {

@@ -73,6 +73,7 @@ setopt AUTO_CD
 # Environment variables
 #
 
+alias mvim="NVIM_APPNAME=mvim nvim"
 export EDITOR=nvim
 export VISUAL=nvim
 
@@ -100,6 +101,7 @@ export -UT INFOPATH infopath  # -T creates a "tied" pair; see below.
 path=(
     $path
     ~/.local/bin
+    ~/.local/share/bob/nvim-bin
     $N_PREFIX/bin
     $PNPM_HOME
     ~/.cargo/bin
