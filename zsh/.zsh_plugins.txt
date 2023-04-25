@@ -1,0 +1,36 @@
+#!/bin/zsh
+#
+# .zsh_plugins.txt - antidote plugins file
+#
+
+# Prompt
+romkatv/powerlevel10k
+
+# Utilities
+romkatv/zsh-bench kind:path
+
+belak/zsh-utils path:history
+belak/zsh-utils path:editor
+
+hlissner/zsh-autopair
+marlonrichert/zsh-edit
+
+# alias plugins
+peterhurford/up.zsh
+ajeetdsouza/zoxide
+junegunn/fzf-git.sh kind:defer
+eckertalex/lsd.plugin.zsh
+eckertalex/git.plugin.zsh
+eckertalex/pnpm.plugin.zsh
+eckertalex/yarn.plugin.zsh
+
+# Syntax highlighting
+zsh-users/zsh-syntax-highlighting kind:defer
+catppuccin/zsh-syntax-highlighting path:themes/catppuccin_macchiato-zsh-syntax-highlighting.zsh
+
+# Completions
+zsh-users/zsh-completions path:src kind:fpath
+belak/zsh-utils path:completion
+
+zsh-users/zsh-autosuggestions kind:defer
+zsh-users/zsh-history-substring-search

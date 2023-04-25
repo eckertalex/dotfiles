@@ -90,7 +90,8 @@ return {
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
       { "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands" },
-      { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
+      { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Diagnostics" },
+      { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
       { "<leader>sg", Util.telescope("live_grep"), desc = "Grep (root dir)" },
       { "<leader>sG", Util.telescope("live_grep", { cwd = false }), desc = "Grep (cwd)" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help Pages" },
@@ -123,7 +124,7 @@ return {
       },
       {
         "<leader>sS",
-        Util.telescope("lsp_workspace_symbols", {
+        Util.telescope("lsp_dynamic_workspace_symbols", {
           symbols = {
             "Class",
             "Function",
@@ -343,6 +344,7 @@ return {
       { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
       { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
       { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+      { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
   },
 }
