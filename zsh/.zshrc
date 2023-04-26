@@ -50,7 +50,15 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 # Homebrew
-eval "$(brew shellenv)"
+
+export HOMEBREW_NO_ANALYTICS=1
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	if command -v brew > /dev/null; then
+		eval "$(brew shellenv)"
+	fi
+elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # n
 export N_PREFIX=$HOME/.n
@@ -115,8 +123,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	source "/usr/local/opt/fzf/shell/completion.zsh"
 	source "/usr/local/opt/fzf/shell/key-bindings.zsh"
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-	source "/usr/share/doc/fzf/examples/completion.zsh"
-	source "/usr/share/doc/fzf/examples/key-bindings.zsh"
+	source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh"
+	source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh"
 fi
 
 ##
