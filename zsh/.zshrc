@@ -155,6 +155,7 @@ bindkey '^[v' describe-key-briefly
 #
 
 alias mvim="NVIM_APPNAME=mvim nvim"
+alias lazyvim="NVIM_APPNAME=lazyvim nvim"
 
 # Associate file .extensions with programs.
 alias -s {css,gradle,html,js,json,md,patch,properties,txt,xml,yml}=bat
