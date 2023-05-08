@@ -162,9 +162,6 @@ bindkey '^[v' describe-key-briefly
 # Always set aliases _last,_ so they don't class with function definitions.
 #
 
-alias mvim="NVIM_APPNAME=mvim nvim"
-alias lazyvim="NVIM_APPNAME=lazyvim nvim"
-
 # Associate file .extensions with programs.
 alias -s {css,gradle,html,js,json,md,patch,properties,txt,xml,yml}=bat
 alias -s {log,out}='tail -F'

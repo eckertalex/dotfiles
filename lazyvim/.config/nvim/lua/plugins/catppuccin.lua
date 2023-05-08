@@ -9,6 +9,7 @@ return {
       },
     },
   },
+
   {
     "LazyVim/LazyVim",
     opts = {
