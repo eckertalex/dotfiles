@@ -7,29 +7,28 @@ tap "homebrew/core"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/services"
-tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "buo/cask-upgrade"
-tap "crowdin/crowdin"
-
-brew "mas"
 
 brew "coreutils"
-brew "gnu-sed"
 brew "imagemagick"
 
 # Git
 
 brew "git"
 brew "git-lfs"
-brew "lazygit"
 brew "git-interactive-rebase-tool"
+
+# cli guis
+
+brew "lazygit"
+brew "lazydocker"
 
 # Clis
 
 brew "tmux"
-brew "n"
 brew "lsd"
+brew "vivid"
 brew "bat"
 brew "stow"
 brew "fzf"
@@ -44,8 +43,6 @@ brew "tealdeer"
 brew "wget"
 brew "fx"
 brew "jq"
-brew "ffmpeg"
-brew "spotify-tui"
 
 # Neovim
 
@@ -54,51 +51,3 @@ brew "tree-sitter"
 brew "luajit"
 brew "luarocks"
 brew "stylua"
-
-# "crowdin/crowdin"
-brew "crowdin@3"
-
-# CASKS
-
-# Development
-
-cask "wezterm"
-cask "visual-studio-code"
-cask "sublime-merge"
-cask "sublime-text"
-cask "keepingyouawake"
-cask "postman"
-
-# MacroPad
-
-cask "vial"
-
-# Keyboard
-
-cask "bettertouchtool"
-
-# Browser
-
-cask "firefox"
-cask "google-chrome"
-cask "microsoft-edge"
-
-# Productivity
-
-cask "rectangle"
-cask "dozer"
-cask "raycast"
-cask "mpv"
-
-# Media
-
-cask "spotify"
-cask "slack"
-cask "discord"
-cask "signal"
-cask "calibre"
-
-# Tap "homebrew/cask-fonts"
-cask "font-jetbrains-mono-nerd-font"
-cask "font-symbols-only-nerd-font"
-

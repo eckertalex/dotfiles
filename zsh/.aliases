@@ -1,0 +1,15 @@
+#!/bin/zsh
+#
+# .aliases - Set whatever shell aliases you want.
+#
+
+### shell
+
+alias zshrc="nvim ~/.zshrc"
+alias renew="rm -rf ~/.antidote ~/.cache/antidote ~/.cache/fsh ~/.cache/gitstatus ~/.cache/p10k-* ~/.cache/zsh ~/.cache/zsh-utils ~/.zsh_plugins.zsh"
+
+### Misc
+alias lzg=lazygit
+alias lzd=lazydocker
+alias mvim="NVIM_APPNAME=mvim nvim"
+

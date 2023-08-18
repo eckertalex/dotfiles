@@ -1,5 +1,7 @@
 [include]
   path = ~/.gitconfig.local
+[includeIf "gitdir:~/.dotfiles/"]
+  path = ~/.gitconfig.private
 [init]
   defaultBranch = main
 [include]
