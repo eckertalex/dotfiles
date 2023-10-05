@@ -78,19 +78,26 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 # FZF
+# Catppuccin Macchiato
 export FZF_DEFAULT_OPTS="\
 --color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
 --color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
 --color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 # pnpm
 export PNPM_HOME=$HOME/.local/share/pnpm
 
+# bun
+export BUN_INSTALL="$HOME/.bun"
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
 # vivid for LS_COLORS
 export LS_COLORS="$(vivid generate catppuccin-macchiato)"
 
-# magic-enter 
+# magic-enter
 MAGIC_ENTER_GIT_COMMAND='gss'
 MAGIC_ENTER_OTHER_COMMAND='la'
 
@@ -111,23 +118,31 @@ export -UT INFOPATH infopath
 path=(
   $HOMEBREW_PREFIX/bin(N)
   $HOMEBREW_PREFIX/sbin(N)
+  $HOMEBREW_PREFIX/opt/php@8.0/bin(N)
+  $HOMEBREW_PREFIX/opt/php@8.0/sbin(N)
   $HOMEBREW_PREFIX/opt/fzf/bin(N)
   $HOME/.local/bin(N)
   $HOME/.cargo/bin(N)
   $HOME/.adb-fastboot(N)
   $N_PREFIX/bin(N)
   $PNPM_HOME(N)
+  $BUN_INSTALL/bin(N)
   $path[@]
 )
 
 # Add your functions to your $fpath, so you can autoload them.
 fpath=(
-  $HOME/.zfunctions(N)
+  $HOME/.zFunctions(N)
   $HOMEBREW_PREFIX/share/zsh/site-functions(N)
   $fpath[@]
 )
 
 [[ -s "$HOME/.personio.plugin.zsh" ]] && source "$HOME/.personio.plugin.zsh"
+[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && source "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+
+## Keybind
+# Ctrl-f
+bindkey -s '^f' "tmux-sessionizer\n"
 
 ##
 # Powerlevel10k

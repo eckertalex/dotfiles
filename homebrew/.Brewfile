@@ -43,6 +43,7 @@ brew "tealdeer"
 brew "wget"
 brew "fx"
 brew "jq"
+brew "walk"
 
 # Neovim
 
