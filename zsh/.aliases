@@ -12,5 +12,4 @@ alias renew="rm -rf ~/.antidote ~/.cache/antidote ~/.cache/fsh ~/.cache/gitstatu
 alias lzg=lazygit
 alias lzd=lazydocker
 alias lvim="NVIM_APPNAME=lazyvim nvim"
-alias w="walk --icons"
 

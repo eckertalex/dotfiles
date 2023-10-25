@@ -397,6 +397,11 @@ require('which-key').register({
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
 })
 
+-- mason-lspconfig requires that these setup functions are called in this order
+-- before setting up the servers.
+require('mason').setup()
+require('mason-lspconfig').setup()
+
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
@@ -407,10 +412,8 @@ require('which-key').register({
 --  define the property 'filetypes' to the map in question.
 local servers = {
   gopls = {},
-  pyright = {},
-  rust_analyzer = {},
   tsserver = {},
-  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  html = { filetypes = { 'html' } },
 
   lua_ls = {
     Lua = {

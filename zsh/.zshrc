@@ -50,6 +50,7 @@ fi
 # Options
 #
 setopt EXTENDED_GLOB
+setopt GLOBDOTS
 
 ##
 # Environment variables
