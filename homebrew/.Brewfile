@@ -37,13 +37,11 @@ brew "ripgrep"
 brew "git-delta"
 brew "zoxide"
 brew "bottom"
-brew "rm-improved"
 brew "gdu"
 brew "tealdeer"
 brew "wget"
 brew "fx"
 brew "jq"
-brew "walk"
 
 # Neovim
 
