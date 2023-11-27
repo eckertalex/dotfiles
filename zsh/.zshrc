@@ -1,81 +1,33 @@
 #!/bin/zsh
 
-##
-# Plugin manager
-#
+# zcomet as zsh plugin manager
+if [[ ! -e ~/.zcomet/bin ]]; then
+  git clone --depth=1 https://github.com/agkozak/zcomet.git ~/.zcomet/bin
+fi
 
-# Make plugin folder names pretty
-zstyle ':antidote:bundle' use-friendly-names 'yes'
-export ANTIDOTE_HOME=$HOME/.cache/antidote
-
-[[ -d $HOME/.antidote ]] ||
-  git clone https://github.com/mattmc3/antidote $HOME/.antidote
-
-source $HOME/.antidote/antidote.zsh
-antidote load
-
-# place this after nvm initialization!
-autoload -U add-zsh-hook
-
-load-nvmrc() {
-  local nvmrc_path
-  nvmrc_path="$(nvm_find_nvmrc)"
-
-  if [ -n "$nvmrc_path" ]; then
-    local nvmrc_node_version
-    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-    if [ "$nvmrc_node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
-      nvm use
-    fi
-  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
-    echo "Reverting to nvm default version"
-    nvm use default
-  fi
-}
-
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Activate Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-##
+source ~/.zcomet/bin/zcomet.zsh
+
 # Options
-#
 setopt EXTENDED_GLOB
 setopt GLOBDOTS
 
-##
 # Environment variables
-#
-
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export PAGER=less
 export EDITOR=nvim
 export VISUAL=nvim
 
 # Homebrew
-
 export HOMEBREW_NO_ANALYTICS=1
 if [[ "$OSTYPE" == "darwin"* ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
-
-# fzf
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	source "/opt/homebrew/opt/fzf/shell/completion.zsh"
-	source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
-elif [[ "$OSTYPE" == "linux-gnu" ]]; then
-	source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/completion.zsh"
-	source "/home/linuxbrew/.linuxbrew/opt/fzf/shell/key-bindings.zsh"
 fi
 
 # FZF
@@ -87,28 +39,29 @@ export FZF_DEFAULT_OPTS="\
 
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
-# pnpm
-export PNPM_HOME=$HOME/.local/share/pnpm
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
 # vivid for LS_COLORS
 export LS_COLORS="$(vivid generate catppuccin-macchiato)"
 
+# asdf
+[ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
+[ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
+
+# zoxide
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh)"
+fi
+
 # magic-enter
-MAGIC_ENTER_GIT_COMMAND='gss'
+MAGIC_ENTER_GIT_COMMAND='gst'
 MAGIC_ENTER_OTHER_COMMAND='la'
 
-##
-# Paths
-#
+# zsh-autosuggestions
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-# -U ensures each entry in these is Unique (that is, discards duplicates).
+# Paths
+# -U ensures each entry in these is Unique (that is, discards duplicates)
 export -U PATH path FPATH fpath MANPATH manpath
-# -T creates a "tied" pair; see below.
+# -T creates a "tied" pair
 export -UT INFOPATH infopath
 
 # $PATH and $path (and also $FPATH and $fpath, etc.) are "tied" to each other.
@@ -123,11 +76,6 @@ path=(
   $HOMEBREW_PREFIX/opt/php@8.0/sbin(N)
   $HOMEBREW_PREFIX/opt/fzf/bin(N)
   $HOME/.local/bin(N)
-  $HOME/.cargo/bin(N)
-  $HOME/.adb-fastboot(N)
-  $N_PREFIX/bin(N)
-  $PNPM_HOME(N)
-  $BUN_INSTALL/bin(N)
   $path[@]
 )
 
@@ -135,19 +83,30 @@ path=(
 fpath=(
   $HOME/.zFunctions(N)
   $HOMEBREW_PREFIX/share/zsh/site-functions(N)
+  $ASDF_DIR/completions(N)
   $fpath[@]
 )
 
-[[ -s "$HOME/.personio.plugin.zsh" ]] && source "$HOME/.personio.plugin.zsh"
-[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && source "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+# plugins
+zcomet snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/magic-enter/magic-enter.plugin.zsh
+zcomet snippet https://github.com/eckertalex/lsd.plugin.zsh/blob/main/lsd.plugin.zsh
+zcomet snippet https://github.com/eckertalex/git.plugin.zsh/blob/main/git.plugin.zsh
+zcomet snippet https://github.com/eckertalex/pnpm.plugin.zsh/blob/main/pnpm.plugin.zsh
+zcomet snippet "$HOME/.aliases"
+[[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
+[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
 
-## Keybind
+zcomet load hlissner/zsh-autopair
+zcomet load romkatv/powerlevel10k
+zcomet load junegunn/fzf shell completion.zsh key-bindings.zsh
+(( ${+commands[fzf]} )) || ~[fzf]/install --bin
+
+zcomet load zsh-users/zsh-syntax-highlighting
+zcomet load zsh-users/zsh-autosuggestions
+
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
 
-##
-# Powerlevel10k
-#
+zcomet compinit
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -s "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
