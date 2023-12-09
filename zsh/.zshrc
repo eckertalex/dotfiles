@@ -42,10 +42,6 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # vivid for LS_COLORS
 export LS_COLORS="$(vivid generate catppuccin-macchiato)"
 
-# asdf
-[ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
-[ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
-
 # zoxide
 if (( $+commands[zoxide] )); then
   eval "$(zoxide init zsh)"
@@ -69,7 +65,7 @@ export -UT INFOPATH infopath
 # Note that each value in an array is expanded separately. Thus, we can use ~
 # for $HOME in each $path entry.
 # (N) omits the item if it doesn't exist.
-path=(
+paths=(
   $HOMEBREW_PREFIX/bin(N)
   $HOMEBREW_PREFIX/sbin(N)
   $HOMEBREW_PREFIX/opt/php@8.0/bin(N)
@@ -83,10 +79,17 @@ path=(
 fpath=(
   $HOME/.zFunctions(N)
   $HOMEBREW_PREFIX/share/zsh/site-functions(N)
-  $ASDF_DIR/completions(N)
   $fpath[@]
 )
 
+# asdf
+[ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
+[ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
+
+fpath=(
+  $ASDF_DIR/completions(N)
+  $fpath[@]
+)
 # plugins
 zcomet snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/magic-enter/magic-enter.plugin.zsh
 zcomet snippet https://github.com/eckertalex/lsd.plugin.zsh/blob/main/lsd.plugin.zsh
