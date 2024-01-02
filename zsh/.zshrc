@@ -65,7 +65,7 @@ export -UT INFOPATH infopath
 # Note that each value in an array is expanded separately. Thus, we can use ~
 # for $HOME in each $path entry.
 # (N) omits the item if it doesn't exist.
-paths=(
+path=(
   $HOMEBREW_PREFIX/bin(N)
   $HOMEBREW_PREFIX/sbin(N)
   $HOMEBREW_PREFIX/opt/php@8.0/bin(N)
@@ -75,18 +75,13 @@ paths=(
   $path[@]
 )
 
-# Add your functions to your $fpath, so you can autoload them.
-fpath=(
-  $HOME/.zFunctions(N)
-  $HOMEBREW_PREFIX/share/zsh/site-functions(N)
-  $fpath[@]
-)
-
 # asdf
 [ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
 [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
 
+# Add your functions to your $fpath, so you can autoload them.
 fpath=(
+  $HOMEBREW_PREFIX/share/zsh/site-functions(N)
   $ASDF_DIR/completions(N)
   $fpath[@]
 )
