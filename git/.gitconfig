@@ -17,7 +17,7 @@
   hyperlinks = true
   line-numbers = true
   side-by-side = true
-  light = true 
+  light = false 
   features = decorations
   syntax-theme = "Catppuccin-latte"
 [delta "interactive"]
