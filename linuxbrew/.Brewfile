@@ -3,14 +3,6 @@
 ######
 
 # General
-#tap "homebrew/core"
-#tap "homebrew/bundle"
-#tap "homebrew/cask"
-#tap "homebrew/services"
-#tap "homebrew/cask-fonts"
-#tap "homebrew/cask-versions"
-#tap "buo/cask-upgrade"
-
 brew "gcc"
 brew "imagemagick"
 
@@ -18,27 +10,30 @@ brew "imagemagick"
 
 brew "git"
 brew "git-lfs"
-brew "lazygit"
 brew "git-interactive-rebase-tool"
+
+# cli guis
+
+brew "lazygit"
 
 # Clis
 
 brew "tmux"
-brew "n"
 brew "lsd"
+brew "vivid"
 brew "bat"
+brew "stow"
 brew "fzf"
 brew "fd"
 brew "ripgrep"
 brew "git-delta"
 brew "zoxide"
 brew "bottom"
-brew "rm-improved"
 brew "gdu"
 brew "tealdeer"
 brew "fx"
 brew "jq"
-brew "ffmpeg"
+brew "hyperfine"
 
 # Neovim
 
