@@ -1,5 +1,5 @@
-require 'mein/options'
-require 'mein/keymaps'
+require("mein.options")
+require("mein.keymaps")
 
-require 'mein/autocmds'
-require 'mein/lazy'
+require("mein.autocmds")
+require("mein.lazy")

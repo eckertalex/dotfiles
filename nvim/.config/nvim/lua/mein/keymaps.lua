@@ -1,35 +1,79 @@
 -- [[ Basic Keymaps ]]
 
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+-- [[ Remap for dealing with word wrap ]]
+vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- Move lines
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv'")
-vim.keymap.set('v', 'K', ":m '>-2<CR>gv=gv'")
+-- [[ Resize windows ]]
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 
-vim.keymap.set('n', 'J', 'mzJ`z')
+-- [[ Move lines ]]
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
 
--- center search
-vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', 'N', 'Nzzzv')
+vim.keymap.set("n", "J", "mzJ`z")
 
--- Center on half page scroll
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
+-- [[ center search ]]
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
 
--- yank/delete into registers
-vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'paste without losing register' })
+-- [[ Center on half page scroll ]]
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
-vim.keymap.set('n', '<leader>y', '"+y', { desc = 'yank into system clipboard' })
-vim.keymap.set('v', '<leader>y', '"+y', { desc = 'yank to system clipboard' })
+-- [[ yank/delete into registers ]]
+vim.keymap.set("x", "<leader>p", '"_dP', { desc = "paste without losing register" })
+vim.keymap.set("n", "<leader>y", '"+y', { desc = "yank into system clipboard" })
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "yank to system clipboard" })
+vim.keymap.set("n", "<leader>d", '"_d', { desc = "delete to empty register" })
+vim.keymap.set("v", "<leader>d", '"_d', { desc = "delete to empty register" })
 
-vim.keymap.set('n', '<leader>d', '"_d', { desc = 'delete to empty register' })
-vim.keymap.set('v', '<leader>d', '"_d', { desc = 'delete to empty register' })
+-- [[ replace word ]]
+vim.keymap.set(
+	"n",
+	"<leader>cw",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "replace current word" }
+)
 
-vim.keymap.set('n', '<C-f>', '<cmd>silent !tmux neww tmux-sessionizer<CR>')
+-- [[ better save ]]
+vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
-vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'replace current word' })
+-- [[ Diagnostics ]]
+vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Next Diagnostic" })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Prev Diagnostic" })
 
+-- [[ Quickfix ]]
+vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
+vim.keymap.set("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
+vim.keymap.set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
+vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
+
+
+-- [[ new file ]]
+vim.keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
+
+-- [[ buffers ]]
+vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
+vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
+
+-- [[ Clear search with <esc> ]]
+vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+
+-- [[ better indenting ]]
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
+
+-- [[ Lazy ]]
+vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+-- [[ tmux ]]
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
