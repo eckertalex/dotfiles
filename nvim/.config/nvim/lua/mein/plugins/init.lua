@@ -1,12 +1,57 @@
 return {
+	-- Detect tabstop and shiftwidth automatically
+	'tpope/vim-sleuth',
+
+	-- comments
+	{
+		'numToStr/Comment.nvim',
+		config = function()
+			require('Comment').setup()
+		end
+	},
+
 	-- [[ colorscheme ]]
 	{
-		"rose-pine/neovim",
-		name = "rose-pine",
+		"catppuccin/nvim",
+		name = "catppuccin",
 		priority = 1000,
 		config = function()
-			vim.cmd.colorscheme("rose-pine")
-		end,
+			require('catppuccin').setup({
+				transparent_background = true,
+				integrations = {
+					cmp = true,
+					fidget = true,
+					gitsigns = true,
+					harpoon = true,
+					treesitter = true,
+					telescope = {
+						enabled = true,
+					},
+					mason = true,
+					which_key = true,
+					native_lsp = {
+						enabled = true,
+						virtual_text = {
+							errors = { "italic" },
+							hints = { "italic" },
+							warnings = { "italic" },
+							information = { "italic" },
+						},
+						underlines = {
+							errors = { "undercurl" },
+							hints = { "undercurl" },
+							warnings = { "undercurl" },
+							information = { "undercurl" },
+						},
+						inlay_hints = {
+							background = true,
+						},
+					},
+				},
+			})
+
+			vim.cmd.colorscheme("catppuccin-macchiato")
+		end
 	},
 
 	-- [[ oil ]]
@@ -52,15 +97,26 @@ return {
 	-- [[ which-key ]]
 	{
 		"folke/which-key.nvim",
-		event = "VeryLazy",
 		opts = {
+			window = {
+				border = "rounded",
+			},
+			plugins = { spelling = true },
 			defaults = {
-				["g"] = { name = "+Goto" },
-				["<leader>f"] = { name = "+Find" },
-				["<leader>s"] = { name = "+Search" },
-				["<leader>h"] = { name = "+Harpoon" },
-				["<leader>c"] = { name = "+Code" },
-				["<leader>x"] = { name = "+Diagnostics/Quickfix" },
+				mode = { "n", "v" },
+				["g"] = { name = "+goto" },
+				["]"] = { name = "+next" },
+				["["] = { name = "+prev" },
+				["<leader>c"] = { name = "+code" },
+				["<leader>f"] = { name = "+find" },
+				["<leader>g"] = { name = "+git" },
+				["<leader>gh"] = { name = "+hunk" },
+				["<leader>h"] = { name = "+harpoon" },
+				["<leader>s"] = { name = "+search" },
+				["<leader>t"] = { name = "+tabs" },
+				["<leader>u"] = { name = "+ui" },
+				["<leader>w"] = { name = "+window" },
+				["<leader>x"] = { name = "+diagnostics/quickfix" },
 			},
 		},
 		config = function(_, opts)

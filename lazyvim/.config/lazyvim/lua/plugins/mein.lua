@@ -1,15 +1,8 @@
 return {
   {
-    "rose-pine/neovim",
-    lazy = true,
-    name = "rose-pine",
-  },
-
-  -- Configure LazyVim to load catppuccin
-  {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "rose-pine",
+      colorscheme = "catppuccin-macchiato",
     },
   },
 

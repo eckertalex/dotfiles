@@ -43,11 +43,3 @@ brew "wget"
 brew "fx"
 brew "jq"
 brew "hyperfine"
-
-# Neovim
-
-brew "neovim"
-brew "tree-sitter"
-brew "luajit"
-brew "luarocks"
-brew "stylua"

@@ -11,4 +11,4 @@ git:
 
 notARepository: "skip" # one of: 'prompt' | 'create' | 'skip' | 'quit'
 os:
-  editPreset: lzv
+  editPreset: nvim
