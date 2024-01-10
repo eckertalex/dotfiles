@@ -32,7 +32,7 @@ return {
         },
       })
       require("mason").setup()
-      require('lspconfig.ui.windows').default_options.border = 'rounded'
+      require("lspconfig.ui.windows").default_options.border = "rounded"
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
@@ -55,8 +55,9 @@ return {
           ["lua_ls"] = function()
             local lspconfig = require("lspconfig")
             lspconfig.lua_ls.setup({
+              capabilities = capabilities,
               settings = {
-                lua = {
+                Lua = {
                   workspace = { checkthirdparty = false },
                   telemetry = { enable = false },
                   hint = { enable = true },
@@ -69,28 +70,30 @@ return {
           ["tsserver"] = function()
             local lspconfig = require("lspconfig")
             lspconfig.tsserver.setup({
+              capabilities = capabilities,
               settings = {
-                -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
-                javascript = {
-                  inlayhints = {
-                    includeinlayenummembervaluehints = true,
-                    includeinlayfunctionlikereturntypehints = true,
-                    includeinlayfunctionparametertypehints = true,
-                    includeinlayparameternamehints = "all",
-                    includeinlayparameternamehintswhenargumentmatchesname = true,
-                    includeinlaypropertydeclarationtypehints = true,
-                    includeinlayvariabletypehints = true,
-                  },
-                },
                 typescript = {
                   inlayhints = {
-                    includeinlayenummembervaluehints = true,
-                    includeinlayfunctionlikereturntypehints = true,
-                    includeinlayfunctionparametertypehints = true,
-                    includeinlayparameternamehints = "all",
-                    includeinlayparameternamehintswhenargumentmatchesname = true,
-                    includeinlaypropertydeclarationtypehints = true,
-                    includeinlayvariabletypehints = true,
+                    includeInlayParameterNameHints = 'all',
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
+                  },
+                },
+                javascript = {
+                  inlayhints = {
+                    includeInlayParameterNameHints = 'all',
+                    includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                    includeInlayFunctionParameterTypeHints = true,
+                    includeInlayVariableTypeHints = true,
+                    includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+                    includeInlayPropertyDeclarationTypeHints = true,
+                    includeInlayFunctionLikeReturnTypeHints = true,
+                    includeInlayEnumMemberValueHints = true,
                   },
                 },
               },
@@ -103,10 +106,67 @@ return {
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
+      local select_opts = { behavior = cmp.SelectBehavior.Select }
+
       cmp.setup({
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = {
+          ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+          ['<CR>'] = cmp.mapping.confirm({ select = false }),
+          ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+          ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<C-f>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(1) then
+              luasnip.jump(1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<C-b>'] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            local col = vim.fn.col('.') - 1
+
+            if cmp.visible() then
+              cmp.select_next_item(select_opts)
+            elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+              fallback()
+            else
+              cmp.complete()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item(select_opts)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        },
+        formatting = {
+          fields = { 'menu', 'abbr', 'kind' },
+          format = function(entry, item)
+            local menu_icon = {
+              nvim_lsp = 'λ',
+              luasnip = '⋗',
+              buffer = 'Ω',
+              path = '🖫',
+            }
+
+            item.menu = menu_icon[entry.source.name]
+            return item
           end,
         },
         completion = {
@@ -117,11 +177,11 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
           { name = "path" },
+          { name = "nvim_lsp", keyword_length = 1 },
+          { name = "luasnip",  keyword_length = 2 },
         }, {
-          { name = "buffer" },
+          { name = "buffer", keyword_length = 3 },
         }),
       })
     end,

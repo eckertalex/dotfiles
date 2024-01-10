@@ -82,6 +82,31 @@ return {
 		end
 	},
 
+	{
+		"echasnovski/mini.bufremove",
+		config = function()
+			local bufremove = require("mini.bufremove").delete
+			vim.keymap.set("n",
+				"<leader>bd",
+				function()
+					if vim.bo.modified then
+						local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+						if choice == 1 then -- Yes
+							vim.cmd.write()
+							bufremove(0)
+						elseif choice == 2 then -- No
+							bufremove(0, true)
+						end
+					else
+						bufremove(0)
+					end
+				end,
+				{ desc = "Delete Buffer" })
+			vim.keymap.set("n", "<leader>bD", function() bufremove(0, true) end,
+				{ desc = "Delete Buffer (Force)" })
+		end
+	},
+
 	-- [[ which-key ]]
 	{
 		"folke/which-key.nvim",
@@ -95,6 +120,7 @@ return {
 				["g"] = { name = "+goto" },
 				["]"] = { name = "+next" },
 				["["] = { name = "+prev" },
+				["<leader>b"] = { name = "+buffers" },
 				["<leader>c"] = { name = "+code" },
 				["<leader>f"] = { name = "+find" },
 				["<leader>g"] = { name = "+git" },

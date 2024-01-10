@@ -60,39 +60,76 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 	callback = function(ev)
-		-- vim.lsp.inlay_hint.enable(ev.buf, true)
-
 		-- Enable completion triggered by <c-x><c-o>
 		vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-		-- Buffer local mappings.
+		-- [[ Buffer local mappings ]]
+
+		-- Displays hover information about the symbol under the cursor
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = ev.buf, desc = "Hover Documentation" })
+
+		-- Jump to the definition
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, desc = "Definition" })
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "References" })
+
+		-- Jump to declaration
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "Declaration" })
-		vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { buffer = ev.buf, desc = "Implementation" })
+
+		-- Lists all the implementations for the symbol under the cursor
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = ev.buf, desc = "Implementation" })
+
+		-- Jumps to the definition of the type symbol
 		vim.keymap.set("n", "gy", vim.lsp.buf.type_definition,
 			{ buffer = ev.buf, desc = "Type Definition" })
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = ev.buf, desc = "Hover Documentation" })
-		vim.keymap.set("n", "gK", vim.lsp.buf.signature_help,
+
+		-- Lists all the references
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "References" })
+
+		-- Displays a function's signature information
+		vim.keymap.set("n", "gs", vim.lsp.buf.signature_help,
 			{ buffer = ev.buf, desc = "Signature Documentation" })
+
+		-- Renames all references to the symbol under the cursor
+		vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename" })
+
+		-- Selects a code action available at the current cursor position
 		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action,
 			{ buffer = ev.buf, desc = "Code Action" })
-		vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename" })
+
 		vim.keymap.set("n", "<leader>cf", function()
 			vim.lsp.buf.format({ async = true })
 		end, { buffer = ev.buf, desc = "Format" })
 	end,
 })
 
+-- [[ inlay_hint ]]
+vim.api.nvim_create_autocmd('LspAttach', {
+	desc = 'Enable inlay hints',
+	callback = function(event)
+		local client = vim.lsp.get_client_by_id(event.data.client_id)
+		if client == nil or not client.server_capabilities.inlayHintProvider then
+			return
+		end
+
+		vim.lsp.inlay_hint.enable(event.buf, true)
+	end,
+})
+
+vim.api.nvim_create_user_command('ToggleInlayHints', function()
+	local is_enabled = vim.lsp.inlay_hint.is_enabled(nil)
+	vim.lsp.inlay_hint.enable(nil, not is_enabled)
+	print('Setting lsp.inlay_hint to: ' .. tostring(not is_enabled))
+end, {})
+
+vim.keymap.set('n', '<leader>uh', "<cmd>ToggleInlayHints<cr>", { desc = 'Toggle inlay hints' })
+
 -- [[ Autoformat ]]
--- Switch for controlling whether you want autoformatting.
 local format_is_enabled = true
-vim.api.nvim_create_user_command('AutoformatToggle', function()
+vim.api.nvim_create_user_command('ToggleAutoformat', function()
 	format_is_enabled = not format_is_enabled
 	print('Setting autoformatting to: ' .. tostring(format_is_enabled))
 end, {})
 
-vim.keymap.set('n', '<leader>uf', "<cmd>AutoformatToggle<cr>", { desc = 'Toggle autoformatting' })
+vim.keymap.set('n', '<leader>uf', "<cmd>ToggleAutoformat<cr>", { desc = 'Toggle autoformatting' })
 
 -- Create an augroup that is used for managing our formatting autocmds.
 --      We need one augroup per client to make sure that multiple clients
@@ -157,4 +194,33 @@ vim.api.nvim_create_autocmd('LspAttach', {
 			end,
 		})
 	end,
+})
+
+local function highlight_symbol(event)
+	local id = vim.tbl_get(event, 'data', 'client_id')
+	local client = id and vim.lsp.get_client_by_id(id)
+	if client == nil or not client.supports_method('textDocument/documentHighlight') then
+		return
+	end
+
+	local group = vim.api.nvim_create_augroup('highlight_symbol', { clear = false })
+
+	vim.api.nvim_clear_autocmds({ buffer = event.buf, group = group })
+
+	vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+		group = group,
+		buffer = event.buf,
+		callback = vim.lsp.buf.document_highlight,
+	})
+
+	vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+		group = group,
+		buffer = event.buf,
+		callback = vim.lsp.buf.clear_references,
+	})
+end
+
+vim.api.nvim_create_autocmd('LspAttach', {
+	desc = 'Setup highlight symbol',
+	callback = highlight_symbol,
 })

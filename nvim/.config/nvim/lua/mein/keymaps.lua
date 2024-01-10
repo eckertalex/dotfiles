@@ -48,8 +48,11 @@ vim.keymap.set(
 vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
 -- [[ Diagnostics ]]
-vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+-- Show diagnostics in a floating window
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+-- Move to the previous diagnostic
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Next Diagnostic" })
+-- Move to the next diagnostic
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Prev Diagnostic" })
 
 -- [[ Quickfix ]]
@@ -89,15 +92,6 @@ vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and 
 -- [[ better indenting ]]
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
-
--- [[ inlay_hint ]]
-vim.keymap.set('n', '<leader>uh', function()
-	local is_enabled = vim.lsp.inlay_hint.is_enabled(nil)
-	vim.lsp.inlay_hint.enable(nil, not is_enabled)
-end, { desc = 'Toggle Inlay Hints' })
-
--- [[ Lazy ]]
-vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
 
 -- [[ tmux ]]
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")

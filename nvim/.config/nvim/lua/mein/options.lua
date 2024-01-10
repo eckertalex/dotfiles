@@ -23,3 +23,21 @@ vim.opt.undofile = true                       -- Save undo history
 vim.opt.updatetime = 250                      -- Decrease update time
 
 vim.g.netrw_banner = 0
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+
+-- diagnostic
+vim.diagnostic.config({
+	float = {
+		border = "rounded"
+	},
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = '✘',
+			[vim.diagnostic.severity.WARN] = '▲',
+			[vim.diagnostic.severity.HINT] = '⚑',
+			[vim.diagnostic.severity.INFO] = '»',
+		},
+	},
+})
