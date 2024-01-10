@@ -21,3 +21,5 @@ vim.opt.termguicolors = true                  -- true color support
 vim.opt.timeoutlen = 300                      -- timeout
 vim.opt.undofile = true                       -- Save undo history
 vim.opt.updatetime = 250                      -- Decrease update time
+
+vim.g.netrw_banner = 0
