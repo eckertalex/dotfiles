@@ -11,15 +11,15 @@ return {
         transparent_background = true,
         integrations = {
           cmp = true,
+          dashboard = true,
           fidget = true,
           gitsigns = true,
           harpoon = true,
-          treesitter = true,
-          telescope = {
-            enabled = true,
-          },
+          illuminate = true,
+          indent_blankline = { enabled = true },
+          lsp_trouble = true,
           mason = true,
-          which_key = true,
+          mini = true,
           native_lsp = {
             enabled = true,
             virtual_text = {
@@ -35,6 +35,9 @@ return {
               information = { "undercurl" },
             },
           },
+          telescope = true,
+          treesitter = true,
+          which_key = true,
         },
       })
 
