@@ -2,25 +2,32 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "folke/neodev.nvim", -- awesome neovim dev tools
-      "j-hui/fidget.nvim", -- lsp progress messages
+      -- awesome neovim dev tools
+      {
+        "folke/neodev.nvim",
+        opts = {}
+      },
+      -- lsp progress messages
+      {
+        "j-hui/fidget.nvim",
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+              border = "rounded",
+            },
+          },
+        }
+      },
 
       -- install deps
-      "williamboman/mason.nvim",
+      {
+        "williamboman/mason.nvim",
+        opts = {}
+      },
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
-      require("neodev").setup()
-      require("mason").setup()
-      require("fidget").setup({
-        notification = {
-          window = {
-            winblend = 0,
-            border = "rounded",
-          },
-        },
-      })
-
       -- diagnostics
       for name, icon in pairs(require("mein.icons").diagnostics) do
         name = "DiagnosticSign" .. name
@@ -51,7 +58,7 @@ return {
       require("lspconfig.ui.windows").default_options.border = "rounded"
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
       vim.lsp.handlers["textDocument/signatureHelp"] =
-        vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+          vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -83,8 +90,34 @@ return {
           vim.keymap.set("n", "<leader>cf", function()
             vim.lsp.buf.format({ async = true })
           end, { buffer = buffer, desc = "Format" })
+
+          vim.api.nvim_buf_create_user_command(buffer, "Format", function(_)
+            vim.lsp.buf.format()
+          end, { desc = "Format current buffer with LSP" })
         end,
       })
+
+      local format_is_enabled = true
+      vim.api.nvim_create_user_command("ToggleAutoformat", function()
+        format_is_enabled = not format_is_enabled
+        print("Setting autoformatting to: " .. tostring(format_is_enabled))
+      end, {})
+
+      vim.keymap.set("n", "<leader>uf", "<cmd>ToggleAutoformat<cr>", { desc = "Toggle autoformatting" })
+
+      -- Create an augroup that is used for managing our formatting autocmds.
+      --      We need one augroup per client to make sure that multiple clients
+      --      can attach to the same buffer without interfering with each other.
+      local _augroups = {}
+      local get_augroup = function(client)
+        if not _augroups[client.id] then
+          local group_name = "lsp-format-" .. client.name
+          local id = vim.api.nvim_create_augroup(group_name, { clear = true })
+          _augroups[client.id] = id
+        end
+
+        return _augroups[client.id]
+      end
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -102,32 +135,6 @@ return {
           if client.name == "tsserver" then
             return
           end
-
-          local format_is_enabled = true
-          vim.api.nvim_create_user_command("ToggleAutoformat", function()
-            format_is_enabled = not format_is_enabled
-            print("Setting autoformatting to: " .. tostring(format_is_enabled))
-          end, {})
-
-          vim.keymap.set("n", "<leader>uf", "<cmd>ToggleAutoformat<cr>", { desc = "Toggle autoformatting" })
-
-          -- Create an augroup that is used for managing our formatting autocmds.
-          --      We need one augroup per client to make sure that multiple clients
-          --      can attach to the same buffer without interfering with each other.
-          local _augroups = {}
-          local get_augroup = function(client_)
-            if not _augroups[client.id] then
-              local group_name = "lsp-format-" .. client_.name
-              local id = vim.api.nvim_create_augroup(group_name, { clear = true })
-              _augroups[client_.id] = id
-            end
-
-            return _augroups[client_.id]
-          end
-
-          vim.api.nvim_buf_create_user_command(buffer, "Format", function(_)
-            vim.lsp.buf.format()
-          end, { desc = "Format current buffer with LSP" })
 
           -- Create an autocmd that will run *before* we save the buffer.
           --  Run the formatting command for the LSP that has just attached.

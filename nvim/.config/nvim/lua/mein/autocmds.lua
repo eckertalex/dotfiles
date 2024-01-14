@@ -50,6 +50,11 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- disable comment continuation
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  callback = function() vim.opt_local.formatoptions:remove({ 'c', 'r', 'o' }) end
+})
+
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("mein_wrap_spell", { clear = true }),

@@ -1,6 +1,8 @@
 return {
   {
     "akinsho/bufferline.nvim",
+    version = "*",
+    event = "VeryLazy",
     dependencies = {
       "nvim-tree/nvim-web-devicons",
       "echasnovski/mini.bufremove",
@@ -9,44 +11,59 @@ return {
         name = "catppuccin",
       },
     },
-    version = "*",
-    config = function()
-      require("bufferline").setup({
+    keys = {
+      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
+      { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
+      { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>",          desc = "Delete other buffers" },
+      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>",           desc = "Delete buffers to the right" },
+      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>",            desc = "Delete buffers to the left" },
+      { "<S-h>",      "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
+      { "<S-l>",      "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
+      { "[b",         "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
+      { "]b",         "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
+    },
+    opts = {
+      options = {
+        close_command = function(n)
+          require("mini.bufremove").delete(n, false)
+        end,
+        right_mouse_command = function(n)
+          require("mini.bufremove").delete(n, false)
+        end,
+        diagnostics = "nvim_lsp",
+        always_show_bufferline = false,
+        diagnostics_indicator = function(_, _, diag)
+          local icons = require("mein.icons").diagnostics
+          local ret = (diag.error and icons.Error .. diag.error .. " " or "")
+              .. (diag.warning and icons.Warn .. diag.warning or "")
+          return vim.trim(ret)
+        end,
         highlights = require("catppuccin.groups.integrations.bufferline").get(),
-        options = {
-          close_command = function(n)
-            require("mini.bufremove").delete(n, false)
-          end,
-          right_mouse_command = function(n)
-            require("mini.bufremove").delete(n, false)
-          end,
-          diagnostics = "nvim_lsp",
-          always_show_bufferline = false,
-        },
-      })
-
-      vim.keymap.set("n", "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", { desc = "Toggle pin" })
-      vim.keymap.set(
-        "n",
-        "<leader>bP",
-        "<Cmd>BufferLineGroupClose ungrouped<CR>",
-        { desc = "Delete non-pinned buffers" }
-      )
-      vim.keymap.set("n", "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", { desc = "Delete other buffers" })
-      vim.keymap.set("n", "<leader>br", "<Cmd>BufferLineCloseRight<CR>", { desc = "Delete buffers to the right" })
-      vim.keymap.set("n", "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", { desc = "Delete buffers to the left" })
-      vim.keymap.set("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
-      vim.keymap.set("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-      vim.keymap.set("n", "[b", "<cmd>BufferLineCyclePrev<cr>", { desc = "Prev buffer" })
-      vim.keymap.set("n", "]b", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
-    end,
+      }
+    },
+    config = function(_, opts)
+      require("bufferline").setup(opts)
+    end
   },
 
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("lualine").setup({
+    event = "VeryLazy",
+    init = function()
+      vim.g.lualine_laststatus = vim.o.laststatus
+      if vim.fn.argc(-1) > 0 then
+        -- set an empty statusline till lualine loads
+        vim.o.statusline = " "
+      else
+        -- hide the statusline on the starter page
+        vim.o.laststatus = 0
+      end
+    end,
+    opts = function()
+      vim.o.laststatus = vim.g.lualine_laststatus
+
+      return {
         options = {
           theme = "catppuccin",
           globalstatus = true,
@@ -65,7 +82,7 @@ return {
           "mason",
           "lazy",
         },
-      })
+      }
     end,
   },
 
@@ -130,7 +147,8 @@ return {
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
-    config = function()
+    event = "VimEnter",
+    opts = function()
       local logo = {
         [[                                                                       ]],
         [[                                                                       ]],
@@ -162,15 +180,15 @@ return {
         },
         config = {
           header = logo,
-					-- stylua: ignore
-					center = {
-						{ action = "Telescope find_files", desc = " Find file", icon = " ", key = "f" },
-						{ action = "ene | startinsert", desc = " New file", icon = " ", key = "n" },
-						{ action = "Telescope oldfiles", desc = " Recent files", icon = " ", key = "r" },
-						{ action = "Telescope live_grep", desc = " Find text", icon = " ", key = "g" },
-						{ action = "Lazy", desc = " Lazy", icon = "󰒲 ", key = "l" },
-						{ action = "qa", desc = " Quit", icon = " ", key = "q" },
-					},
+          -- stylua: ignore
+          center = {
+            { action = "Telescope find_files", desc = " Find file", icon = " ", key = "f" },
+            { action = "ene | startinsert", desc = " New file", icon = " ", key = "n" },
+            { action = "Telescope oldfiles", desc = " Recent files", icon = " ", key = "r" },
+            { action = "Telescope live_grep", desc = " Find text", icon = " ", key = "g" },
+            { action = "Lazy", desc = " Lazy", icon = "󰒲 ", key = "l" },
+            { action = "qa", desc = " Quit", icon = " ", key = "q" },
+          },
           footer = function()
             local stats = require("lazy").stats()
             local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -195,7 +213,7 @@ return {
         })
       end
 
-      require("lualine").setup(opts)
+      return opts
     end,
   },
 }

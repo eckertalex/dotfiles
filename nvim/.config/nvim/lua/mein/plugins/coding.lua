@@ -10,40 +10,42 @@ return {
         end,
       },
     },
-    config = function()
-      require("luasnip").setup({
-        history = true,
-        delete_check_events = "TextChanged",
-      })
-
-      vim.keymap.set({ "i", "s" }, "<tab>", function()
-        return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-      end, { expr = true, silent = true })
-      vim.keymap.set({ "i", "s" }, "<tab>", function()
-        require("luasnip").jump(1)
-      end)
-      vim.keymap.set({ "i", "s" }, "<s-tab>", function()
-        require("luasnip").jump(-1)
-      end)
-    end,
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
+    keys = {
+      {
+        "<tab>",
+        function()
+          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+        end,
+        expr = true,
+        silent = true,
+        mode = "i",
+      },
+      { "<tab>",   function() require("luasnip").jump(1) end,  mode = "s" },
+      { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+    },
   },
 
   {
     "hrsh7th/nvim-cmp",
     version = false, -- last release is way too old
+    event = "InsertEnter",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
     },
-    config = function()
+    opts = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
 
-      require("cmp").setup({
+      return {
         completion = {
           completeopt = "menu,menuone,noinsert",
         },
@@ -95,28 +97,33 @@ return {
           },
         },
         sorting = defaults.sorting,
-      })
+      }
+    end,
+    ---@param opts cmp.ConfigSchema
+    config = function(_, opts)
+      for _, source in ipairs(opts.sources) do
+        source.group_index = source.group_index or 1
+      end
+      require("cmp").setup(opts)
     end,
   },
 
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
-    config = function()
-      require("ts_context_commentstring").setup({
-        enable_autocmd = false,
-      })
-    end,
+    lazy = true,
+    opts = {
+      enable_autocmd = false,
+    },
   },
   {
     "echasnovski/mini.comment",
-    config = function()
-      require("mini.comment").setup({
-        options = {
-          custom_commentstring = function()
-            return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
-          end,
-        },
-      })
-    end,
+    event = "VeryLazy",
+    opts = {
+      options = {
+        custom_commentstring = function()
+          return require("ts_context_commentstring.internal").calculate_commentstring() or vim.bo.commentstring
+        end,
+      },
+    },
   },
 }

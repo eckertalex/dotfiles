@@ -1,7 +1,18 @@
 return {
   {
+    "nvim-pack/nvim-spectre",
+    build = false,
+    cmd = "Spectre",
+    opts = { open_cmd = "noswapfile vnew" },
+    keys = {
+      { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+    },
+  },
+
+  {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.5",
+    cmd = "Telescope",
+    version = false, -- telescope did only one release, so use HEAD for now
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       local function filenameFirst(_, path)
@@ -75,6 +86,7 @@ return {
     config = function()
       local harpoon = require("harpoon")
       harpoon:setup({})
+
       vim.keymap.set("n", "<C-g>", function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
       end, { desc = "List" })
@@ -104,101 +116,92 @@ return {
   },
 
   {
-    -- Adds git related signs to the gutter, as well as utilities for managing changes
     "lewis6991/gitsigns.nvim",
-    config = function()
-      require("gitsigns").setup({
-        -- See `:help gitsigns.txt`
-        signs = {
-          add = { text = "+" },
-          change = { text = "~" },
-          delete = { text = "_" },
-          topdelete = { text = "‾" },
-          changedelete = { text = "~" },
-        },
-        on_attach = function(bufnr)
-          local gs = package.loaded.gitsigns
+    opts = {
+      signs = {
+        add = { text = "+" },
+        change = { text = "~" },
+        delete = { text = "_" },
+        topdelete = { text = "‾" },
+        changedelete = { text = "~" },
+      },
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
 
-          local function map(mode, l, r, opts)
-            opts = opts or {}
-            opts.buffer = bufnr
-            vim.keymap.set(mode, l, r, opts)
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, l, r, opts)
+        end
+
+        -- Navigation
+        map({ "n", "v" }, "]c", function()
+          if vim.wo.diff then
+            return "]c"
           end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true, desc = "Next hunk" })
 
-          -- Navigation
-          map({ "n", "v" }, "]c", function()
-            if vim.wo.diff then
-              return "]c"
-            end
-            vim.schedule(function()
-              gs.next_hunk()
-            end)
-            return "<Ignore>"
-          end, { expr = true, desc = "Next hunk" })
+        map({ "n", "v" }, "[c", function()
+          if vim.wo.diff then
+            return "[c"
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
+          return "<Ignore>"
+        end, { expr = true, desc = "Previous hunk" })
 
-          map({ "n", "v" }, "[c", function()
-            if vim.wo.diff then
-              return "[c"
-            end
-            vim.schedule(function()
-              gs.prev_hunk()
-            end)
-            return "<Ignore>"
-          end, { expr = true, desc = "Previous hunk" })
-
-          -- Actions
-          -- visual mode
-          map("v", "<leader>ghs", function()
-            gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-          end, { desc = "Stage hunk" })
-          map("v", "<leader>ghr", function()
-            gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-          end, { desc = "Reset hunk" })
-          -- normal mode
-          map("n", "<leader>ghs", gs.stage_hunk, { desc = "Stage hunk" })
-          map("n", "<leader>ghr", gs.reset_hunk, { desc = "Reset hunk" })
-          map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage buffer" })
-          map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-          map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset buffer" })
-          map("n", "<leader>ghp", gs.preview_hunk, { desc = "Preview hunk" })
-          map("n", "<leader>ghb", function()
-            gs.blame_line({ full = false })
-          end, { desc = "Blame line" })
-          map("n", "<leader>ghd", gs.diffthis, { desc = "Diff this" })
-          map("n", "<leader>ghD", function()
-            gs.diffthis("~")
-          end, { desc = "Diff this ~" })
-        end,
-      })
-    end,
+        -- Actions
+        -- visual mode
+        map("v", "<leader>ghs", function()
+          gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end, { desc = "Stage hunk" })
+        map("v", "<leader>ghr", function()
+          gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+        end, { desc = "Reset hunk" })
+        -- normal mode
+        map("n", "<leader>ghs", gs.stage_hunk, { desc = "Stage hunk" })
+        map("n", "<leader>ghr", gs.reset_hunk, { desc = "Reset hunk" })
+        map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage buffer" })
+        map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+        map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset buffer" })
+        map("n", "<leader>ghp", gs.preview_hunk, { desc = "Preview hunk" })
+        map("n", "<leader>ghb", function()
+          gs.blame_line({ full = false })
+        end, { desc = "Blame line" })
+        map("n", "<leader>ghd", gs.diffthis, { desc = "Diff this" })
+        map("n", "<leader>ghD", function()
+          gs.diffthis("~")
+        end, { desc = "Diff this ~" })
+      end,
+    },
   },
 
   {
     "RRethy/vim-illuminate",
-    config = function()
+    config = function(_, opts)
       require("illuminate").configure({
-        large_file_cutoff = 2000,
         delay = 200,
+        large_file_cutoff = 2000,
         large_file_overrides = {
           providers = { "lsp" },
         },
       })
 
-      local function map(key, dir, buffer)
-        vim.keymap.set("n", key, function()
-          require("illuminate")["goto_" .. dir .. "_reference"](false)
-        end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference", buffer = buffer })
-      end
-
-      map("]]", "next")
-      map("[[", "prev")
-
-      -- also set it after loading ftplugins, since a lot overwrite [[ and ]]
       vim.api.nvim_create_autocmd("FileType", {
         callback = function()
           local buffer = vim.api.nvim_get_current_buf()
-          map("]]", "next", buffer)
-          map("[[", "prev", buffer)
+
+          vim.keymap.set("n", "]]", function()
+            require("illuminate")["goto_next_reference"](false)
+          end, { desc = "Next Reference", buffer = buffer })
+          vim.keymap.set("n", "[[", function()
+            require("illuminate")["goto_prev_reference"](false)
+          end, { desc = "Prev Reference", buffer = buffer })
         end,
       })
     end,
@@ -210,25 +213,27 @@ return {
 
   {
     "echasnovski/mini.bufremove",
-    config = function()
-      local bufremove = require("mini.bufremove").delete
-      vim.keymap.set("n", "<leader>bd", function()
-        if vim.bo.modified then
-          local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
-          if choice == 1 then -- Yes
-            vim.cmd.write()
-            bufremove(0)
-          elseif choice == 2 then -- No
-            bufremove(0, true)
+    keys = {
+      {
+        "<leader>bd",
+        function()
+          local bd = require("mini.bufremove").delete
+          if vim.bo.modified then
+            local choice = vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+            if choice == 1 then -- Yes
+              vim.cmd.write()
+              bd(0)
+            elseif choice == 2 then -- No
+              bd(0, true)
+            end
+          else
+            bd(0)
           end
-        else
-          bufremove(0)
-        end
-      end, { desc = "Delete Buffer" })
-      vim.keymap.set("n", "<leader>bD", function()
-        bufremove(0, true)
-      end, { desc = "Delete Buffer (Force)" })
-    end,
+        end,
+        desc = "Delete Buffer",
+      },
+      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+    },
   },
 
   {
@@ -236,10 +241,10 @@ return {
     cmd = { "TroubleToggle", "Trouble" },
     opts = { use_diagnostic_signs = true },
     keys = {
-      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
+      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>",  desc = "Document Diagnostics (Trouble)" },
       { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
-      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
+      { "<leader>xL", "<cmd>TroubleToggle loclist<cr>",               desc = "Location List (Trouble)" },
+      { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>",              desc = "Quickfix List (Trouble)" },
       {
         "[q",
         function()
@@ -290,15 +295,16 @@ return {
         end,
         desc = "Previous todo comment",
       },
-      { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
-      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
-      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
+      { "<leader>xt", "<cmd>TodoTrouble<cr>",                           desc = "Todo (Trouble)" },
+      { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",   desc = "Todo/Fix/Fixme (Trouble)" },
+      { "<leader>st", "<cmd>TodoTelescope<cr>",                         desc = "Todo" },
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
   },
 
   {
     "folke/which-key.nvim",
+    event = "VeryLazy",
     opts = {
       window = {
         border = "rounded",
