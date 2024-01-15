@@ -5,7 +5,7 @@ return {
       -- awesome neovim dev tools
       {
         "folke/neodev.nvim",
-        opts = {}
+        opts = {},
       },
       -- lsp progress messages
       {
@@ -17,13 +17,13 @@ return {
               border = "rounded",
             },
           },
-        }
+        },
       },
 
       -- install deps
       {
         "williamboman/mason.nvim",
-        opts = {}
+        opts = {},
       },
       "williamboman/mason-lspconfig.nvim",
     },
@@ -82,7 +82,8 @@ return {
           -- Lists all the references
           vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = buffer, desc = "References" })
           -- Displays a function's signature information
-          vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, { buffer = buffer, desc = "Signature Documentation" })
+          vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help,
+            { buffer = buffer, desc = "Signature Documentation" })
           -- Renames all references to the symbol under the cursor
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = buffer, desc = "Rename" })
           -- Selects a code action available at the current cursor position
@@ -97,10 +98,14 @@ return {
         end,
       })
 
-      local format_is_enabled = true
+      local autoformat_is_enabled = true
       vim.api.nvim_create_user_command("ToggleAutoformat", function()
-        format_is_enabled = not format_is_enabled
-        print("Setting autoformatting to: " .. tostring(format_is_enabled))
+        autoformat_is_enabled = not autoformat_is_enabled
+        if autoformat_is_enabled then
+          vim.notify("Enabled autoformatting", vim.log.levels.INFO)
+        else
+          vim.notify("Disabled autoformatting", vim.log.levels.WARN)
+        end
       end, {})
 
       vim.keymap.set("n", "<leader>uf", "<cmd>ToggleAutoformat<cr>", { desc = "Toggle autoformatting" })
@@ -142,7 +147,7 @@ return {
             group = get_augroup(client),
             buffer = buffer,
             callback = function()
-              if not format_is_enabled then
+              if not autoformat_is_enabled then
                 return
               end
 

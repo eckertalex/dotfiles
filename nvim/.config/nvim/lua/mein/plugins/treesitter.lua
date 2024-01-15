@@ -7,7 +7,7 @@ return {
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = {
       { "<c-space>", desc = "Increment selection" },
-      { "<bs>",      desc = "Decrement selection", mode = "x" },
+      { "<bs>", desc = "Decrement selection", mode = "x" },
     },
     ---@type TSConfig
     opts = {
@@ -53,6 +53,19 @@ return {
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
-    end
+    end,
+  },
+
+  {
+    "Wansmer/treesj",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    keys = {
+      { "<leader>cj", "<cmd>TSJJoin<cr>", desc = "Join line below" },
+      { "<leader>cs", "<cmd>TSJSplit<cr>", desc = "Split line" },
+      { "<leader>cm", "<cmd>TSJToggle<cr>", desc = "Toggle join/split" },
+    },
+    opts = {
+      use_default_keymaps = false,
+    },
   },
 }

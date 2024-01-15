@@ -5,16 +5,99 @@ return {
     cmd = "Spectre",
     opts = { open_cmd = "noswapfile vnew" },
     keys = {
-      { "<leader>sr", function() require("spectre").open() end, desc = "Replace in files (Spectre)" },
+      {
+        "<leader>sR",
+        function()
+          require("spectre").open()
+        end,
+        desc = "Replace in files (Spectre)",
+      },
     },
   },
 
   {
     "nvim-telescope/telescope.nvim",
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      { "nvim-telescope/telescope-live-grep-args.nvim" },
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+        cond = function()
+          return vim.fn.executable("make") == 1
+        end,
+      },
+    },
     cmd = "Telescope",
     version = false, -- telescope did only one release, so use HEAD for now
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
+    keys = {
+      {
+        "<leader><leader>",
+        "<cmd>Telescope find_files<cr>",
+        desc = "Find Files",
+      },
+      {
+        "<leader>r",
+        "<cmd>Telescope resume<cr>",
+        desc = "Resume Telescope",
+      },
+      {
+        "<leader>fb",
+        "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
+        desc = "Buffers",
+      },
+      {
+        "<leader>fr",
+        "<cmd>Telescope oldfiles<cr>",
+        desc = "Recent",
+      },
+      {
+        "<leader>gc",
+        "<cmd>Telescope git_commits<cr>",
+        desc = "Commits",
+      },
+      {
+        "<leader>gs",
+        "<cmd>Telescope git_status<cr>",
+        desc = "Status",
+      },
+      {
+        "<leader>gf",
+        "<cmd>Telescope git_files<cr>",
+        desc = "Git Files",
+      },
+      {
+        "<leader>sb",
+        "<cmd>Telescope current_buffer_fuzzy_find<cr>",
+        desc = "Buffer",
+      },
+      {
+        "<leader>sd",
+        "<cmd>Telescope diagnostics bufnr=0<cr>",
+        desc = "Document diagnostics",
+      },
+      {
+        "<leader>sD",
+        "<cmd>Telescope diagnostics<cr>",
+        desc = "Workspace diagnostics",
+      },
+      {
+        "<leader>sg",
+        "<cmd>Telescope live_grep_args<cr>",
+        desc = "Grep",
+      },
+      {
+        "<leader>sh",
+        "<cmd>Telescope help_tags<cr>",
+        desc = "Help",
+      },
+      {
+        "<leader>sW",
+        "<cmd>Telescope grep_string word_match=-w<cr>",
+        desc = "Word",
+      },
+    },
+    opts = function()
       local function filenameFirst(_, path)
         local tail = vim.fs.basename(path)
         local parent = vim.fs.dirname(path)
@@ -24,56 +107,30 @@ return {
         return string.format("%s\t\t%s", tail, parent)
       end
 
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "TelescopeResults",
-        callback = function(ctx)
-          vim.api.nvim_buf_call(ctx.buf, function()
-            vim.fn.matchadd("TelescopeParent", "\t\t.*$")
-            vim.api.nvim_set_hl(0, "TelescopeParent", { link = "Comment" })
-          end)
-        end,
-      })
-
+      pcall(require("telescope").load_extension, "fzf")
+      require("telescope").load_extension("live_grep_args")
+      local actions = require("telescope.actions")
       local action_layout = require("telescope.actions.layout")
-      require("telescope").setup({
+      local lga_actions = require("telescope-live-grep-args.actions")
+
+      return {
         defaults = {
+          prompt_prefix = " ",
+          selection_caret = " ",
           path_display = filenameFirst,
           mappings = {
-            n = {
-              ["<C-h>"] = action_layout.toggle_preview,
-            },
             i = {
               ["<C-h>"] = action_layout.toggle_preview,
+              ["<C-k>"] = lga_actions.quote_prompt(),
+              ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+            },
+            n = {
+              ["<C-h>"] = action_layout.toggle_preview,
+              ["q"] = actions.close,
             },
           },
         },
-      })
-
-      local builtin = require("telescope.builtin")
-
-      vim.keymap.set("n", "<leader><leader>", builtin.find_files, { desc = "Find Files" })
-      vim.keymap.set("n", "<leader>r", builtin.resume, { desc = "Resume Telescope" })
-
-      -- find
-      vim.keymap.set("n", "<leader>fb", function()
-        builtin.buffers({ sort_mru = true, sort_lastused = true })
-      end, { desc = "Buffers" })
-      vim.keymap.set("n", "<leader>fr", builtin.oldfiles, { desc = "Recent" })
-
-      -- git
-      vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "Commits" })
-      vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Status" })
-      vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "Git Files" })
-
-      -- search
-      vim.keymap.set("n", "<leader>sb", builtin.current_buffer_fuzzy_find, { desc = "Buffer" })
-      vim.keymap.set("n", "<leader>sd", function()
-        builtin.diagnostics({ bufnr = 0 })
-      end, { desc = "Buffer Diagnostics" })
-      vim.keymap.set("n", "<leader>sD", builtin.diagnostics, { desc = "Diagnostics" })
-      vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "Grep" })
-      vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "Help" })
-      vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "Current Word" })
+      }
     end,
   },
 
@@ -183,7 +240,7 @@ return {
 
   {
     "RRethy/vim-illuminate",
-    config = function(_, opts)
+    config = function()
       require("illuminate").configure({
         delay = 200,
         large_file_cutoff = 2000,
@@ -205,10 +262,6 @@ return {
         end,
       })
     end,
-    keys = {
-      { "]]", desc = "Next Reference" },
-      { "[[", desc = "Prev Reference" },
-    },
   },
 
   {
@@ -232,7 +285,13 @@ return {
         end,
         desc = "Delete Buffer",
       },
-      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+      {
+        "<leader>bD",
+        function()
+          require("mini.bufremove").delete(0, true)
+        end,
+        desc = "Delete Buffer (Force)",
+      },
     },
   },
 
@@ -278,8 +337,8 @@ return {
 
   {
     "folke/todo-comments.nvim",
+    event = "VeryLazy",
     cmd = { "TodoTrouble", "TodoTelescope" },
-    config = true,
     keys = {
       {
         "]t",
@@ -300,6 +359,7 @@ return {
       { "<leader>st", "<cmd>TodoTelescope<cr>",                         desc = "Todo" },
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
+    opts = {},
   },
 
   {
@@ -313,6 +373,7 @@ return {
       defaults = {
         mode = { "n", "v" },
         ["g"] = { name = "+goto" },
+        ["gs"] = { name = "+surround" },
         ["]"] = { name = "+next" },
         ["["] = { name = "+prev" },
         ["<leader>b"] = { name = "+buffers" },
@@ -323,7 +384,6 @@ return {
         ["<leader>h"] = { name = "+harpoon" },
         ["<leader>q"] = { name = "+quit" },
         ["<leader>s"] = { name = "+search" },
-        ["<leader>t"] = { name = "+tabs" },
         ["<leader>u"] = { name = "+ui" },
         ["<leader>w"] = { name = "+window" },
         ["<leader>x"] = { name = "+diagnostics/quickfix" },

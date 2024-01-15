@@ -1,3 +1,5 @@
+local toggle = require("mein.util.toggle")
+
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Remap for dealing with word wrap
@@ -31,24 +33,14 @@ vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 vim.keymap.set("n", "<leader>d", '"_d', { desc = "Delete to empty register" })
 vim.keymap.set("v", "<leader>d", '"_d', { desc = "Delete to empty register" })
 
+-- search for word under cursor
+vim.keymap.set("n", "<leader>sw", "*``", { desc = "Word (Buffer)" })
+
 -- replace word
-vim.keymap.set(
-  "n",
-  "<leader>cw",
-  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  { desc = "Replace current word" }
-)
+vim.keymap.set("n", "<leader>sr", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace (Buffer)" })
 
 -- new file
 vim.keymap.set("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
-
--- tabs
-vim.keymap.set("n", "<leader>tl", "<cmd>tablast<cr>", { desc = "Last Tab" })
-vim.keymap.set("n", "<leader>tf", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-vim.keymap.set("n", "<leader>tt", "<cmd>tabnew<cr>", { desc = "New Tab" })
-vim.keymap.set("n", "<leader>t]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-vim.keymap.set("n", "<leader>td", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-vim.keymap.set("n", "<leader>t[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 
 -- buffers
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
@@ -72,11 +64,34 @@ vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and 
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
--- TODO toggle options
--- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua#L112
+-- toggle options
+vim.keymap.set("n", "<leader>us", function()
+  toggle.option("spell")
+end, { desc = "Toggle Spelling" })
+vim.keymap.set("n", "<leader>uw", function()
+  toggle.option("wrap")
+end, { desc = "Toggle Word Wrap" })
+vim.keymap.set("n", "<leader>uL", function()
+  toggle.option("relativenumber")
+end, { desc = "Toggle Relative Line Numbers" })
+vim.keymap.set("n", "<leader>ul", function()
+  toggle.number()
+end, { desc = "Toggle Line Numbers" })
+vim.keymap.set("n", "<leader>ud", function()
+  toggle.diagnostics()
+end, { desc = "Toggle Diagnostics" })
+local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
+vim.keymap.set("n", "<leader>uc", function()
+  toggle.option("conceallevel", false, { 0, conceallevel })
+end, { desc = "Toggle Conceal" })
+vim.keymap.set("n", "<leader>uT", function()
+  toggle.treesitter_highlight()
+end, { desc = "Toggle Treesitter Highlight" })
+-- highlights under cursor
+vim.keymap.set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
 
--- better save
-vim.keymap.set({ "i", "x", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+-- messages
+vim.keymap.set("n", "<leader>um", "<cmd>messages<cr>", { desc = "View messages" })
 
 -- quit
 vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })

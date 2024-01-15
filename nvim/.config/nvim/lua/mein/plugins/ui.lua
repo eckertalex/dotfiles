@@ -12,15 +12,15 @@ return {
       },
     },
     keys = {
-      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>",            desc = "Toggle pin" },
+      { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
-      { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>",          desc = "Delete other buffers" },
-      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>",           desc = "Delete buffers to the right" },
-      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>",            desc = "Delete buffers to the left" },
-      { "<S-h>",      "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
-      { "<S-l>",      "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
-      { "[b",         "<cmd>BufferLineCyclePrev<cr>",            desc = "Prev buffer" },
-      { "]b",         "<cmd>BufferLineCycleNext<cr>",            desc = "Next buffer" },
+      { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete other buffers" },
+      { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete buffers to the right" },
+      { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete buffers to the left" },
+      { "<S-h>", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      { "<S-l>", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
+      { "[b", "<cmd>BufferLineCyclePrev<cr>", desc = "Prev buffer" },
+      { "]b", "<cmd>BufferLineCycleNext<cr>", desc = "Next buffer" },
     },
     opts = {
       options = {
@@ -35,15 +35,15 @@ return {
         diagnostics_indicator = function(_, _, diag)
           local icons = require("mein.icons").diagnostics
           local ret = (diag.error and icons.Error .. diag.error .. " " or "")
-              .. (diag.warning and icons.Warn .. diag.warning or "")
+            .. (diag.warning and icons.Warn .. diag.warning or "")
           return vim.trim(ret)
         end,
         highlights = require("catppuccin.groups.integrations.bufferline").get(),
-      }
+      },
     },
     config = function(_, opts)
       require("bufferline").setup(opts)
-    end
+    end,
   },
 
   {
@@ -98,16 +98,11 @@ return {
       exclude = {
         filetypes = {
           "help",
-          "alpha",
           "dashboard",
-          "neo-tree",
           "Trouble",
           "trouble",
           "lazy",
           "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
         },
       },
     },
@@ -124,16 +119,11 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = {
           "help",
-          "alpha",
           "dashboard",
-          "neo-tree",
           "Trouble",
           "trouble",
           "lazy",
           "mason",
-          "notify",
-          "toggleterm",
-          "lazyterm",
         },
         callback = function()
           vim.b.miniindentscope_disable = true
