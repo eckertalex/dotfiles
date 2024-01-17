@@ -34,14 +34,14 @@ fi
 
 # Catppuccin Macchiato
 export FZF_DEFAULT_OPTS=" \
---color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
---color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
---color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+--color=bg+:#1a1b26,bg:#1a1b26,spinner:#9ece6a,hl:#bb9af7  \
+--color=fg:#c0caf5,header:#9ece6a,info:#7aa2f7,pointer:#7dcfff  \
+--color=marker:#9ece6a,fg+:#c0caf5,prompt:#7dcfff,hl+:#7dcfff"
 
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 # vivid for LS_COLORS
-export LS_COLORS="$(vivid generate catppuccin-macchiato)"
+export LS_COLORS="$(vivid generate tokyonight-night)"
 
 # magic-enter
 MAGIC_ENTER_GIT_COMMAND='gst'
