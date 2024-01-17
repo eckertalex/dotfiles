@@ -43,11 +43,6 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # vivid for LS_COLORS
 export LS_COLORS="$(vivid generate catppuccin-macchiato)"
 
-# zoxide
-if (( $+commands[zoxide] )); then
-  eval "$(zoxide init zsh)"
-fi
-
 # magic-enter
 MAGIC_ENTER_GIT_COMMAND='gst'
 MAGIC_ENTER_OTHER_COMMAND='la'

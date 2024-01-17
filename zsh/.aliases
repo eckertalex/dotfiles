@@ -10,6 +10,4 @@ alias shellclean="rm -rf ~/.aliases.zwc ~/.personio.plugin.zsh.zwc ~/.zcompdump*
 
 ### Misc
 alias lzg=lazygit
-alias lzd=lazydocker
-alias lzv="NVIM_APPNAME=lazyvim nvim"
 
