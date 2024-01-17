@@ -22,8 +22,8 @@ vim.opt.scrolloff = 4                  -- Lines of context
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
 vim.opt.shiftround = true              -- Round indent
 vim.opt.shiftwidth = 2                 -- Size of an indent
-vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
-vim.opt.showmode = false               -- Dont show mode since we have a statuslin
+vim.opt.shortmess:append({ W = true, c = true, C = true })
+vim.opt.showmode = false               -- Dont show mode since we have a statusline
 vim.opt.sidescrolloff = 8              -- Columns of context
 vim.opt.signcolumn = "yes"             -- Keep signcolumn on by default
 vim.opt.smartcase = true               -- Don't ignore case with capitals
