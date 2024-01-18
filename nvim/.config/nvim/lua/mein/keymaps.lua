@@ -113,14 +113,22 @@ vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 vim.api.nvim_create_user_command("ReportStartupPerformance", function()
   local stats = require("lazy").stats()
   local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-  vim.notify("⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms",
-    vim.log.levels.INFO)
+  vim.notify(
+    "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms",
+    vim.log.levels.INFO
+  )
 end, {})
 
 vim.keymap.set("n", "<leader>up", "<cmd>ReportStartupPerformance<cr>", { desc = "Report Startup Performance" })
 
 -- netrw
 vim.keymap.set("n", "-", vim.cmd.Ex, { desc = "Explorer" })
+
+-- Lazy
+vim.keymap.set("n", "<leader>vz", "<cmd>Lazy<cr>", { desc = "Lazy" })
+
+-- Mason
+vim.keymap.set("n", "<leader>vm", "<cmd>Mason<cr>", { desc = "Mason" })
 
 -- tmux
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")

@@ -57,7 +57,7 @@ return {
       require("lspconfig.ui.windows").default_options.border = "rounded"
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
       vim.lsp.handlers["textDocument/signatureHelp"] =
-          vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+        vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -67,7 +67,7 @@ return {
           -- Enable completion triggered by <c-x><c-o>
           vim.bo[buffer].omnifunc = "v:lua.vim.lsp.omnifunc"
 
-          vim.keymap.set("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp Info" })
+          vim.keymap.set("n", "<leader>vl", "<cmd>LspInfo<cr>", { desc = "Lsp Info" })
           -- Displays hover information about the symbol under the cursor
           vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = buffer, desc = "Hover Documentation" })
           -- Jump to the definition
@@ -81,8 +81,12 @@ return {
           -- Lists all the references
           vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = buffer, desc = "References" })
           -- Displays a function's signature information
-          vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help,
-            { buffer = buffer, desc = "Signature Documentation" })
+          vim.keymap.set(
+            { "n", "i" },
+            "<C-s>",
+            vim.lsp.buf.signature_help,
+            { buffer = buffer, desc = "Signature Documentation" }
+          )
           -- Renames all references to the symbol under the cursor
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = buffer, desc = "Rename" })
           -- Selects a code action available at the current cursor position
@@ -203,6 +207,59 @@ return {
                       "missing-fields",
                     },
                   },
+                },
+              },
+            })
+          end,
+
+          ["tsserver"] = function()
+            local lspconfig = require("lspconfig")
+            lspconfig.tsserver.setup({
+              keys = {
+                {
+                  "<leader>co",
+                  function()
+                    vim.lsp.buf.code_action({
+                      apply = true,
+                      context = {
+                        only = { "source.organizeImports.ts" },
+                        diagnostics = {},
+                      },
+                    })
+                  end,
+                  desc = "Organize Imports",
+                },
+                {
+                  "<leader>cR",
+                  function()
+                    vim.lsp.buf.code_action({
+                      apply = true,
+                      context = {
+                        only = { "source.removeUnused.ts" },
+                        diagnostics = {},
+                      },
+                    })
+                  end,
+                  desc = "Remove Unused Imports",
+                },
+              },
+              settings = {
+                typescript = {
+                  format = {
+                    indentSize = vim.o.shiftwidth,
+                    convertTabsToSpaces = vim.o.expandtab,
+                    tabSize = vim.o.tabstop,
+                  },
+                },
+                javascript = {
+                  format = {
+                    indentSize = vim.o.shiftwidth,
+                    convertTabsToSpaces = vim.o.expandtab,
+                    tabSize = vim.o.tabstop,
+                  },
+                },
+                completions = {
+                  completeFunctionCalls = true,
                 },
               },
             })
