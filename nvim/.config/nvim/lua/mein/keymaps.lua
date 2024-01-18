@@ -119,7 +119,7 @@ vim.api.nvim_create_user_command("ReportStartupPerformance", function()
   )
 end, {})
 
-vim.keymap.set("n", "<leader>up", "<cmd>ReportStartupPerformance<cr>", { desc = "Report Startup Performance" })
+vim.keymap.set("n", "<leader>vp", "<cmd>ReportStartupPerformance<cr>", { desc = "Report Startup Performance" })
 
 -- netrw
 vim.keymap.set("n", "-", vim.cmd.Ex, { desc = "Explorer" })
