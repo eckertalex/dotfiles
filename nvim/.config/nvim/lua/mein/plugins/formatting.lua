@@ -18,15 +18,15 @@ return {
 
   {
     "stevearc/conform.nvim",
-    dependencies = {},
+    cmd = "ConformInfo",
     keys = {
       {
         "<leader>cF",
         function()
-          require("conform").format()
+          require("conform").format({ formatters = { "injected" } })
         end,
         mode = { "n", "v" },
-        desc = "Format (Conform)",
+        desc = "Format Injected Langs",
       },
       {
         "<leader>vc",

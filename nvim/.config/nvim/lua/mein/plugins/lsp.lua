@@ -62,7 +62,6 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local buffer = args.buf
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
 
           -- Enable completion triggered by <c-x><c-o>
           vim.bo[buffer].omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -91,13 +90,6 @@ return {
           vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = buffer, desc = "Rename" })
           -- Selects a code action available at the current cursor position
           vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { buffer = buffer, desc = "Code Action" })
-          vim.keymap.set("n", "<leader>cf", function()
-            vim.lsp.buf.format({ async = true })
-          end, { buffer = buffer, desc = "Format" })
-
-          vim.api.nvim_buf_create_user_command(buffer, "Format", function(_)
-            vim.lsp.buf.format()
-          end, { desc = "Format current buffer with LSP" })
         end,
       })
 
@@ -144,6 +136,24 @@ return {
             return
           end
 
+          local function format(opts)
+            local ok, conform = pcall(require, "conform")
+            if ok then
+              conform.format({
+                async = true,
+                lsp_fallback = true,
+              })
+            else
+              vim.lsp.buf.format(opts)
+            end
+          end
+
+          vim.api.nvim_buf_create_user_command(buffer, "Format", function()
+            format({ async = true })
+          end, { desc = "Format current buffer" })
+
+          vim.keymap.set("n", "<leader>cf", "<cmd>Format<cr>", { buffer = buffer, desc = "Format" })
+
           -- Create an autocmd that will run *before* we save the buffer.
           --  Run the formatting command for the LSP that has just attached.
           vim.api.nvim_create_autocmd("BufWritePre", {
@@ -154,7 +164,7 @@ return {
                 return
               end
 
-              vim.lsp.buf.format({
+              format({
                 async = false,
                 filter = function(c)
                   return c.id == client.id

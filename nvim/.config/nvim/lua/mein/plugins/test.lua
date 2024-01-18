@@ -6,14 +6,14 @@ return {
         "folke/trouble.nvim",
         opts = {},
       },
-      'nvim-neotest/neotest-jest',
+      "nvim-neotest/neotest-jest",
     },
     opts = {
       adapters = {
         ["neotest-jest"] = {
           jestCommand = "pnpm nx run test --",
           jestConfigFile = function()
-            local file = vim.fn.expand('%:p')
+            local file = vim.fn.expand("%:p")
             if string.find(file, "/apps/") then
               return string.match(file, "(.-/[^/]+/)src") .. "jest.config.js"
             end
@@ -22,13 +22,13 @@ return {
           end,
           env = { CI = true },
           cwd = function()
-            local file = vim.fn.expand('%:p')
+            local file = vim.fn.expand("%:p")
             if string.find(file, "/apps/") then
               return string.match(file, "(.-/[^/]+/)src")
             end
             return vim.fn.getcwd()
-          end
-        }
+          end,
+        },
       },
       status = { virtual_text = true },
       output = { open_on_run = true },
