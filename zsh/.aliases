@@ -11,3 +11,12 @@ alias shellclean="rm -rf ~/.aliases.zwc ~/.personio.plugin.zsh.zwc ~/.zcompdump*
 ### Misc
 alias lzg=lazygit
 
+### ls
+
+if (( ${+commands[gls]} )); then
+  alias ls="gls"
+fi
+alias ls="ls -F --color"
+alias l="ls -lA"
+alias ll="ls -l"
+alias la='ls -A'

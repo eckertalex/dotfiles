@@ -84,7 +84,6 @@ fpath=(
 )
 # plugins
 zcomet snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/magic-enter/magic-enter.plugin.zsh
-zcomet snippet https://github.com/eckertalex/lsd.plugin.zsh/blob/main/lsd.plugin.zsh
 zcomet snippet https://github.com/eckertalex/git.plugin.zsh/blob/main/git.plugin.zsh
 zcomet snippet https://github.com/eckertalex/pnpm.plugin.zsh/blob/main/pnpm.plugin.zsh
 zcomet snippet "$HOME/.aliases"
