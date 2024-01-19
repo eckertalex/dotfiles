@@ -8,7 +8,7 @@ vim.opt.confirm = true -- Confirm to save changes before exiting modified buffer
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.foldlevel = 99
-vim.opt.foldmethod = "expr"
+vim.opt.foldtext = "v:lua.require'mein.util.ui'.foldtext()"
 vim.opt.formatoptions = "jcroqlnt" -- tcqj
 vim.opt.ignorecase = true -- Ignore case
 vim.opt.laststatus = 3 -- Global statusline
@@ -32,6 +32,7 @@ vim.opt.smoothscroll = true
 vim.opt.splitbelow = true -- Put new windows below current
 vim.opt.splitkeep = "screen"
 vim.opt.splitright = true -- Put new windows right of current
+vim.opt.statuscolumn = [[%!v:lua.require'mein.util.ui'.statuscolumn()]]
 vim.opt.tabstop = 2 -- Number of spaces tabs count for
 vim.opt.termguicolors = true -- true color support
 vim.opt.timeoutlen = 300 -- timeout
@@ -40,9 +41,13 @@ vim.opt.undolevels = 10000
 vim.opt.updatetime = 200 -- Save swap file and trigger CursorHold
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
-vim.opt.winbar = "%=%m %f" -- Buffer local statusline
+-- vim.opt.winbar = "%=%m %f" -- Buffer local statusline
 vim.opt.winminwidth = 5 -- Minimum window width
 vim.opt.wrap = false -- Disable line wrap
+vim.opt.fillchars = {
+  foldclose = "",
+  fold = " ",
+}
 
 -- netrw
 -- size of netrw window as split: 30%
