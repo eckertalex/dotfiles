@@ -20,3 +20,6 @@ alias ls="ls -F --color"
 alias l="ls -lA"
 alias ll="ls -l"
 alias la='ls -A'
+
+### tree
+alias tree="tree -Fa"
