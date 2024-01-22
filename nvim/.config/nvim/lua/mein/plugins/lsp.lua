@@ -125,14 +125,12 @@ return {
           local client = vim.lsp.get_client_by_id(args.data.client_id)
 
           if not client then
+            vim.notify("No client attached", vim.lsp.log_levels.WARN)
             return
           end
 
           if not client.server_capabilities.documentFormattingProvider then
-            return
-          end
-
-          if client.name == "tsserver" then
+            vim.notify("Client has formatting capability", vim.lsp.log_levels.WARN)
             return
           end
 
