@@ -50,6 +50,7 @@ return {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
+      { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
     },
     opts = function()
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -95,12 +96,12 @@ return {
           { name = "buffer" },
         }),
         formatting = {
-          format = function(_, item)
+          format = function(entry, item)
             local icons = require("mein.icons").kinds
             if icons[item.kind] then
               item.kind = icons[item.kind] .. item.kind
             end
-            return item
+            return require("tailwindcss-colorizer-cmp").formatter(entry, item)
           end,
         },
         experimental = {

@@ -7,6 +7,7 @@ return {
         opts = {},
       },
       "nvim-neotest/neotest-jest",
+      "nvim-neotest/neotest-go",
     },
     opts = {
       adapters = {
@@ -29,6 +30,7 @@ return {
             return vim.fn.getcwd()
           end,
         },
+        ["neotest-go"] = {},
       },
       status = { virtual_text = true },
       output = { open_on_run = true },

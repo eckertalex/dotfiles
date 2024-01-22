@@ -25,6 +25,13 @@ return {
         opts = {},
       },
       "williamboman/mason-lspconfig.nvim",
+
+      -- json schema support
+      {
+        "b0o/SchemaStore.nvim",
+        lazy = true,
+        version = false, -- last release is way too old
+      },
     },
     config = function()
       -- diagnostics
@@ -183,10 +190,13 @@ return {
 
       require("mason-lspconfig").setup({
         ensure_installed = {
+          "eslint",
+          "gopls",
           "gopls",
           "html",
           "jsonls",
           "lua_ls",
+          "marksman",
           "phpactor",
           "tailwindcss",
           "tsserver",
@@ -220,9 +230,20 @@ return {
             })
           end,
 
+          ["eslint"] = function()
+            local lspconfig = require("lspconfig")
+            lspconfig.eslint.setup({
+              capabilities = capabilities,
+              settings = {
+                workingDirectories = { mode = "auto" },
+              },
+            })
+          end,
+
           ["tsserver"] = function()
             local lspconfig = require("lspconfig")
             lspconfig.tsserver.setup({
+              capabilities = capabilities,
               keys = {
                 {
                   "<leader>co",
@@ -268,6 +289,67 @@ return {
                 },
                 completions = {
                   completeFunctionCalls = true,
+                },
+              },
+            })
+          end,
+
+          ["gopls"] = function()
+            local lspconfig = require("lspconfig")
+            lspconfig.gopls.setup({
+              capabilities = capabilities,
+              settings = {
+                gopls = {
+                  gofumpt = true,
+                  codelenses = {
+                    gc_details = false,
+                    generate = true,
+                    regenerate_cgo = true,
+                    run_govulncheck = true,
+                    test = true,
+                    tidy = true,
+                    upgrade_dependency = true,
+                    vendor = true,
+                  },
+                  hints = {
+                    assignVariableTypes = true,
+                    compositeLiteralFields = true,
+                    compositeLiteralTypes = true,
+                    constantValues = true,
+                    functionTypeParameters = true,
+                    parameterNames = true,
+                    rangeVariableTypes = true,
+                  },
+                  analyses = {
+                    fieldalignment = true,
+                    nilness = true,
+                    unusedparams = true,
+                    unusedwrite = true,
+                    useany = true,
+                  },
+                  usePlaceholders = true,
+                  completeUnimported = true,
+                  staticcheck = true,
+                  directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+                  semanticTokens = true,
+                },
+              },
+            })
+          end,
+
+          ["jsonls"] = function()
+            require("lspconfig").jsonls.setup({
+              capabilities = capabilities,
+              on_new_config = function(new_config)
+                new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+                vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+              end,
+              settings = {
+                format = {
+                  json = {
+                    enable = true,
+                  },
+                  validate = { enable = true },
                 },
               },
             })

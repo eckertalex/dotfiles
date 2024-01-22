@@ -9,6 +9,8 @@ return {
     },
     opts = {
       ensure_installed = {
+        "gofumpt",
+        "goimports",
         "prettier",
         "shfmt",
         "stylua",
@@ -62,6 +64,7 @@ return {
         ["markdown.mdx"] = { "prettier" },
         ["graphql"] = { "prettier" },
         ["handlebars"] = { "prettier" },
+        ["go"] = { "goimports", "gofumpt" },
       },
       formatters = {
         injected = {

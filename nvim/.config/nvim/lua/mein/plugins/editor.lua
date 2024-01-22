@@ -31,71 +31,19 @@ return {
     cmd = "Telescope",
     version = false, -- telescope did only one release, so use HEAD for now
     keys = {
-      {
-        "<leader><leader>",
-        "<cmd>Telescope find_files<cr>",
-        desc = "Find Files",
-      },
-      {
-        "<leader>r",
-        "<cmd>Telescope resume<cr>",
-        desc = "Resume Telescope",
-      },
-      {
-        "<leader>fb",
-        "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
-        desc = "Buffers",
-      },
-      {
-        "<leader>fr",
-        "<cmd>Telescope oldfiles<cr>",
-        desc = "Recent",
-      },
-      {
-        "<leader>gc",
-        "<cmd>Telescope git_commits<cr>",
-        desc = "Commits",
-      },
-      {
-        "<leader>gs",
-        "<cmd>Telescope git_status<cr>",
-        desc = "Status",
-      },
-      {
-        "<leader>gf",
-        "<cmd>Telescope git_files<cr>",
-        desc = "Git Files",
-      },
-      {
-        "<leader>sb",
-        "<cmd>Telescope current_buffer_fuzzy_find<cr>",
-        desc = "Buffer",
-      },
-      {
-        "<leader>sd",
-        "<cmd>Telescope diagnostics bufnr=0<cr>",
-        desc = "Document diagnostics",
-      },
-      {
-        "<leader>sD",
-        "<cmd>Telescope diagnostics<cr>",
-        desc = "Workspace diagnostics",
-      },
-      {
-        "<leader>sg",
-        "<cmd>Telescope live_grep_args<cr>",
-        desc = "Grep",
-      },
-      {
-        "<leader>sh",
-        "<cmd>Telescope help_tags<cr>",
-        desc = "Help",
-      },
-      {
-        "<leader>sW",
-        "<cmd>Telescope grep_string word_match=-w<cr>",
-        desc = "Word",
-      },
+      { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
+      { "<leader>/", "<cmd>Telescope live_grep_args<cr>", desc = "Grep" },
+      { "<leader>r", "<cmd>Telescope resume<cr>", desc = "Resume Telescope" },
+      { "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
+      { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
+      { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Commits" },
+      { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Status" },
+      { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+      { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
+      { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
+      { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
+      { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help" },
+      { "<leader>sW", "<cmd>Telescope grep_string word_match=-w<cr>", desc = "Word" },
     },
     opts = function()
       local function filenameFirst(_, path)
