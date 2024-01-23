@@ -32,13 +32,13 @@ return {
     version = false, -- telescope did only one release, so use HEAD for now
     keys = {
       { "<leader><leader>", "<cmd>Telescope find_files<cr>", desc = "Find Files" },
-      { "<leader>/", "<cmd>Telescope live_grep_args<cr>", desc = "Grep" },
       { "<leader>r", "<cmd>Telescope resume<cr>", desc = "Resume Telescope" },
       { "<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", desc = "Buffers" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent" },
       { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Commits" },
       { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Status" },
       { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+      { "<leader>sg", "<cmd>Telescope live_grep_args<cr>", desc = "Grep" },
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
       { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
@@ -332,7 +332,7 @@ return {
         ["<leader>h"] = { name = "+harpoon" },
         ["<leader>q"] = { name = "+quit" },
         ["<leader>s"] = { name = "+search" },
-        ["<leader>t"] = { name = "+test" },
+        ["<leader>t"] = { name = "+treesitter/test" },
         ["<leader>u"] = { name = "+ui" },
         ["<leader>v"] = { name = "+vim" },
         ["<leader>w"] = { name = "+window" },

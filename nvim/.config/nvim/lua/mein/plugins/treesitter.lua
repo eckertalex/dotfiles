@@ -5,6 +5,9 @@ return {
     build = ":TSUpdate",
     event = { "VeryLazy" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    },
     keys = {
       { "<c-space>", desc = "Increment selection" },
       { "<bs>", desc = "Decrement selection", mode = "x" },
@@ -15,6 +18,7 @@ return {
       indent = { enable = true },
       ensure_installed = {
         "bash",
+        "c",
         "css",
         "diff",
         "dockerfile",
@@ -54,6 +58,49 @@ return {
           node_decremental = "<bs>",
         },
       },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ["aa"] = "@parameter.outer",
+            ["ia"] = "@parameter.inner",
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+        move = {
+          enable = true,
+          set_jumps = true,
+          goto_next_start = {
+            ["]m"] = "@function.outer",
+            ["]]"] = "@class.outer",
+          },
+          goto_next_end = {
+            ["]M"] = "@function.outer",
+            ["]["] = "@class.outer",
+          },
+          goto_previous_start = {
+            ["[m"] = "@function.outer",
+            ["[["] = "@class.outer",
+          },
+          goto_previous_end = {
+            ["[M"] = "@function.outer",
+            ["[]"] = "@class.outer",
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<leader>ta"] = "@parameter.inner",
+          },
+          swap_previous = {
+            ["<leader>tA"] = "@parameter.inner",
+          },
+        },
+      },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
@@ -64,9 +111,9 @@ return {
     "Wansmer/treesj",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     keys = {
-      { "<leader>cj", "<cmd>TSJJoin<cr>", desc = "Join line below" },
-      { "<leader>cs", "<cmd>TSJSplit<cr>", desc = "Split line" },
-      { "<leader>cm", "<cmd>TSJToggle<cr>", desc = "Toggle join/split" },
+      { "<leader>tj", "<cmd>TSJJoin<cr>", desc = "Join line below" },
+      { "<leader>ts", "<cmd>TSJSplit<cr>", desc = "Split line" },
+      { "<leader>tm", "<cmd>TSJToggle<cr>", desc = "Toggle join/split" },
     },
     opts = {
       use_default_keymaps = false,

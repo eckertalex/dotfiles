@@ -100,9 +100,9 @@ vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 -- Show diagnostics in a floating window
 vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
 -- Move to the previous diagnostic
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Next Diagnostic" })
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 -- Move to the next diagnostic
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Prev Diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 
 -- Quickfix
 vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })

@@ -11,6 +11,7 @@ vim.opt.foldlevel = 99
 vim.opt.foldtext = "v:lua.require'mein.util.ui'.foldtext()"
 vim.opt.formatoptions = "jcroqlnt" -- tcqj
 vim.opt.ignorecase = true -- Ignore case
+vim.opt.inccommand = 'split' -- shows partial off-screen results in a preview window
 vim.opt.laststatus = 3 -- Global statusline
 vim.opt.list = true -- Show some invisible characters (tabs...
 vim.opt.mouse = "a" -- Enable mouse mode
