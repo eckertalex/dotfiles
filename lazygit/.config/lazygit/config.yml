@@ -1,14 +1,11 @@
-gui:
-  showRandomTip: false
-  showBottomLine: false # for hiding the bottom information line (unless it has important information to tell you)
-  showCommandLog: false
-  nerdFontsVersion: "3"
-
 git:
   paging:
     colorArg: always
     pager: delta --dark --paging=never
-
-notARepository: "skip" # one of: 'prompt' | 'create' | 'skip' | 'quit'
+gui: # stuff relating to the UI
+  showRandomTip: false
+  nerdFontsVersion: "3"
+notARepository: 'skip' # one of: 'prompt' | 'create' | 'skip' | 'quit'
 os:
   editPreset: nvim
+promptToReturnFromSubprocess: false # display confirmation when subprocess terminates
