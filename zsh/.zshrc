@@ -1,13 +1,8 @@
-#!/bin/zsh
-
+# !/bin/zsh
+ 
 # zcomet as zsh plugin manager
 if [[ ! -e ~/.zcomet/bin ]]; then
   git clone --depth=1 https://github.com/agkozak/zcomet.git ~/.zcomet/bin
-fi
-
-# Activate Powerlevel10k instant prompt
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 source ~/.zcomet/bin/zcomet.zsh
@@ -83,15 +78,10 @@ fpath=(
   $fpath[@]
 )
 # plugins
-zcomet snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/magic-enter/magic-enter.plugin.zsh
-zcomet snippet https://github.com/eckertalex/git.plugin.zsh/blob/main/git.plugin.zsh
-zcomet snippet https://github.com/eckertalex/pnpm.plugin.zsh/blob/main/pnpm.plugin.zsh
 zcomet snippet "$HOME/.aliases"
-[[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
-[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+# [[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
+# [[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
 
-zcomet load hlissner/zsh-autopair
-zcomet load romkatv/powerlevel10k
 zcomet load junegunn/fzf shell completion.zsh key-bindings.zsh
 (( ${+commands[fzf]} )) || ~[fzf]/install --bin
 
@@ -102,5 +92,3 @@ zcomet load zsh-users/zsh-autosuggestions
 bindkey -s '^f' "tmux-sessionizer\n"
 
 zcomet compinit
-
-[[ -s "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"

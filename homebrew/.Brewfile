@@ -1,6 +1,7 @@
 tap "homebrew/bundle"
 
 brew "bat"
+brew "hyperfine"
 brew "bottom"
 brew "coreutils"
 brew "fd"
