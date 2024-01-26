@@ -4,25 +4,40 @@
 # Basic
 ########
 
-alias zshrc="nvim ~/.zshrc"
-alias prof="hyperfine --warmup 3 \"$SHELL -i -c exit\""
-alias shellclean="rm -rf ~/.aliases.zwc ~/.personio.plugin.zsh.zwc ~/.zcompdump* ~/.zcomet ~/.local/share/zsh"
-alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
-alias lzg=lazygit
+alias zsh_profile_hyperfine="hyperfine --warmup 3 \"$SHELL -i -c exit\""
+alias zsh_profile="for i in \$(seq 1 10); do time \$SHELL -i -c exit; done"
+alias shellclean="rm -rf ~/.aliases.zwc ~/.personio.plugin.zsh.zwc ~/.zcompdump* ~/.zcomet ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh"
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../../..'
+
+##########
+# lazygit
+##########
+
+if type lazygit &> /dev/null; then
+  alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
+  alias lzg=lazygit
+fi
 
 #####
 # ls
 #####
 
 if type gls &> /dev/null; then
-  alias ls="gls"
+  alias ls="gls -F --color"
+  alias l="gls -lFA --color"
+  alias ll="gls -lF --color"
+  alias la='gls -FA --color'
+else
+  alias ls="ls -F --color"
+  alias l="ls -lFA --color"
+  alias ll="ls -lF --color"
+  alias la='ls -FA --color'
 fi
-alias ls="ls -F --color"
-alias l="ls -lA"
-alias ll="ls -l"
-alias la='ls -A'
 
-### tree
+# ### tree
 alias tree="tree -Fa"
 
 #######
@@ -31,15 +46,12 @@ alias tree="tree -Fa"
 
 # General
 alias p="pnpm"
-alias pi="pnpm init"
 alias pdx="pnpm dlx"
 alias pex="pnpm exec"
-alias pcr="pnpm create"
 
 # Dependencies
 alias pa="pnpm add"
 alias pad="pnpm add --save-dev"
-alias pap="pnpm add --save-peer"
 alias prm="pnpm remove"
 alias pu="pnpm update"
 alias puil="pnpm update --interactive --latest"
@@ -52,12 +64,6 @@ alias pga="pnpm add --global"
 alias pgrm="pnpm remove --global"
 alias pgu="pnpm update --global"
 alias pgls="pnpm list --global"
-
-# Workspace Dependencies
-alias pwa="pnpm add --workspace"
-alias pwrm="pnpm remove --workspace"
-alias pwu="pnpm update --workspace"
-alias pwls="pnpm list --workspace"
 
 # Link
 alias pln="pnpm link"
@@ -77,22 +83,6 @@ alias ptc="pnpm run test --coverage"
 alias plt="pnpm run lint"
 alias pf="pnpm run format"
 alias pty="pnpm run typecheck"
-
-# Config
-alias pcls="pnpm config list"
-alias pcg="pnpm config get"
-alias pcs="pnpm config set"
-alias pcrm="pnpm config delete"
-alias pgcls="pnpm config list --global"
-alias pgcg="pnpm config get --global"
-alias pgcs="pnpm config set --global"
-alias pgcrm="pnpm config delete --global"
-
-# Env
-alias pevls="pnpm env list"
-alias pevlsr="pnpm env list --remote"
-alias peva="pnpm env use --global"
-alias pevrm="pnpm env remove --global"
 
 ######
 # git
@@ -157,14 +147,7 @@ alias gbmv="git_rename_branch"
 ## Local Files
 alias ga="git add"
 alias gaa="git add --all"
-alias gau="git add --update"
-alias gapa="git add --patch"
-alias grm="git rm"
-alias grmc="git rm --cached"
 alias grs="git restore"
-alias grss="git restore --source"
-alias grst="git restore --staged"
-alias grst!="git restore --staged --worktree"
 
 ## Clean
 alias gclean="git clean -di"
@@ -189,7 +172,6 @@ alias gcm="git commit -m"
 alias gcam="git commit -a -m"
 
 ## Checkout
-
 alias gco="git checkout"
 alias gcob="git checkout -b"
 alias gcom="git checkout $(git_default_branch)"
@@ -198,11 +180,6 @@ alias gsw="git switch"
 alias gswc="git switch -c"
 alias gswm="git switch $(git_default_branch)"
 alias gsw-="git switch @{-1}"
-
-## Fetch
-alias gf="git fetch"
-alias gfa="git fetch --all --prune"
-alias gfo="git fetch origin"
 
 ## Push
 alias gp="git push"
@@ -233,7 +210,6 @@ alias gdwc="git diff --word-diff --cached"
 alias gdto="git difftool"
 
 ## Log
-
 alias glo="git log --pretty=format:\"%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s\" --date=short"
 alias glg="git log --stat"
 alias glgg="git log --graph"
