@@ -5,6 +5,7 @@
 [init]
   defaultBranch = main
 [include]
+  path = ~/.gitalias
   path = ~/.config/delta/config
 [core]
   editor = nvim

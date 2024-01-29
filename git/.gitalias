@@ -1,0 +1,192 @@
+# -*- mode: gitconfig; -*-
+# vim: set filetype=gitconfig:
+
+[alias]
+  ## shell scripting
+  default-branch = config init.defaultBranch
+  current-branch = git branch --show-current
+
+  ## status
+  s = status
+  ss = status --short
+
+  ## add
+  a = add
+  aa = add --all
+  ap = add --patch # add by patch - looks at each change, and asks if we want to put it in the repo.
+  au = add --update # add just the files that are updated.
+
+  ## branch
+  b = branch
+  bv = branch --verbose --verbose
+  ba = branch --verbose --all
+  bd = branch --delete
+  bdf = branch --delete --force
+  bage = "!git for-each-ref --sort=committerdate refs/heads/ --format=\"%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))\""
+
+  ## commit
+  c = commit --verbose
+  cm = commit --message
+  ca = commit --verbose --amend
+  cam = commit --amend --message
+  cane = commit --amend --no-edit
+  caa = commit --verbose --amend --all
+  caam = commit --amend --all --message
+  caane = commit --amend --all --no-edit
+
+  ## checkout
+  co = checkout
+  cob = checkout -b
+  com = "!git checkout \"$(git default-branch)\""
+
+  ## switch
+  sw = switch
+  swc = switch -c
+  swm = "!git switch \"$(git default-branch)\""
+
+  ## cherry-pick
+  cp = cherry-pick
+  cpa = cherry-pick --abort
+  cpc = cherry-pick --continue
+  cps = cherry-pick --skip
+
+  ## bisect
+  bs = bisect
+  bss = bisect start
+  bsb = bisect bad
+  bsg = bisect good
+  bsr = bisect reset
+
+  ## rebase
+  rb = rebase
+  rbi = rebase --interactive
+  rba = rebase --abort
+  rbc = rebase --continue
+  rbs = rebase --skip
+  rbm = "!git rebase \"$(git default-branch)\""
+  rbmi = "!git rebase \"$(git default-branch)\" --interactive"
+
+  ## push
+  p = push
+  pf = push --force-with-lease
+  po = push origin
+  pof = push --force-with-lease origin
+  gp = "!git push --set-upstream origin \"$(git current-branch)\""
+  gpf = "!git push --force-with-lease origin :\"$(git current-branch)\""
+  gpu = push --set-upstream origin $(git_current_branch)
+  poat = !git push origin --all && !git push origin --tags
+
+  ## pull
+  pl = pull
+  gpl = "!git pull origin \"$(git current-branch)\""
+  plr = pull --rebase
+  plra = pull --rebase --autostash
+
+  ## stash
+  sta = stash
+  std = stash drop
+  stl = stash list
+  stp = stash pop
+  sts = stash show --text
+
+  ## wip
+  wip = "!git add --all; git ls-files --deleted -z | xargs -r -0 git rm; git commit --message=wip --no-verify"
+  unwip = "!git log -n 1 | grep -q -c wip && git reset HEAD~1"
+
+  ## remote
+  r = remote -vv
+  ra = remote add
+  rmv = remote rename
+  rpo = remote prune origin
+  rrm = remote remove
+  rset = remote set-url
+  rup = remote update
+
+  ## tag
+  t = tag
+  tl = tag -n1 --list
+  td = tag -d
+  tv = tag | sort -V
+
+  ## log
+  lo = "log --pretty=format:\"%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s\" --date=short"
+  lg = log --stat
+  lgg = log --graph
+  lgga = log --graph --decorate --all
+  lom = log --graph --decorate --all
+  whorank = shortlog --summary --numbered --no-merges
+
+  # clean
+  clean = clean -dff
+  cleaner = clean -dffx
+  pristine = !git reset --hard && git clean -dffx
+
+  # reset
+  rh = reset HEAD~1
+  rhh = reset --hard HEAD~1
+
+  ## Miscellaneous
+  rs = restore
+  d = diff
+  f = fetch
+  cl = clone
+  m = merge
+  bl = blame -b -w
+  cf = config
+  cfl = config --list
+  ls = ls-files
+  rv = revert
+  aliases = "!git config --get-regexp '^alias\\.' | cut -c 7- | sed 's/ / = /'"
+
+  # Start a topic branch.
+  #
+  # Example:
+  #
+  #     git topic add-feature-foo
+  #
+  topic = "!f(){ \
+    new_branch=\"$1\"; \
+    base_branch=\"$(git default-branch)\"; \
+    git switch \"$base_branch\"; \
+    git pull --ff-only; \
+    git switch -c \"$new_branch\" \"$base_branch\"; \
+    git push -u origin \"$new_branch\"; \
+  };f"
+
+  # Assume & Unassume
+  #
+  # Sometimes we want to change a file in a repo, but never check in your edits.
+  # We can't use .gitignore because the file is tracked. We use update-index.
+  #
+  # If you interact with big corporate projects, such as projects in Subversion,
+  # then you might run into the need to ignore certain files which are under the
+  # Subversion control, yet you need to modify them but not commit.
+  #
+  # The assume-unchanged flag comes to the rescue.
+  #
+  # Suppose we want to edit passwords.txt and for gosh sake never check it in:
+  #
+  #     $ git status
+  #     modified passwords.txt
+  #     modified foo.txt
+  #
+  #     $ git assume passwords.txt
+  #     $ git status
+  #     modified foo.txt
+  #
+  #     $ git assumed
+  #     passwords.txt
+  #
+  #     $ git unassume passwords.txt
+  #     $ git status
+  #     modified passwords.txt
+  #     modified foo.txt
+  #
+  # Thanks <http://durdn.com/blog/2012/11/22/must-have-git-aliases-advanced-examples/>
+  # Thanks <http://blog.apiaxle.com/post/handy-git-tips-to-stop-you-getting-fired/>
+  #
+  assume   = update-index --assume-unchanged
+  unassume = update-index --no-assume-unchanged
+  assume-all = "!git st -s | awk '{ print $2 }' | xargs -r git assume"
+  unassume-all = "!git assumed | xargs -r git update-index --no-assume-unchanged"
+  assumed  = "!git ls-files -v | grep ^h | cut -c 3-"

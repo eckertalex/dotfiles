@@ -1,0 +1,96 @@
+#!/bin/zsh
+
+########
+# Basic
+########
+
+alias g=git
+
+alias benchmark_hyperfine="hyperfine --warmup 3 \"$SHELL -i -c exit\""
+alias benchmark="for i in \$(seq 1 10); do time \$SHELL -i -c exit; done"
+
+alias shellclean="rm -rf ~/.aliases.zwc ~/.personio.plugin.zsh.zwc ~/.zcompdump* ~/.zcomet ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh"
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+
+alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+
+alias showpath='echo -e ${PATH//:/\\n}'
+
+alias reload="exec ${SHELL} -l"
+
+##########
+# lazygit
+##########
+
+if type lazygit &> /dev/null; then
+  alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
+  alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
+fi
+
+#####
+# ls
+#####
+
+if type gls &> /dev/null; then
+  alias ls="gls -F --color"
+  alias l="gls -lFA --color"
+  alias ll="gls -lF --color"
+  alias la='gls -FA --color'
+else
+  alias ls="ls -F --color"
+  alias l="ls -lFA --color"
+  alias ll="ls -lF --color"
+  alias la='ls -FA --color'
+fi
+
+# ### tree
+alias tree="tree -Fa"
+
+#######
+# PNPM
+#######
+
+# General
+alias p="pnpm"
+alias pdx="pnpm dlx"
+alias pex="pnpm exec"
+
+# Dependencies
+alias pa="pnpm add"
+alias pad="pnpm add --save-dev"
+alias prm="pnpm remove"
+alias pu="pnpm update"
+alias puil="pnpm update --interactive --latest"
+alias pls="pnpm list"
+alias pin="pnpm install"
+alias pout="pnpm outdated"
+
+# Global Dependencies
+alias pga="pnpm add --global"
+alias pgrm="pnpm remove --global"
+alias pgu="pnpm update --global"
+alias pgls="pnpm list --global"
+
+# Link
+alias pln="pnpm link"
+alias pgln="pnpm link --global"
+alias plnrm="pnpm unlink"
+
+# Scripts
+alias pr="pnpm run"
+alias pb="pnpm run build"
+alias pd="pnpm run dev"
+alias pst="pnpm run start"
+alias psv="pnpm run serve"
+alias ppre="pnpm run preview"
+alias pdocs="pnpm run docs"
+alias pt="pnpm run test"
+alias ptc="pnpm run test --coverage"
+alias plt="pnpm run lint"
+alias pf="pnpm run format"
+alias pty="pnpm run typecheck"
+

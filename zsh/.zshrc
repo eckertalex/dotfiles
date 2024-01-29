@@ -1,7 +1,5 @@
 # !/bin/zsh
  
-# zmodload zsh/zprof
-
 #########
 # zcomet
 #########
@@ -48,14 +46,20 @@ export PAGER=less
 export EDITOR=nvim
 export VISUAL=nvim
 
-source "$HOME/.ls_colors"
+zcomet snippet "$HOME/.config/zsh/ls_colors"
 
 # -U ensures each entry in these is Unique (that is, discards duplicates)
 # -T creates a "tied" pair
 export -U PATH path FPATH fpath MANPATH manpath
 export -UT INFOPATH infopath
-PATH=$HOME/.local/bin:$PATH
-FPATH=$HOME/.local/completions:$FPATH
+PATH=$HOME/.config/zsh/functions:$HOME/.local/bin:$PATH
+FPATH=$HOME/.config/zsh/completions:$FPATH
+
+##########
+# Wezterm
+##########
+
+PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
 ############
 # Homebrew
@@ -82,10 +86,8 @@ fi
 
 # Auto-completion
 [ -s "/opt/homebrew/opt/fzf/shell/completion.zsh" ] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
-
 # Key bindings
 [ -s "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
-
 export FZF_DEFAULT_OPTS=" \
 --color=bg+:#1a1b26,bg:#1a1b26,spinner:#9ece6a,hl:#bb9af7  \
 --color=fg:#c0caf5,header:#9ece6a,info:#7aa2f7,pointer:#7dcfff  \
@@ -104,24 +106,27 @@ fi
 # asdf
 #######
 
-if type asdf &> /dev/null; then
-  [ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
-  [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
-  FPATH=$ASDF_DIR/completions:$FPATH
-fi
+[ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
+[ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
+FPATH=$ASDF_DIR/completions:$FPATH
 
 #################
 # zcomet plugins
 #################
 
-# zcomet snippet "$HOME/.aliases"
 zcomet load romkatv/powerlevel10k
-# [[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
-# [[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
-
 zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+[[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
+[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+[[ -s "$HOME/.config/zsh/pnpm.zsh" ]] && zcomet snippet "$HOME/.config/zsh/pnpm.zsh"
+
+##########
+# aliases
+##########
+
+zcomet snippet "$HOME/.config/zsh/alias"
 
 ##################
 # custom keybinds
@@ -133,6 +138,5 @@ bindkey -s '^f' "tmux-sessionizer\n"
 ################
 
 zcomet compinit
-[[ -s "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
-# zprof
+[[ -s "$HOME/.config/zsh/p10k.zsh" ]] && source "$HOME/.config/zsh/p10k.zsh"
 
