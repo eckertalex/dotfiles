@@ -1,4 +1,6 @@
 return {
+  "tpope/vim-fugitive",
+
   {
     "nvim-pack/nvim-spectre",
     build = false,

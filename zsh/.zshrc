@@ -1,22 +1,18 @@
 # !/bin/zsh
  
-#########
-# zcomet
-#########
+#########################
+# zcomet & powerlevel10k
+#########################
 
 if [[ ! -e $HOME/.zcomet/bin ]]; then
   git clone --depth=1 https://github.com/agkozak/zcomet.git $HOME/.zcomet/bin
 fi
 
-source "$HOME/.zcomet/bin/zcomet.zsh"
-
-################
-# Powerlevel10k
-################
-
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+source "$HOME/.zcomet/bin/zcomet.zsh"
 
 ##########
 # Options
@@ -46,7 +42,7 @@ export PAGER=less
 export EDITOR=nvim
 export VISUAL=nvim
 
-zcomet snippet "$HOME/.config/zsh/ls_colors"
+source "$HOME/.config/zsh/ls_colors"
 
 # -U ensures each entry in these is Unique (that is, discards duplicates)
 # -T creates a "tied" pair
@@ -54,6 +50,7 @@ export -U PATH path FPATH fpath MANPATH manpath
 export -UT INFOPATH infopath
 PATH=$HOME/.config/zsh/functions:$HOME/.local/bin:$PATH
 FPATH=$HOME/.config/zsh/completions:$FPATH
+source "$HOME/.config/zsh/pnpm.zsh"
 
 ##########
 # Wezterm
@@ -111,22 +108,23 @@ fi
 FPATH=$ASDF_DIR/completions:$FPATH
 
 #################
-# zcomet plugins
+# plugins
 #################
 
-zcomet load romkatv/powerlevel10k
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+[[ -s "$HOME/.personio.plugin.zsh" ]] && source "$HOME/.personio.plugin.zsh"
+[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && source "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+
 zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-[[ -s "$HOME/.personio.plugin.zsh" ]] && zcomet snippet "$HOME/.personio.plugin.zsh"
-[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && zcomet snippet "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
-[[ -s "$HOME/.config/zsh/pnpm.zsh" ]] && zcomet snippet "$HOME/.config/zsh/pnpm.zsh"
+zcomet load romkatv/powerlevel10k
 
 ##########
 # aliases
 ##########
 
-zcomet snippet "$HOME/.config/zsh/alias"
+source "$HOME/.config/zsh/alias"
 
 ##################
 # custom keybinds
@@ -138,5 +136,5 @@ bindkey -s '^f' "tmux-sessionizer\n"
 ################
 
 zcomet compinit
-[[ -s "$HOME/.config/zsh/p10k.zsh" ]] && source "$HOME/.config/zsh/p10k.zsh"
+source "$HOME/.p10k.zsh"
 
