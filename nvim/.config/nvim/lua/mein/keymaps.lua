@@ -1,6 +1,7 @@
 local toggle = require("mein.util.toggle")
 
 vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+vim.keymap.set("n", "Q", "<Nop>")
 
 -- Remap for dealing with word wrap
 vim.keymap.set({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
