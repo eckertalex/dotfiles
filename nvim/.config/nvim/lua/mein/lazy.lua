@@ -15,9 +15,6 @@ require("lazy").setup("mein.plugins", {
   install = {
     colorscheme = { "tokyonight-night", "habamax" },
   },
-  ui = {
-    border = "rounded",
-  },
   performance = {
     rtp = {
       disabled_plugins = {

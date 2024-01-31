@@ -1,5 +1,25 @@
 return {
-  "tpope/vim-fugitive",
+  {
+    "tpope/vim-fugitive",
+    keys = {
+      {
+        "<leader>gg",
+        "<cmd>Git<cr>",
+        desc = "Fugitive",
+      },
+    },
+  },
+
+  {
+    "mbbill/undotree",
+    keys = {
+      {
+        "<leader>su",
+        "<cmd>UndotreeToggle<cr>",
+        desc = "Undotree",
+      },
+    },
+  },
 
   {
     "nvim-pack/nvim-spectre",
@@ -90,40 +110,65 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+    keys = {
+      {
+        "<C-e>",
+        function()
+          local harpoon = require("harpoon")
+          harpoon.ui:toggle_quick_menu(harpoon:list())
+        end,
+        desc = "Harpoon List",
+      },
+      {
+        "<leader>a",
+        function()
+          local harpoon = require("harpoon")
+          harpoon:list():append()
+        end,
+        desc = "Harpoon file",
+      },
+      {
+        "<C-h>",
+        function()
+          local harpoon = require("harpoon")
+          harpoon:list():select(1)
+        end,
+        desc = "Harpoon to file 1",
+      },
+      {
+        "<C-j>",
+        function()
+          local harpoon = require("harpoon")
+          harpoon:list():select(2)
+        end,
+        desc = "Harpoon to file 2",
+      },
+      {
+        "<C-k>",
+        function()
+          local harpoon = require("harpoon")
+          harpoon:list():select(3)
+        end,
+        desc = "Harpoon to file 3",
+      },
+      {
+        "<C-l>",
+        function()
+          local harpoon = require("harpoon")
+          harpoon:list():select(4)
+        end,
+        desc = "Harpoon to file 4",
+      },
+    },
     config = function()
       local harpoon = require("harpoon")
       harpoon:setup({})
-
-      vim.keymap.set("n", "<C-g>", function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end, { desc = "List" })
-      vim.keymap.set("n", "<leader>hl", function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end, { desc = "List" })
-      vim.keymap.set("n", "<leader>ha", function()
-        harpoon:list():append()
-      end, { desc = "Append" })
-      vim.keymap.set("n", "<leader>hp", function()
-        harpoon:list():prepend()
-      end, { desc = "Prepend" })
-
-      vim.keymap.set("n", "<C-h>", function()
-        harpoon:list():select(1)
-      end, { desc = "Harpoon to file 1" })
-      vim.keymap.set("n", "<C-j>", function()
-        harpoon:list():select(2)
-      end, { desc = "Harpoon to file 2" })
-      vim.keymap.set("n", "<C-k>", function()
-        harpoon:list():select(3)
-      end, { desc = "Harpoon to file 3" })
-      vim.keymap.set("n", "<C-l>", function()
-        harpoon:list():select(4)
-      end, { desc = "Harpoon to file 4" })
     end,
   },
 
   {
     "lewis6991/gitsigns.nvim",
+    event = "VeryLazy",
     opts = {
       signs = {
         add = { text = "+" },
@@ -190,6 +235,7 @@ return {
 
   {
     "RRethy/vim-illuminate",
+    event = "VeryLazy",
     config = function()
       require("illuminate").configure({
         delay = 200,
@@ -212,6 +258,10 @@ return {
         end,
       })
     end,
+    keys = {
+      { "]]", desc = "Next Reference" },
+      { "[[", desc = "Prev Reference" },
+    },
   },
 
   {
@@ -316,9 +366,6 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
-      window = {
-        border = "rounded",
-      },
       plugins = { spelling = true },
       defaults = {
         mode = { "n", "v" },
@@ -331,7 +378,6 @@ return {
         ["<leader>f"] = { name = "+find" },
         ["<leader>g"] = { name = "+git" },
         ["<leader>gh"] = { name = "+hunk" },
-        ["<leader>h"] = { name = "+harpoon" },
         ["<leader>q"] = { name = "+quit" },
         ["<leader>s"] = { name = "+search" },
         ["<leader>t"] = { name = "+treesitter/test" },

@@ -1,6 +1,7 @@
 return {
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    lazy = true,
     dependencies = {
       {
         "williamboman/mason.nvim",
@@ -14,6 +15,9 @@ return {
         "prettier",
         "shfmt",
         "stylua",
+        "ktlint",
+        "markdownlint",
+        "phpstan",
       },
     },
   },

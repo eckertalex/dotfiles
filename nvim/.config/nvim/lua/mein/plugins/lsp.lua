@@ -1,6 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    event = "VeryLazy",
     dependencies = {
       -- awesome neovim dev tools
       {
@@ -41,9 +42,6 @@ return {
       end
 
       vim.diagnostic.config({
-        float = {
-          border = "rounded",
-        },
         underline = true,
         update_in_insert = false,
         virtual_text = {
@@ -60,11 +58,6 @@ return {
         },
         severity_sort = true,
       })
-
-      require("lspconfig.ui.windows").default_options.border = "rounded"
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-      vim.lsp.handlers["textDocument/signatureHelp"] =
-        vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
@@ -195,7 +188,6 @@ return {
           "jsonls",
           "lua_ls",
           "marksman",
-          "phpactor",
           "tailwindcss",
           "tsserver",
         },

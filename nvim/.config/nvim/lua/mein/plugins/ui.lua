@@ -1,12 +1,9 @@
 return {
+  { "nvim-tree/nvim-web-devicons", lazy = true },
+
   {
     "akinsho/bufferline.nvim",
-    version = "*",
-    event = { "VeryLazy" },
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-      "echasnovski/mini.bufremove",
-    },
+    event = "VeryLazy",
     keys = {
       { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
@@ -43,8 +40,7 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    event = { "VeryLazy" },
+    event = "VeryLazy",
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
@@ -56,21 +52,90 @@ return {
       end
     end,
     opts = function()
+      -- PERF: we don't need this lualine require madness 🤷
+      local lualine_require = require("lualine_require")
+      lualine_require.require = require
+
+      local icons = require("mein.icons")
+
       vim.o.laststatus = vim.g.lualine_laststatus
+
+      --- @param trunc_length number truncates component to trunc_len number of chars
+      --- @param hide_width number hides component when window width is smaller then hide_width
+      --- return function that can format the component accordingly
+      local function trunc(trunc_length, hide_width)
+        return function(str)
+          local win_width = vim.fn.winwidth(0)
+          if hide_width and win_width < hide_width then
+            return ""
+          elseif trunc_length and #str > trunc_length then
+            return str:sub(1, trunc_length) .. "..."
+          end
+          return str
+        end
+      end
 
       return {
         options = {
           theme = "tokyonight",
           globalstatus = true,
-          component_separators = "|",
+          disabled_filetypes = { statusline = { "dashboard" } },
           section_separators = "",
+          component_separators = "│",
         },
         sections = {
-          lualine_b = { "diff", "diagnostics" },
+          lualine_a = { "mode" },
+          lualine_b = { { "branch", fmt = trunc(13, 80) } },
+          lualine_c = {
+            {
+              "diagnostics",
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
+            { "filename", path = 1 },
+          },
+          lualine_x = {
+            {
+              "diff",
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
+              source = function()
+                local gitsigns = vim.b.gitsigns_status_dict
+                if gitsigns then
+                  return {
+                    added = gitsigns.added,
+                    modified = gitsigns.changed,
+                    removed = gitsigns.removed,
+                  }
+                end
+              end,
+            },
+            {
+              require("lazy.status").updates,
+              cond = require("lazy.status").has_updates,
+            },
+          },
+          lualine_y = {
+            "encoding",
+            "fileformat",
+            { "filetype", icon_only = true },
+          },
+          lualine_z = {
+            { "progress", separator = " ", padding = { left = 1, right = 0 } },
+            { "location", padding = { left = 0, right = 1 } },
+          },
         },
         extensions = {
           "mason",
           "lazy",
+          "trouble",
         },
       }
     end,
@@ -79,6 +144,7 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
+    event = "VeryLazy",
     opts = {
       indent = {
         char = "│",
@@ -101,6 +167,7 @@ return {
   {
     "echasnovski/mini.indentscope",
     version = false, -- wait till new 0.7.0 release to put it back on semver
+    event = "VeryLazy",
     opts = {
       symbol = "│",
       options = { try_as_border = true },
@@ -109,6 +176,7 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         pattern = {
           "help",
+          "dashboard",
           "Trouble",
           "trouble",
           "lazy",
@@ -118,6 +186,95 @@ return {
           vim.b.miniindentscope_disable = true
         end,
       })
+    end,
+  },
+
+  {
+    "nvimdev/dashboard-nvim",
+    event = "VimEnter",
+    opts = function()
+      local logo = {
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+        [[                                                                     ]],
+        [[       ████ ██████           █████      ██                     ]],
+        [[      ███████████             █████                             ]],
+        [[      █████████ ███████████████████ ███   ███████████   ]],
+        [[     █████████  ███    █████████████ █████ ██████████████   ]],
+        [[    █████████ ██████████ █████████ █████ █████ ████ █████   ]],
+        [[  ███████████ ███    ███ █████████ █████ █████ ████ █████  ]],
+        [[ ██████  █████████████████████ ████ █████ █████ ████ ██████ ]],
+        [[                                                                       ]],
+        [[                                                                       ]],
+      }
+
+      local opts = {
+        theme = "doom",
+        hide = {
+          -- this is taken care of by lualine
+          -- enabling this messes up the actual laststatus setting after loading a file
+          statusline = false,
+        },
+        config = {
+          header = logo,
+          center = {
+            {
+              action = "Telescope find_files",
+              desc = " Find file",
+              icon = " ",
+              key = "f",
+            },
+            {
+              action = "ene | startinsert",
+              desc = " New file",
+              icon = " ",
+              key = "n",
+            },
+            {
+              action = "Telescope oldfiles",
+              desc = " Recent files",
+              icon = " ",
+              key = "r",
+            },
+            {
+              action = "Telescope live_grep_args",
+              desc = " Find text",
+              icon = " ",
+              key = "g",
+            },
+            {
+              action = "Lazy",
+              desc = " Lazy",
+              icon = "󰒲 ",
+              key = "l",
+            },
+            {
+              action = "qa",
+              desc = " Quit",
+              icon = " ",
+              key = "q",
+            },
+          },
+          footer = function()
+            local stats = require("lazy").stats()
+            local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+            return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+          end,
+        },
+      }
+
+      for _, button in ipairs(opts.config.center) do
+        button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
+        button.key_format = "  %s"
+      end
+
+      return opts
     end,
   },
 }
