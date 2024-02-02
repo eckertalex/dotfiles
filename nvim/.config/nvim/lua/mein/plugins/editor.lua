@@ -1,6 +1,7 @@
 return {
   {
     "tpope/vim-fugitive",
+    event = "VeryLazy",
     keys = {
       {
         "<leader>gg",
@@ -360,6 +361,44 @@ return {
       { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
     },
     opts = {},
+  },
+
+  {
+    "folke/zen-mode.nvim",
+    opts = {
+      window = {
+        options = {
+          signcolumn = "no", -- disable signcolumn
+          number = false, -- disable number column
+          relativenumber = false, -- disable relative numbers
+          cursorline = false, -- disable cursorline
+          cursorcolumn = false, -- disable cursor column
+          foldcolumn = "0", -- disable fold column
+          list = false, -- disable whitespace characters
+        },
+      },
+      plugins = {
+        options = {
+          enabled = true,
+          laststatus = 0,
+        },
+        gitsigns = { enabled = true },
+        tmux = { enabled = true },
+      },
+      on_open = function()
+        vim.cmd("IBLDisable")
+      end,
+      on_close = function()
+        vim.cmd("IBLEnable")
+      end,
+    },
+    keys = {
+      {
+        "<leader>z",
+        "<cmd>ZenMode<cr>",
+        desc = "Zen",
+      },
+    },
   },
 
   {
