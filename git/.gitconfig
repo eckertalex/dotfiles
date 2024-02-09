@@ -42,5 +42,3 @@
   prune = true
 [commit]
   template = ~/.gitmessage
-[sequence]
-  editor = interactive-rebase-tool
