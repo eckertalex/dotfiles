@@ -42,7 +42,6 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = {
       { "nvim-lua/plenary.nvim" },
-      { "nvim-telescope/telescope-live-grep-args.nvim" },
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
@@ -61,7 +60,7 @@ return {
       { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Commits" },
       { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Status" },
       { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
-      { "<leader>sg", "<cmd>Telescope live_grep_args<cr>", desc = "Grep" },
+      { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Grep" },
       { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
       { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
       { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
@@ -79,10 +78,8 @@ return {
       end
 
       pcall(require("telescope").load_extension, "fzf")
-      require("telescope").load_extension("live_grep_args")
       local actions = require("telescope.actions")
       local action_layout = require("telescope.actions.layout")
-      local lga_actions = require("telescope-live-grep-args.actions")
 
       return {
         defaults = {
@@ -92,8 +89,6 @@ return {
           mappings = {
             i = {
               ["<C-h>"] = action_layout.toggle_preview,
-              ["<C-k>"] = lga_actions.quote_prompt(),
-              ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
             },
             n = {
               ["<C-h>"] = action_layout.toggle_preview,
