@@ -85,10 +85,18 @@ fi
 [ -s "/opt/homebrew/opt/fzf/shell/completion.zsh" ] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
 # Key bindings
 [ -s "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#1a1b26,bg:#1a1b26,spinner:#9ece6a,hl:#bb9af7  \
---color=fg:#c0caf5,header:#9ece6a,info:#7aa2f7,pointer:#7dcfff  \
---color=marker:#9ece6a,fg+:#c0caf5,prompt:#7dcfff,hl+:#7dcfff"
+# Tokyo Night Night
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+--color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
+--color=fg+:#c0caf5,bg+:#292e42,hl+:#ff9e64 \
+--color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff \
+--color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
+# Tokyo Night Day
+# export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+# --color=fg:#3760bf,bg:#e1e2e7,hl:#b15c00 \
+# --color=fg+:#3760bf,bg+:#c4c8da,hl+:#b15c00 \
+# --color=info:#2e7de9,prompt:#007197,pointer:#007197 \
+# --color=marker:#587539,spinner:#587539,header:#587539"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 ###########
