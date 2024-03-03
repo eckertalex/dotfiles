@@ -363,34 +363,6 @@ require("lazy").setup({
     },
 
     {
-        "folke/which-key.nvim",
-        event = "VeryLazy",
-        opts = {
-            plugins = { spelling = true },
-            defaults = {
-                mode = { "n", "v" },
-                ["<leader>b"] = { name = "[B]uffers", _ = "which_key_ignore" },
-                ["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-                ["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
-                ["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
-                ["<leader>gh"] = { name = "[H]unk", _ = "which_key_ignore" },
-                ["<leader>q"] = { name = "[Q]uit", _ = "which_key_ignore" },
-                ["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
-                ["<leader>t"] = { name = "[T]est", _ = "which_key_ignore" },
-                ["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
-                ["<leader>u"] = { name = "[U]i", _ = "which_key_ignore" },
-                ["<leader>w"] = { name = "[W]indow", _ = "which_key_ignore" },
-                ["<leader>x"] = { name = "diagnostics/quickfi[X]", _ = "which_key_ignore" },
-            },
-        },
-        config = function(_, opts)
-            local wk = require("which-key")
-            wk.setup(opts)
-            wk.register(opts.defaults)
-        end,
-    },
-
-    {
         "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
         event = "VeryLazy",
     },
@@ -507,7 +479,7 @@ require("lazy").setup({
 
     {
         "JoosepAlviste/nvim-ts-context-commentstring",
-        lazy = true,
+        event = "VeryLazy",
         opts = {
             enable_autocmd = false,
         },
@@ -574,12 +546,26 @@ require("lazy").setup({
     },
 
     {
+        "echasnovski/mini.notify",
+        event = "VeryLazy",
+        config = true,
+    },
+
+    {
+        "echasnovski/mini.cursorword",
+        event = "VeryLazy",
+        config = true,
+    },
+
+    {
         "echasnovski/mini.statusline",
+        event = "VeryLazy",
         config = true,
     },
 
     {
         "echasnovski/mini.tabline",
+        event = "VeryLazy",
         config = true,
     },
 
@@ -599,19 +585,62 @@ require("lazy").setup({
                     new_section("Recent files", "Telescope oldfiles", "Telescope"),
                     new_section("Grep text", "Telescope live_grep", "Telescope"),
                     new_section("init.lua", "e ~/.config/nvim/init.lua", "Config"),
+                    new_section("Lazy", "Lazy", "Config"),
                     new_section("New file", "ene | startinsert", "Built-in"),
                     new_section("Quit", "qa", "Built-in"),
                 },
+                footer = "",
             })
+        end,
+    },
 
-            -- vim.api.nvim_create_autocmd("User", {
-            --     callback = function()
-            --         local stats = require("lazy").stats()
-            --         local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-            --         starter.config.footer = "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
-            --         pcall(starter.refresh, 0)
-            --     end,
-            -- })
+    {
+        "echasnovski/mini.clue",
+        event = "VeryLazy",
+        config = function()
+            local miniclue = require("mini.clue")
+            miniclue.setup({
+                window = {
+                    delay = 0,
+                    config = {
+                        width = "auto",
+                    },
+                },
+                triggers = {
+                    -- Leader triggers
+                    { mode = "n", keys = "<Leader>" },
+                    { mode = "x", keys = "<Leader>" },
+
+                    -- `g` key
+                    { mode = "n", keys = "g" },
+                    { mode = "x", keys = "g" },
+
+                    -- Window commands
+                    { mode = "n", keys = "<C-w>" },
+
+                    -- `z` key
+                    { mode = "n", keys = "z" },
+                    { mode = "x", keys = "z" },
+                },
+                -- Add descriptions for mapping groups
+                clues = {
+                    miniclue.gen_clues.g(),
+                    miniclue.gen_clues.windows(),
+                    miniclue.gen_clues.z(),
+                    { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
+                    { mode = "n", keys = "<Leader>c", desc = "+Code" },
+                    { mode = "n", keys = "<Leader>d", desc = "+Document" },
+                    { mode = "n", keys = "<Leader>g", desc = "+Git" },
+                    { mode = "n", keys = "<Leader>gh", desc = "+Hunk" },
+                    { mode = "n", keys = "<Leader>q", desc = "+Quit" },
+                    { mode = "n", keys = "<Leader>s", desc = "+Search" },
+                    { mode = "n", keys = "<Leader>t", desc = "+Test" },
+                    { mode = "n", keys = "<Leader>r", desc = "+Rename" },
+                    { mode = "n", keys = "<Leader>u", desc = "+UI" },
+                    { mode = "n", keys = "<Leader>w", desc = "+Window" },
+                    { mode = "n", keys = "<Leader>x", desc = "+Diagnostics/Quickfix" },
+                },
+            })
         end,
     },
 
@@ -951,7 +980,6 @@ require("lazy").setup({
             "WhoIsSethDaniel/mason-tool-installer.nvim",
 
             { "folke/neodev.nvim", opts = {} },
-            { "j-hui/fidget.nvim", opts = {} },
 
             "b0o/SchemaStore.nvim",
         },
@@ -1037,24 +1065,6 @@ require("lazy").setup({
                         vim.lsp.buf.signature_help,
                         { buffer = event.buffer, desc = "Signature Documentation" }
                     )
-
-                    -- The following two autocommands are used to highlight references of the
-                    -- word under your cursor when your cursor rests there for a little while.
-                    --    See `:help CursorHold` for information about when this is executed
-                    --
-                    -- When you move your cursor, the highlights will be cleared (the second autocommand).
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    if client and client.server_capabilities.documentHighlightProvider then
-                        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                            buffer = event.buf,
-                            callback = vim.lsp.buf.document_highlight,
-                        })
-
-                        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-                            buffer = event.buf,
-                            callback = vim.lsp.buf.clear_references,
-                        })
-                    end
                 end,
             })
 
@@ -1230,11 +1240,10 @@ require("lazy").setup({
     },
 
     {
-        "NvChad/nvim-colorizer.lua",
+        "brenoprata10/nvim-highlight-colors",
+        event = "VeryLazy",
         opts = {
-            user_default_options = {
-                tailwind = true,
-            },
+            enable_tailwind = true,
         },
     },
 
