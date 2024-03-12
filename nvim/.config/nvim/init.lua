@@ -158,7 +158,7 @@ vim.keymap.set("v", ">", ">gv")
 
 -- toggle diagnostics
 local enabled = true
-vim.keymap.set("n", "<leader>ud", function()
+vim.keymap.set("n", "<leader>xd", function()
     enabled = not enabled
     if enabled then
         vim.diagnostic.enable()
@@ -170,7 +170,7 @@ vim.keymap.set("n", "<leader>ud", function()
 end, { desc = "Toggle Diagnostics" })
 
 -- highlights under cursor
-vim.keymap.set("n", "<leader>ui", vim.show_pos, { desc = "Inspect Pos" })
+vim.keymap.set("n", "<leader>i", vim.show_pos, { desc = "Inspect Pos" })
 
 -- quit
 vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
@@ -636,7 +636,6 @@ require("lazy").setup({
                     { mode = "n", keys = "<Leader>s", desc = "+Search" },
                     { mode = "n", keys = "<Leader>t", desc = "+Test" },
                     { mode = "n", keys = "<Leader>r", desc = "+Rename" },
-                    { mode = "n", keys = "<Leader>u", desc = "+UI" },
                     { mode = "n", keys = "<Leader>w", desc = "+Window" },
                     { mode = "n", keys = "<Leader>x", desc = "+Diagnostics/Quickfix" },
                 },
