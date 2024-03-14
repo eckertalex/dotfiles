@@ -120,9 +120,6 @@ vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 vim.keymap.set("n", "<leader>d", '"_d', { desc = "Delete to empty register" })
 vim.keymap.set("v", "<leader>d", '"_d', { desc = "Delete to empty register" })
 
--- search for word under cursor
-vim.keymap.set("n", "<leader>h", "*``", { desc = "Highlight Word" })
-
 -- replace word
 vim.keymap.set(
     "n",
@@ -1076,6 +1073,8 @@ require("lazy").setup({
             )
 
             local servers = {
+                cssls = {},
+                cssmodules_ls = {},
                 eslint = {
                     settings = {
                         workingDirectories = { mode = "auto" },
@@ -1125,6 +1124,7 @@ require("lazy").setup({
                         },
                     },
                 },
+                graphql = {},
                 html = {},
                 jsonls = {
                     on_new_config = function(new_config)
@@ -1140,6 +1140,7 @@ require("lazy").setup({
                         },
                     },
                 },
+                kotlin_language_server = {},
                 lua_ls = {
                     settings = {
                         Lua = {
@@ -1161,6 +1162,9 @@ require("lazy").setup({
                     },
                 },
                 marksman = {},
+                -- phpactor = {},
+                pyright = {},
+                sqls = {},
                 tailwindcss = {},
                 tsserver = {
                     keys = {
