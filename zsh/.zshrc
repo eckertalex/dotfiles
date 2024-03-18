@@ -122,7 +122,6 @@ FPATH=$ASDF_DIR/completions:$FPATH
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 [[ -s "$HOME/.local.zsh" ]] && source "$HOME/.local.zsh"
-[[ -s "$HOME/.personio.plugin.zsh" ]] && source "$HOME/.personio.plugin.zsh"
 [[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && source "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
 
 zcomet load zsh-users/zsh-syntax-highlighting
