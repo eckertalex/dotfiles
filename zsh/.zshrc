@@ -1,15 +1,15 @@
 # !/bin/zsh
- 
+
 #########################
 # zcomet & powerlevel10k
 #########################
 
 if [[ ! -e $HOME/.zcomet/bin ]]; then
-  git clone --depth=1 https://github.com/agkozak/zcomet.git $HOME/.zcomet/bin
+	git clone --depth=1 https://github.com/agkozak/zcomet.git $HOME/.zcomet/bin
 fi
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 source "$HOME/.zcomet/bin/zcomet.zsh"
@@ -42,8 +42,6 @@ export PAGER=less
 export EDITOR=nvim
 export VISUAL=nvim
 
-source "$HOME/.config/zsh/ls_colors"
-
 # -U ensures each entry in these is Unique (that is, discards duplicates)
 # -T creates a "tied" pair
 export -U PATH path FPATH fpath MANPATH manpath
@@ -64,47 +62,64 @@ PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
 export HOMEBREW_NO_ANALYTICS=1
 case $OSTYPE in
-  linux*)
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-  ;;
-  darwin*)
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  ;;
+	linux*)
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+		;;
+	darwin*)
+		eval "$(/opt/homebrew/bin/brew shellenv)"
+		;;
 esac
 
 if type brew &> /dev/null; then
-  PATH=$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH
-  FPATH=$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH
+	PATH=$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH
+	FPATH=$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH
 fi
 
-######
+#####
 # FZF
-######
+#####
 
 # Auto-completion
 [ -s "/opt/homebrew/opt/fzf/shell/completion.zsh" ] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
 # Key bindings
 [ -s "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
+
+#########
+# THEMING
+#########
+
+######
+# DARK
+######
+source "$HOME/.config/vivid/tokyonight-night.lscolors"
+export BAT_THEME="tokyonight_night"
 # Tokyo Night Night
 export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
---color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
---color=fg+:#c0caf5,bg+:#292e42,hl+:#ff9e64 \
---color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff \
---color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
-# Tokyo Night Day
+	--color=fg:#c0caf5,bg:#1a1b26,hl:#ff9e64 \
+	--color=fg+:#c0caf5,bg+:#292e42,hl+:#ff9e64 \
+	--color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff \
+	--color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a"
+
+#######
+# LIGHT
+#######
+# source "$HOME/.config/vivid/tokyonight-day.lscolors"
+# export BAT_THEME="tokyonight_day"
+# # Tokyo Night Day
 # export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
-# --color=fg:#3760bf,bg:#e1e2e7,hl:#b15c00 \
-# --color=fg+:#3760bf,bg+:#c4c8da,hl+:#b15c00 \
-# --color=info:#2e7de9,prompt:#007197,pointer:#007197 \
-# --color=marker:#587539,spinner:#587539,header:#587539"
-export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
+# 	--color=fg:#3760bf,bg:#e1e2e7,hl:#b15c00 \
+# 	--color=fg+:#3760bf,bg+:#c4c8da,hl+:#b15c00 \
+# 	--color=info:#2e7de9,prompt:#007197,pointer:#007197 \
+# 	--color=marker:#587539,spinner:#587539,header:#587539"
 
 ###########
 # bob/nvim
 ###########
 
 if type bob &> /dev/null; then
-  PATH=$HOME/.local/share/bob/nvim-bin:$PATH
+	PATH=$HOME/.local/share/bob/nvim-bin:$PATH
 fi
 
 #######
@@ -121,8 +136,7 @@ FPATH=$ASDF_DIR/completions:$FPATH
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-[[ -s "$HOME/.local.zsh" ]] && source "$HOME/.local.zsh"
-[[ -s "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh" ]] && source "$HOME/dev/mu.plugin.zsh/mu.plugin.zsh"
+[[ -s "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
 
 zcomet load zsh-users/zsh-syntax-highlighting
 zcomet load zsh-users/zsh-autosuggestions
@@ -145,4 +159,3 @@ bindkey -s '^f' "tmux-sessionizer\n"
 
 zcomet compinit
 source "$HOME/.p10k.zsh"
-
