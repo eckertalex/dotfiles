@@ -577,6 +577,7 @@ require("lazy").setup({
             local starter = require("mini.starter")
             starter.setup({
                 evaluate_single = true,
+                query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
                 items = {
                     new_section("Find file", "Telescope find_files", "Telescope"),
                     new_section("Recent files", "Telescope oldfiles", "Telescope"),
