@@ -340,20 +340,8 @@ require("lazy").setup({
         "folke/tokyonight.nvim",
         lazy = false,
         priority = 1000,
-        opts = {
-            on_highlights = function(hl, c)
-                hl.WinBar = {
-                    bg = c.none,
-                    fg = c.teal,
-                }
-                hl.WinBarNC = {
-                    bg = c.none,
-                    fg = c.comment,
-                }
-            end,
-        },
-        config = function(_, opts)
-            require("tokyonight").setup(opts)
+        config = function()
+            require("tokyonight").setup({})
 
             vim.cmd.colorscheme("tokyonight-night")
         end,
