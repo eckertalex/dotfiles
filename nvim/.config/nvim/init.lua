@@ -75,7 +75,8 @@ vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 
 vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 
-vim.opt.smoothscroll = true
+-- TODO: enable when neovim v10
+-- vim.opt.smoothscroll = true
 
 vim.opt.termguicolors = true -- true color support
 
@@ -264,53 +265,45 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 local icons = {
-    diagnostics = {
-        Error = " ",
-        Warn = " ",
-        Hint = " ",
-        Info = " ",
-    },
-    kinds = {
-        Array = " ",
-        Boolean = "󰨙 ",
-        Class = " ",
-        Codeium = "󰘦 ",
-        Color = " ",
-        Control = " ",
-        Collapsed = " ",
-        Constant = "󰏿 ",
-        Constructor = " ",
-        Copilot = " ",
-        Enum = " ",
-        EnumMember = " ",
-        Event = " ",
-        Field = " ",
-        File = " ",
-        Folder = " ",
-        Function = "󰊕 ",
-        Interface = " ",
-        Key = " ",
-        Keyword = " ",
-        Method = "󰊕 ",
-        Module = " ",
-        Namespace = "󰦮 ",
-        Null = " ",
-        Number = "󰎠 ",
-        Object = " ",
-        Operator = " ",
-        Package = " ",
-        Property = " ",
-        Reference = " ",
-        Snippet = " ",
-        String = " ",
-        Struct = "󰆼 ",
-        TabNine = "󰏚 ",
-        Text = " ",
-        TypeParameter = " ",
-        Unit = " ",
-        Value = " ",
-        Variable = "󰀫 ",
-    },
+    Array = " ",
+    Boolean = "󰨙 ",
+    Class = " ",
+    Codeium = "󰘦 ",
+    Color = " ",
+    Control = " ",
+    Collapsed = " ",
+    Constant = "󰏿 ",
+    Constructor = " ",
+    Copilot = " ",
+    Enum = " ",
+    EnumMember = " ",
+    Event = " ",
+    Field = " ",
+    File = " ",
+    Folder = " ",
+    Function = "󰊕 ",
+    Interface = " ",
+    Key = " ",
+    Keyword = " ",
+    Method = "󰊕 ",
+    Module = " ",
+    Namespace = "󰦮 ",
+    Null = " ",
+    Number = "󰎠 ",
+    Object = " ",
+    Operator = " ",
+    Package = " ",
+    Property = " ",
+    Reference = " ",
+    Snippet = " ",
+    String = " ",
+    Struct = "󰆼 ",
+    TabNine = "󰏚 ",
+    Text = " ",
+    TypeParameter = " ",
+    Unit = " ",
+    Value = " ",
+    Variable = "󰀫 ",
 }
 
 -- [[ Install `lazy.nvim` plugin manager ]]
@@ -965,25 +958,9 @@ require("lazy").setup({
             "b0o/SchemaStore.nvim",
         },
         config = function()
-            for name, icon in pairs(icons.diagnostics) do
-                name = "DiagnosticSign" .. name
-                vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-            end
-
             vim.diagnostic.config({
                 underline = true,
                 update_in_insert = false,
-                virtual_text = {
-                    spacing = 4,
-                    source = "if_many",
-                    prefix = function(diagnostic)
-                        for d, icon in pairs(icons.diagnostics) do
-                            if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-                                return icon
-                            end
-                        end
-                    end,
-                },
                 severity_sort = true,
             })
 
@@ -1159,25 +1136,12 @@ require("lazy").setup({
                                 vim.lsp.buf.code_action({
                                     apply = true,
                                     context = {
-                                        only = { "source.organizeImports.ts" },
+                                        only = { "source.organizeImports" },
                                         diagnostics = {},
                                     },
                                 })
                             end,
                             desc = "Organize Imports",
-                        },
-                        {
-                            "<leader>cR",
-                            function()
-                                vim.lsp.buf.code_action({
-                                    apply = true,
-                                    context = {
-                                        only = { "source.removeUnused.ts" },
-                                        diagnostics = {},
-                                    },
-                                })
-                            end,
-                            desc = "Remove Unused Imports",
                         },
                     },
                     settings = {
@@ -1300,8 +1264,8 @@ require("lazy").setup({
                 }),
                 formatting = {
                     format = function(entry, item)
-                        if icons.kinds[item.kind] then
-                            item.kind = icons.kinds[item.kind] .. item.kind
+                        if icons[item.kind] then
+                            item.kind = icons[item.kind] .. item.kind
                         end
                         return require("tailwindcss-colorizer-cmp").formatter(entry, item)
                     end,
