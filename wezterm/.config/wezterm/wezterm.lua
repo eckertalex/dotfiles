@@ -11,9 +11,9 @@ end
 
 local function scheme_for_appearance(appearance)
 	if appearance:find("Dark") then
-		return "Tokyo Night"
+		return "Catppuccin Macchiato"
 	else
-		return "Tokyo Night Day"
+		return "Catppuccin Latte"
 	end
 end
 

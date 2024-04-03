@@ -20,7 +20,7 @@
   side-by-side = true
   light = false 
   features = decorations
-  syntax-theme = "tokyonight_night"
+  syntax-theme = "Catppuccin Macchiato"
 [delta "interactive"]
   keep-plus-minus-markers = false
 [delta "decorations"]

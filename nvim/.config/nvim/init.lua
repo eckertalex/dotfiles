@@ -327,13 +327,35 @@ require("lazy").setup({
     { "nvim-tree/nvim-web-devicons", lazy = true },
 
     {
-        "folke/tokyonight.nvim",
+        "catppuccin/nvim",
+        name = "catppuccin",
         lazy = false,
         priority = 1000,
         config = function()
-            require("tokyonight").setup({})
+            require("catppuccin").setup({
+                integrations = {
+                    cmp = true,
+                    gitsigns = true,
+                    lsp_trouble = true,
+                    mason = true,
+                    mini = true,
+                    native_lsp = {
+                        enabled = true,
+                        underlines = {
+                            errors = { "undercurl" },
+                            hints = { "undercurl" },
+                            warnings = { "undercurl" },
+                            information = { "undercurl" },
+                        },
+                    },
+                    semantic_tokens = true,
+                    telescope = true,
+                    treesitter = true,
+                    treesitter_context = true,
+                },
+            })
 
-            vim.cmd.colorscheme("tokyonight-night")
+            vim.cmd.colorscheme("catppuccin-macchiato")
         end,
     },
 
