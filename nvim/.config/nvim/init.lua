@@ -1150,42 +1150,6 @@ require("lazy").setup({
                 pyright = {},
                 sqls = {},
                 tailwindcss = {},
-                tsserver = {
-                    keys = {
-                        {
-                            "<leader>co",
-                            function()
-                                vim.lsp.buf.code_action({
-                                    apply = true,
-                                    context = {
-                                        only = { "source.organizeImports" },
-                                        diagnostics = {},
-                                    },
-                                })
-                            end,
-                            desc = "Organize Imports",
-                        },
-                    },
-                    settings = {
-                        typescript = {
-                            format = {
-                                indentSize = vim.o.shiftwidth,
-                                convertTabsToSpaces = vim.o.expandtab,
-                                tabSize = vim.o.tabstop,
-                            },
-                        },
-                        javascript = {
-                            format = {
-                                indentSize = vim.o.shiftwidth,
-                                convertTabsToSpaces = vim.o.expandtab,
-                                tabSize = vim.o.tabstop,
-                            },
-                        },
-                        completions = {
-                            completeFunctionCalls = true,
-                        },
-                    },
-                },
             }
 
             require("mason").setup()
@@ -1214,11 +1178,9 @@ require("lazy").setup({
     },
 
     {
-        "brenoprata10/nvim-highlight-colors",
-        event = "VeryLazy",
-        opts = {
-            enable_tailwind = true,
-        },
+        "pmizio/typescript-tools.nvim",
+        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        opts = {},
     },
 
     {
@@ -1241,8 +1203,6 @@ require("lazy").setup({
                     require("luasnip.loaders.from_vscode").lazy_load()
                 end,
             },
-
-            { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
         },
         opts = function()
             local cmp = require("cmp")
@@ -1285,11 +1245,11 @@ require("lazy").setup({
                     { name = "buffer" },
                 }),
                 formatting = {
-                    format = function(entry, item)
+                    format = function(_, item)
                         if icons[item.kind] then
                             item.kind = icons[item.kind] .. item.kind
                         end
-                        return require("tailwindcss-colorizer-cmp").formatter(entry, item)
+                        return item
                     end,
                 },
             }
@@ -1298,13 +1258,29 @@ require("lazy").setup({
 
     {
         "stevearc/conform.nvim",
-        event = "VeryLazy",
+        lazy = false,
+        keys = {
+            {
+                "<leader>cf",
+                function()
+                    require("conform").format({ async = true, lsp_fallback = true })
+                end,
+                mode = "",
+                desc = "[F]ormat buffer",
+            },
+        },
         opts = {
             notify_on_error = false,
-            format_on_save = {
-                timeout_ms = 500,
-                lsp_fallback = true,
-            },
+            format_on_save = function(bufnr)
+                -- Disable "format_on_save lsp_fallback" for languages that don't
+                -- have a well standardized coding style. You can add additional
+                -- languages here or re-enable it for the disabled ones.
+                local disable_filetypes = { c = true, cpp = true }
+                return {
+                    timeout_ms = 500,
+                    lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+                }
+            end,
             formatters_by_ft = {
                 ["lua"] = { "stylua" },
                 ["sh"] = { "shfmt" },
