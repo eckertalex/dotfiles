@@ -18,9 +18,11 @@
 	hyperlinks = true
 	line-numbers = true
 	side-by-side = true
-	light = false 
 	features = decorations
-	syntax-theme = "Catppuccin Macchiato"
+	; light = false 
+	; syntax-theme = "Catppuccin Macchiato"
+	light = true 
+	syntax-theme = "Catppuccin Latte"
 [delta "interactive"]
 	keep-plus-minus-markers = false
 [delta "decorations"]

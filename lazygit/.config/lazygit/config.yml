@@ -1,7 +1,8 @@
 git:
   paging:
     colorArg: always
-    pager: delta --dark --paging=never
+    # pager: delta --dark --paging=never
+    pager: delta --paging=never
 gui: # stuff relating to the UI
   showRandomTip: false
   nerdFontsVersion: "3"
