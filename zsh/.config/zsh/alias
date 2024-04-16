@@ -9,7 +9,7 @@ alias g=git
 alias benchmark_hyperfine="hyperfine --warmup 3 \"$SHELL -i -c exit\""
 alias benchmark="for i in \$(seq 1 10); do time \$SHELL -i -c exit; done"
 
-alias shellclean="rm -rf ~/*.zwc ~/.zcompdump* ~/.zcompcache ~/.zcomet ~/.cache/p10k* ~/.cache/gitstatus"
+alias shellclean="rm -rf ~/*.zwc ~/.zcompdump* ~/.zcompcache ~/.config/zsh/plugins ~/.cache/p10k* ~/.cache/gitstatus"
 
 alias ..="cd .."
 alias ...="cd ../.."

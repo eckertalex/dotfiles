@@ -1,18 +1,30 @@
 # !/bin/zsh
 
-#########################
-# zcomet & powerlevel10k
-#########################
+function zcompile-many() {
+  local f
+  for f; do zcompile -R -- "$f".zwc "$f"; done
+}
 
-if [[ ! -e $HOME/.zcomet/bin ]]; then
-	git clone --depth=1 https://github.com/agkozak/zcomet.git $HOME/.zcomet/bin
+if [[ ! -e $HOME/.config/zsh/plugins/zsh-syntax-highlighting ]]; then
+  git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.config/zsh/plugins/zsh-syntax-highlighting
+  zcompile-many $HOME/.config/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
 fi
+if [[ ! -e $HOME/.config/zsh/plugins/zsh-autosuggestions ]]; then
+  git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.config/zsh/plugins/zsh-autosuggestions
+  zcompile-many $HOME/.config/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+fi
+if [[ ! -e $HOME/.config/zsh/plugins/powerlevel10k ]]; then
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/plugins/powerlevel10k
+  make -C $HOME/.config/zsh/plugins/powerlevel10k pkg
+fi
+
+#########################
+# powerlevel10k
+#########################
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-source "$HOME/.zcomet/bin/zcomet.zsh"
 
 ##########
 # Options
@@ -128,24 +140,6 @@ fi
 [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
 FPATH=$ASDF_DIR/completions:$FPATH
 
-#################
-# plugins
-#################
-
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-
-[[ -s "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
-
-zcomet load zsh-users/zsh-syntax-highlighting
-zcomet load zsh-users/zsh-autosuggestions
-zcomet load romkatv/powerlevel10k
-
-##########
-# aliases
-##########
-
-source "$HOME/.config/zsh/alias"
-
 ##################
 # custom keybinds
 ##################
@@ -153,7 +147,20 @@ source "$HOME/.config/zsh/alias"
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
 
-################
+#################
+# plugins
+#################
 
-zcomet compinit
+# Enable the "new" completion system (compsys).
+autoload -Uz compinit && compinit
+[[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile-many ~/.zcompdump
+unfunction zcompile-many
+
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+[[ -s "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
+source "$HOME/.config/zsh/alias"
+source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
 source "$HOME/.p10k.zsh"
