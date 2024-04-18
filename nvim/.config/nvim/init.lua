@@ -124,7 +124,7 @@ vim.keymap.set("v", "<leader>d", '"_d', { desc = "Delete to empty register" })
 -- replace word
 vim.keymap.set(
     "n",
-    "<leader>rr",
+    "<leader>r",
     [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
     { desc = "Replace word in Buffer" }
 )
@@ -355,7 +355,7 @@ require("lazy").setup({
                 },
             })
 
-            vim.cmd.colorscheme("catppuccin-latte")
+            vim.cmd.colorscheme("catppuccin-macchiato")
         end,
     },
 
@@ -632,7 +632,6 @@ require("lazy").setup({
                     { mode = "n", keys = "<Leader>gh", desc = "+Hunk" },
                     { mode = "n", keys = "<Leader>q", desc = "+Quit" },
                     { mode = "n", keys = "<Leader>s", desc = "+Search" },
-                    { mode = "n", keys = "<Leader>r", desc = "+Rename" },
                     { mode = "n", keys = "<Leader>w", desc = "+Window" },
                     { mode = "n", keys = "<Leader>x", desc = "+Diagnostics/Quickfix" },
                 },
@@ -860,9 +859,23 @@ require("lazy").setup({
             pcall(require("telescope").load_extension, "ui-select")
             local actions = require("telescope.actions")
             local action_layout = require("telescope.actions.layout")
+            local telescopeConfig = require("telescope.config")
+            local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
+
+            -- I want to search in hidden/dot files.
+            table.insert(vimgrep_arguments, "--hidden")
+            -- I don't want to search in the `.git` directory.
+            table.insert(vimgrep_arguments, "--glob")
+            table.insert(vimgrep_arguments, "!**/.git/*")
 
             return {
+                pickers = {
+                    find_files = {
+                        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+                    },
+                },
                 defaults = {
+                    vimgrep_arguments = vimgrep_arguments,
                     path_display = filenameFirst,
                     mappings = {
                         i = {
@@ -1024,7 +1037,7 @@ require("lazy").setup({
 
                     -- Rename the variable under your cursor
                     --  Most Language Servers support renaming across files, etc.
-                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+                    map("<leader>cr", vim.lsp.buf.rename, "[R]e[n]ame")
 
                     -- Execute a code action, usually your cursor needs to be on top of an error
                     -- or a suggestion from your LSP for this to activate.
@@ -1063,6 +1076,9 @@ require("lazy").setup({
                     settings = {
                         workingDirectories = { mode = "auto" },
                     },
+                    on_attach = function()
+                        vim.keymap.set("", "<leader>cx", "<cmd>EslintFixAll<cr>", { desc = "EslintFixAll" })
+                    end,
                 },
                 gopls = {
                     settings = {
@@ -1180,6 +1196,19 @@ require("lazy").setup({
     {
         "pmizio/typescript-tools.nvim",
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+        opts = {},
+    },
+
+    {
+        "danymat/neogen",
+        cmd = "Neogen",
+        keys = {
+            {
+                "<leader>cn",
+                "<cmd>Neogen<cr>",
+                desc = "Annotate",
+            },
+        },
         opts = {},
     },
 
