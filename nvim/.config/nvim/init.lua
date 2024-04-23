@@ -846,37 +846,16 @@ require("lazy").setup({
             { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Search Git Files" },
         },
         opts = function()
-            local function filenameFirst(_, path)
-                local tail = vim.fs.basename(path)
-                local parent = vim.fs.dirname(path)
-                if parent == "." then
-                    return tail
-                end
-                return string.format("%s\t\t%s", tail, parent)
-            end
-
             pcall(require("telescope").load_extension, "fzf")
             pcall(require("telescope").load_extension, "ui-select")
             local actions = require("telescope.actions")
             local action_layout = require("telescope.actions.layout")
-            local telescopeConfig = require("telescope.config")
-            local vimgrep_arguments = { unpack(telescopeConfig.values.vimgrep_arguments) }
-
-            -- I want to search in hidden/dot files.
-            table.insert(vimgrep_arguments, "--hidden")
-            -- I don't want to search in the `.git` directory.
-            table.insert(vimgrep_arguments, "--glob")
-            table.insert(vimgrep_arguments, "!**/.git/*")
 
             return {
-                pickers = {
-                    find_files = {
-                        find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
-                    },
-                },
                 defaults = {
-                    vimgrep_arguments = vimgrep_arguments,
-                    path_display = filenameFirst,
+                    path_display = {
+                        filename_first = true,
+                    },
                     mappings = {
                         i = {
                             ["<C-h>"] = action_layout.toggle_preview,
