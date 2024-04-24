@@ -35,6 +35,11 @@ vim.g.netrw_banner = 0
 vim.opt.number = true -- Print line number
 vim.opt.relativenumber = true -- Relative line numbers
 
+vim.opt.foldcolumn = "1"
+vim.opt.foldlevel = 99
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
 vim.opt.mouse = "a" -- Enable mouse mode
 
 vim.opt.showmode = false -- Dont show mode since we have a statusline
@@ -84,7 +89,8 @@ vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in 
 
 vim.opt.winminwidth = 5 -- Minimum window width
 
--- vim.opt.winbar = "%=%m %f" -- Buffer local statusline
+vim.opt.winbar = "%=%m %f" -- Buffer local statusline
+vim.opt.laststatus = 3
 
 -- [[ Basic Keymaps ]]
 
@@ -130,14 +136,16 @@ vim.keymap.set(
 )
 
 -- new file
-vim.keymap.set("n", "<leader>n", "<cmd>enew<cr>", { desc = "New File" })
+vim.keymap.set("n", "<leader>n", "<cmd>enew<cr>", { desc = "New file" })
 
 -- buffers
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
-vim.keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
+vim.keymap.set("n", "<leader>bb", "<cmd>e#<cr>", { desc = "Switch to other buffer" })
+vim.keymap.set("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
+vim.keymap.set("n", "<leader>bD", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete all buffers" })
 
 -- window
 vim.keymap.set("n", "<leader>ww", "<C-w>p", { desc = "Other window", remap = true })
@@ -166,6 +174,8 @@ vim.keymap.set("n", "<leader>xd", function()
         vim.notify("Disabled diagnostics", vim.log.levels.WARN)
     end
 end, { desc = "Toggle Diagnostics" })
+
+vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnostic" })
 
 -- highlights under cursor
 vim.keymap.set("n", "<leader>i", vim.show_pos, { desc = "Inspect Pos" })
@@ -509,40 +519,6 @@ require("lazy").setup({
     },
 
     {
-        "echasnovski/mini.bufremove",
-        event = "VeryLazy",
-        keys = {
-            {
-                "<leader>bd",
-                function()
-                    local bd = require("mini.bufremove").delete
-                    if vim.bo.modified then
-                        local choice =
-                            vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
-                        if choice == 1 then -- Yes
-                            vim.cmd.write()
-                            bd(0)
-                        elseif choice == 2 then -- No
-                            bd(0, true)
-                        end
-                    else
-                        bd(0)
-                    end
-                end,
-                desc = "Delete Buffer",
-            },
-            {
-                "<leader>bD",
-                function()
-                    require("mini.bufremove").delete(0, true)
-                end,
-                desc = "Delete Buffer (Force)",
-            },
-        },
-        opt = {},
-    },
-
-    {
         "echasnovski/mini.notify",
         event = "VeryLazy",
         config = true,
@@ -557,13 +533,9 @@ require("lazy").setup({
     {
         "echasnovski/mini.statusline",
         event = "VeryLazy",
-        config = true,
-    },
-
-    {
-        "echasnovski/mini.tabline",
-        event = "VeryLazy",
-        config = true,
+        opts = {
+            set_vim_settings = false,
+        },
     },
 
     {
