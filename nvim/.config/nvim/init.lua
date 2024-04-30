@@ -80,8 +80,7 @@ vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 
 vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 
--- TODO: enable when neovim v10
--- vim.opt.smoothscroll = true
+vim.opt.smoothscroll = true
 
 vim.opt.termguicolors = true -- true color support
 
@@ -170,7 +169,7 @@ vim.keymap.set("n", "<leader>xd", function()
         vim.diagnostic.enable()
         vim.notify("Enabled diagnostics", vim.log.levels.INFO)
     else
-        vim.diagnostic.disable()
+        vim.diagnostic.enable(false)
         vim.notify("Disabled diagnostics", vim.log.levels.WARN)
     end
 end, { desc = "Toggle Diagnostics" })
@@ -692,7 +691,7 @@ require("lazy").setup({
                         require("trouble").previous({ skip_groups = true, jump = true })
                     else
                         local ok, err = pcall(vim.cmd.cprev)
-                        if not ok then
+                        if not ok and err then
                             vim.notify(err, vim.log.levels.ERROR)
                         end
                     end
@@ -706,7 +705,7 @@ require("lazy").setup({
                         require("trouble").next({ skip_groups = true, jump = true })
                     else
                         local ok, err = pcall(vim.cmd.cnext)
-                        if not ok then
+                        if not ok and err then
                             vim.notify(err, vim.log.levels.ERROR)
                         end
                     end
@@ -1009,6 +1008,13 @@ require("lazy").setup({
                         vim.lsp.buf.signature_help,
                         { buffer = event.buffer, desc = "Signature Documentation" }
                     )
+
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+                        map("<leader>ch", function()
+                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+                        end, "[T]oggle Inlay [H]ints")
+                    end
                 end,
             })
 
