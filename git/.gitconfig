@@ -38,6 +38,8 @@
 	conflictstyle = diff3
 [diff]
 	colorMoved = default
+[push]
+	autoSetupRemote = true
 [pull]
 	rebase = false
 [fetch]

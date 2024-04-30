@@ -2,94 +2,23 @@
 # vim: set filetype=gitconfig:
 
 [alias]
-  ## shell scripting
-  default-branch = config init.defaultBranch
-  current-branch = git branch --show-current
+	## shell scripting
+	default-branch = config init.defaultBranch
+	current-branch = git branch --show-current
 
-  ## status
-  s = status
-  ss = status --short
+	co = checkout
+	sw = switch
+	swm = "!git switch \"$(git default-branch)\""
+	p = push
+	pf = push --force-with-lease
+	pl = pull
+	rh = reset HEAD~1
+	rhh = reset --hard HEAD~1
+	lo = "log --pretty=format:\"%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s\" --date=short"
+	lg = log --stat
+	whorank = shortlog --summary --numbered --no-merges
 
-  ## add
-  a = add
-  aa = add --all
-  ap = add --patch # add by patch - looks at each change, and asks if we want to put it in the repo.
-  au = add --update # add just the files that are updated.
-
-  ## branch
-  b = branch
-  bv = branch --verbose --verbose
-  ba = branch --verbose --all
-  bd = branch --delete
-  bdf = branch --delete --force
-  bage = "!git for-each-ref --sort=committerdate refs/heads/ --format=\"%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))\""
-
-  ## commit
-  c = commit --verbose
-  ca = commit --verbose --amend
-  can = commit --amend --no-edit
-
-  ## checkout
-  co = checkout
-  cob = checkout -b
-  com = "!git checkout \"$(git default-branch)\""
-
-  ## switch
-  sw = switch
-  swc = switch -c
-  swm = "!git switch \"$(git default-branch)\""
-
-  ## rebase
-  rb = rebase
-  rbi = rebase --interactive
-  rba = rebase --abort
-  rbc = rebase --continue
-  rbs = rebase --skip
-  rbm = "!git rebase \"$(git default-branch)\""
-  rbmi = "!git rebase \"$(git default-branch)\" --interactive"
-
-  ## push
-  p = push
-  pf = push --force-with-lease
-  po = push origin
-  pof = push --force-with-lease origin
-  gp = "!git push --set-upstream origin \"$(git current-branch)\""
-  gpf = "!git push --force-with-lease origin :\"$(git current-branch)\""
-  gpu = push --set-upstream origin $(git_current_branch)
-  poat = !git push origin --all && !git push origin --tags
-
-  ## pull
-  pl = pull
-  gpl = "!git pull origin \"$(git current-branch)\""
-  plr = pull --rebase
-  plra = pull --rebase --autostash
-
-  ## stash
-  sta = stash
-  std = stash drop
-  stl = stash list
-  stp = stash pop
-
-  ## wip
-  wip = "!git add --all; git ls-files --deleted -z | xargs -r -0 git rm; git commit --message=wip --no-verify"
-  unwip = "!git log -n 1 | grep -q -c wip && git reset HEAD~1"
-
-  ## log
-  lo = "log --pretty=format:\"%C(yellow)%h %Cred%ad %Cblue%an%Cgreen%d %Creset%s\" --date=short"
-  lg = log --stat
-  lgg = log --graph
-  lgga = log --graph --decorate --all
-  lom = log --graph --decorate --all
-  whorank = shortlog --summary --numbered --no-merges
-
-  # clean
-  clean = clean -dff
-  cleaner = clean -dffx
-  pristine = !git reset --hard && git clean -dffx
-
-  # reset
-  rh = reset HEAD~1
-  rhh = reset --hard HEAD~1
-
-  bl = blame -b -w
+	## wip
+	wip = "!git add --all; git ls-files --deleted -z | xargs -r -0 git rm; git commit --message=wip --no-verify"
+	unwip = "!git log -n 1 | grep -q -c wip && git reset HEAD~1"
 
