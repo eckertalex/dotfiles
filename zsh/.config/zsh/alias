@@ -4,8 +4,6 @@
 # Basic
 ########
 
-alias g=git
-
 alias benchmark_hyperfine="hyperfine --warmup 3 \"$SHELL -i -c exit\""
 alias benchmark="for i in \$(seq 1 10); do time \$SHELL -i -c exit; done"
 
@@ -20,8 +18,6 @@ alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
 
 alias showpath='echo -e ${PATH//:/\\n}'
 
-alias reload="exec ${SHELL} -l"
-
 ##########
 # lazygit
 ##########
@@ -30,6 +26,56 @@ if type lazygit &> /dev/null; then
   alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
   alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
 fi
+
+######
+# git
+######
+
+# Check if main exists and use instead of master
+function git_main_branch() {
+  command git rev-parse --git-dir &>/dev/null || return
+  local ref
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
+      return 0
+    fi
+  done
+
+  # If no main branch was found, fall back to master but return error
+  echo master
+  return 1
+}
+
+alias g=git
+alias gst="git status"
+alias gss="git status --short"
+alias ga="git add"
+alias gaa="git add --all"
+alias gc="git commit --verbose"
+alias gcm="git commit --message"
+alias gcam="git commit --all --message"
+alias gca="git commit --verbose --all"
+alias gc!="git commit --verbose --amend"
+alias gca!="git commit --verbose --all --amend"
+alias gcn!="git commit --verbose --amend --no-edit"
+alias gcan!="git commit --verbose --all --amend --no-edit"
+alias gco="git checkout"
+alias gsw="git switch"
+alias gswc="git switch -c"
+alias gswm="git switch $(git_main_branch)"
+alias gp="git push"
+alias gpf="git push --force-with-lease"
+alias gpl="git pull"
+alias gplra="git pull --rebase --autostash"
+alias gr="git reset"
+alias grh="git reset HEAD~1"
+alias grhh="git reset --hard HEAD~1"
+alias gl='git log --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
+alias glg='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset" --date=short'
+alias gwhorank="git shortlog --summary --numbered --no-merges"
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
+alias gunwip='git rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && git reset HEAD~1'
 
 #####
 # ls
