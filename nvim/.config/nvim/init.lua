@@ -311,8 +311,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure and install plugins ]]
 require("lazy").setup({
-    { "nvim-tree/nvim-web-devicons", lazy = true },
-
     {
         "catppuccin/nvim",
         name = "catppuccin",
@@ -348,91 +346,82 @@ require("lazy").setup({
 
     {
         "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-        event = "VeryLazy",
     },
 
     {
         "tpope/vim-fugitive",
-        event = "VeryLazy",
-        keys = {
-            {
-                "<leader>gb",
-                "<cmd>Git blame<cr>",
-                desc = "Blame file",
-            },
-            {
-                "<leader>gg",
-                "<cmd>Git<cr>",
-                desc = "Fugitive",
-            },
-        },
+        config = function()
+            vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
+            vim.keymap.set("n", "<leader>g", "<cmd>Git<cr>", { desc = "Fugitive" })
+        end,
     },
 
     {
         "lewis6991/gitsigns.nvim",
-        event = "VeryLazy",
-        opts = {
-            signs = {
-                add = { text = "+" },
-                change = { text = "~" },
-                delete = { text = "_" },
-                topdelete = { text = "‾" },
-                changedelete = { text = "~" },
-            },
-            on_attach = function(bufnr)
-                local gs = package.loaded.gitsigns
+        config = function()
+            require("gitsigns").setup({
+                signs = {
+                    add = { text = "+" },
+                    change = { text = "~" },
+                    delete = { text = "_" },
+                    topdelete = { text = "‾" },
+                    changedelete = { text = "~" },
+                },
+                on_attach = function(bufnr)
+                    local gs = package.loaded.gitsigns
 
-                local function map(mode, l, r, opts)
-                    opts = opts or {}
-                    opts.buffer = bufnr
-                    vim.keymap.set(mode, l, r, opts)
-                end
-
-                -- Navigation
-                map({ "n", "v" }, "]c", function()
-                    if vim.wo.diff then
-                        return "]c"
+                    local function map(mode, l, r, opts)
+                        opts = opts or {}
+                        opts.buffer = bufnr
+                        vim.keymap.set(mode, l, r, opts)
                     end
-                    vim.schedule(function()
-                        gs.next_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, desc = "Next hunk" })
 
-                map({ "n", "v" }, "[c", function()
-                    if vim.wo.diff then
-                        return "[c"
-                    end
-                    vim.schedule(function()
-                        gs.prev_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, desc = "Previous hunk" })
+                    -- Navigation
+                    map({ "n", "v" }, "]c", function()
+                        if vim.wo.diff then
+                            return "]c"
+                        end
+                        vim.schedule(function()
+                            gs.next_hunk()
+                        end)
+                        return "<Ignore>"
+                    end, { expr = true, desc = "Next hunk" })
 
-                -- Actions
-                -- visual mode
-                map("v", "<leader>ghs", function()
-                    gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                end, { desc = "Stage hunk" })
-                map("v", "<leader>ghr", function()
-                    gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                end, { desc = "Reset hunk" })
-                -- normal mode
-                map("n", "<leader>ghs", gs.stage_hunk, { desc = "Stage hunk" })
-                map("n", "<leader>ghr", gs.reset_hunk, { desc = "Reset hunk" })
-                map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage buffer" })
-                map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-                map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset buffer" })
-                map("n", "<leader>ghp", gs.preview_hunk, { desc = "Preview hunk" })
-                map("n", "<leader>ghb", function()
-                    gs.blame_line({ full = false })
-                end, { desc = "Blame line" })
-                map("n", "<leader>ghd", gs.diffthis, { desc = "Diff this" })
-                map("n", "<leader>ghD", function()
-                    gs.diffthis("~")
-                end, { desc = "Diff this ~" })
-            end,
-        },
+                    map({ "n", "v" }, "[c", function()
+                        if vim.wo.diff then
+                            return "[c"
+                        end
+                        vim.schedule(function()
+                            gs.prev_hunk()
+                        end)
+                        return "<Ignore>"
+                    end, { expr = true, desc = "Previous hunk" })
+
+                    -- Actions
+                    -- visual mode
+                    map("v", "<leader>ghs", function()
+                        gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                    end, { desc = "Stage hunk" })
+                    map("v", "<leader>ghr", function()
+                        gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                    end, { desc = "Reset hunk" })
+                    -- normal mode
+                    map("n", "<leader>ghs", gs.stage_hunk, { desc = "Stage hunk" })
+                    map("n", "<leader>ghr", gs.reset_hunk, { desc = "Reset hunk" })
+                    map("n", "<leader>ghS", gs.stage_buffer, { desc = "Stage buffer" })
+                    map("n", "<leader>ghu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+                    map("n", "<leader>ghR", gs.reset_buffer, { desc = "Reset buffer" })
+                    map("n", "<leader>ghp", gs.preview_hunk, { desc = "Preview hunk" })
+                    map("n", "<leader>ghb", function()
+                        gs.blame_line({ full = false })
+                    end, { desc = "Blame line" })
+                    map("n", "<leader>ghd", gs.diffthis, { desc = "Diff this" })
+                    map("n", "<leader>ghD", function()
+                        gs.diffthis("~")
+                    end, { desc = "Diff this ~" })
+                end,
+            })
+        end,
     },
 
     {
@@ -451,28 +440,29 @@ require("lazy").setup({
 
     {
         "JoosepAlviste/nvim-ts-context-commentstring",
-        event = "VeryLazy",
-        opts = {
-            enable_autocmd = false,
-        },
+        config = function()
+            require("ts_context_commentstring").setup({
+                enable_autocmd = false,
+            })
+        end,
     },
 
     {
         "echasnovski/mini.comment",
-        event = "VeryLazy",
-        opts = {
-            options = {
-                custom_commentstring = function()
-                    return require("ts_context_commentstring.internal").calculate_commentstring()
-                        or vim.bo.commentstring
-                end,
-            },
-        },
+        config = function()
+            require("mini.comment").setup({
+                options = {
+                    custom_commentstring = function()
+                        return require("ts_context_commentstring.internal").calculate_commentstring()
+                            or vim.bo.commentstring
+                    end,
+                },
+            })
+        end,
     },
 
     {
         "echasnovski/mini.indentscope",
-        event = "VeryLazy",
         config = function()
             require("mini.indentscope").setup({
                 symbol = "│",
@@ -485,61 +475,56 @@ require("lazy").setup({
 
     {
         "echasnovski/mini.bufremove",
-        event = "VeryLazy",
-        keys = {
-            {
-                "<leader>bd",
-                function()
-                    local bd = require("mini.bufremove").delete
-                    if vim.bo.modified then
-                        local choice =
-                            vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
-                        if choice == 1 then -- Yes
-                            vim.cmd.write()
-                            bd(0)
-                        elseif choice == 2 then -- No
-                            bd(0, true)
-                        end
-                    else
+        config = function()
+            require("mini.indentscope").setup({})
+
+            vim.keymap.set("n", "<leader>bd", function()
+                local bd = require("mini.bufremove").delete
+                if vim.bo.modified then
+                    local choice =
+                        vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+                    if choice == 1 then -- Yes
+                        vim.cmd.write()
                         bd(0)
+                    elseif choice == 2 then -- No
+                        bd(0, true)
                     end
-                end,
-                desc = "Delete Buffer",
-            },
-            {
-                "<leader>bD",
-                function()
-                    require("mini.bufremove").delete(0, true)
-                end,
-                desc = "Delete Buffer (Force)",
-            },
-        },
-        opt = {},
+                else
+                    bd(0)
+                end
+            end, { desc = "Delete Buffer" })
+
+            vim.keymap.set("n", "<leader>bD", function()
+                require("mini.bufremove").delete(0, true)
+            end, { desc = "Delete Buffer (Force)" })
+        end,
     },
 
     {
         "echasnovski/mini.notify",
-        event = "VeryLazy",
-        config = true,
+        config = function()
+            require("mini.notify").setup({})
+        end,
     },
 
     {
         "echasnovski/mini.cursorword",
-        event = "VeryLazy",
-        config = true,
+        config = function()
+            require("mini.cursorword").setup({})
+        end,
     },
 
     {
         "echasnovski/mini.statusline",
-        event = "VeryLazy",
-        opts = {
-            set_vim_settings = false,
-        },
+        config = function()
+            require("mini.statusline").setup({
+                set_vim_settings = false,
+            })
+        end,
     },
 
     {
         "echasnovski/mini.starter",
-        event = "VimEnter",
         config = function()
             local new_section = function(name, action, section)
                 return { name = name, action = action, section = section }
@@ -565,7 +550,6 @@ require("lazy").setup({
 
     {
         "echasnovski/mini.clue",
-        event = "VeryLazy",
         config = function()
             local miniclue = require("mini.clue")
             miniclue.setup({
@@ -623,168 +607,150 @@ require("lazy").setup({
 
     {
         "folke/zen-mode.nvim",
-        opts = {
-            window = {
-                options = {
-                    signcolumn = "no", -- disable signcolumn
-                    number = false, -- disable number column
-                    relativenumber = false, -- disable relative numbers
-                    cursorline = false, -- disable cursorline
-                    cursorcolumn = false, -- disable cursor column
-                    foldcolumn = "0", -- disable fold column
-                    list = false, -- disable whitespace characters
+        config = function()
+            require("zen-mode").setup({
+                window = {
+                    options = {
+                        signcolumn = "no", -- disable signcolumn
+                        number = false, -- disable number column
+                        relativenumber = false, -- disable relative numbers
+                        cursorline = false, -- disable cursorline
+                        cursorcolumn = false, -- disable cursor column
+                        foldcolumn = "0", -- disable fold column
+                        list = false, -- disable whitespace characters
+                    },
                 },
-            },
-            plugins = {
-                options = {
-                    enabled = true,
-                    laststatus = 0,
+                plugins = {
+                    options = {
+                        enabled = true,
+                        laststatus = 0,
+                    },
+                    gitsigns = { enabled = true },
+                    tmux = { enabled = true },
                 },
-                gitsigns = { enabled = true },
-                tmux = { enabled = true },
-            },
-            on_open = function()
-                vim.b.miniindentscope_disable = true
-            end,
-            on_close = function()
-                vim.b.miniindentscope_disable = false
-            end,
-        },
-        keys = {
-            {
-                "<leader>z",
-                "<cmd>ZenMode<cr>",
-                desc = "Zen",
-            },
-        },
+                on_open = function()
+                    vim.b.miniindentscope_disable = true
+                end,
+                on_close = function()
+                    vim.b.miniindentscope_disable = false
+                end,
+            })
+
+            vim.keymap.set("n", "<leader>z", "<cmd>ZenMode<cr>", { desc = "Zen" })
+        end,
     },
 
     {
         "folke/todo-comments.nvim",
-        event = "VeryLazy",
-        cmd = { "TodoTrouble", "TodoTelescope" },
-        keys = {
-            {
-                "]t",
-                function()
-                    require("todo-comments").jump_next()
-                end,
-                desc = "Next todo comment",
-            },
-            {
-                "[t",
-                function()
-                    require("todo-comments").jump_prev()
-                end,
-                desc = "Previous todo comment",
-            },
-            { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "Todo (Trouble)" },
-            { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme (Trouble)" },
-            { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Todo" },
-            { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "Todo/Fix/Fixme" },
-        },
-        opts = {},
+        config = function()
+            require("todo-comments").setup({})
+
+            vim.keymap.set("n", "]t", function()
+                require("todo-comments").jump_next()
+            end, { desc = "Next todo comment" })
+
+            vim.keymap.set("n", "[t", function()
+                require("todo-comments").jump_prev()
+            end, { desc = "Previous todo comment" })
+
+            vim.keymap.set("n", "<leader>xt", "<cmd>TodoTrouble<cr>", { desc = "Todo (Trouble)" })
+
+            vim.keymap.set(
+                "n",
+                "<leader>xT",
+                "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",
+                { desc = "Todo/Fix/Fixme (Trouble)" }
+            )
+
+            vim.keymap.set("n", "<leader>st", "<cmd>TodoTelescope<cr>", { desc = "Todo" })
+
+            vim.keymap.set(
+                "n",
+                "<leader>sT",
+                "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>",
+                { desc = "Todo/Fix/Fixme" }
+            )
+        end,
     },
 
     {
         "folke/trouble.nvim",
-        cmd = { "TroubleToggle", "Trouble" },
-        opts = { use_diagnostic_signs = true },
-        keys = {
-            { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document Diagnostics (Trouble)" },
-            { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-            { "<leader>xL", "<cmd>TroubleToggle loclist<cr>", desc = "Location List (Trouble)" },
-            { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix List (Trouble)" },
-            {
-                "[q",
-                function()
-                    if require("trouble").is_open() then
-                        require("trouble").previous({ skip_groups = true, jump = true })
-                    else
-                        local ok, err = pcall(vim.cmd.cprev)
-                        if not ok and err then
-                            vim.notify(err, vim.log.levels.ERROR)
-                        end
+        config = function()
+            require("trouble").setup({ use_diagnostic_signs = true })
+
+            vim.keymap.set(
+                "n",
+                "<leader>xx",
+                "<cmd>TroubleToggle document_diagnostics<cr>",
+                { desc = "Document Diagnostics (Trouble)" }
+            )
+
+            vim.keymap.set(
+                "n",
+                "<leader>xX",
+                "<cmd>TroubleToggle workspace_diagnostics<cr>",
+                { desc = "Workspace Diagnostics (Trouble)" }
+            )
+
+            vim.keymap.set("n", "<leader>xL", "<cmd>TroubleToggle loclist<cr>", { desc = "Location List (Trouble)" })
+
+            vim.keymap.set("n", "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", { desc = "Quickfix List (Trouble)" })
+
+            vim.keymap.set("n", "[q", function()
+                if require("trouble").is_open() then
+                    require("trouble").previous({ skip_groups = true, jump = true })
+                else
+                    local ok, err = pcall(vim.cmd.cprev)
+                    if not ok and err then
+                        vim.notify(err, vim.log.levels.ERROR)
                     end
-                end,
-                desc = "Previous trouble/quickfix item",
-            },
-            {
-                "]q",
-                function()
-                    if require("trouble").is_open() then
-                        require("trouble").next({ skip_groups = true, jump = true })
-                    else
-                        local ok, err = pcall(vim.cmd.cnext)
-                        if not ok and err then
-                            vim.notify(err, vim.log.levels.ERROR)
-                        end
+                end
+            end, { desc = "Previous trouble/quickfix item" })
+
+            vim.keymap.set("n", "]q", function()
+                if require("trouble").is_open() then
+                    require("trouble").next({ skip_groups = true, jump = true })
+                else
+                    local ok, err = pcall(vim.cmd.cnext)
+                    if not ok and err then
+                        vim.notify(err, vim.log.levels.ERROR)
                     end
-                end,
-                desc = "Next trouble/quickfix item",
-            },
-        },
+                end
+            end, { desc = "Next trouble/quickfix item" })
+        end,
     },
 
     {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-        },
-        keys = {
-            {
-                "<C-e>",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon.ui:toggle_quick_menu(harpoon:list())
-                end,
-                desc = "Harpoon List",
-            },
-            {
-                "<leader>a",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon:list():add()
-                end,
-                desc = "Harpoon file",
-            },
-            {
-                "<C-h>",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon:list():select(1)
-                end,
-                desc = "Harpoon to file 1",
-            },
-            {
-                "<C-j>",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon:list():select(2)
-                end,
-                desc = "Harpoon to file 2",
-            },
-            {
-                "<C-k>",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon:list():select(3)
-                end,
-                desc = "Harpoon to file 3",
-            },
-            {
-                "<C-l>",
-                function()
-                    local harpoon = require("harpoon")
-                    harpoon:list():select(4)
-                end,
-                desc = "Harpoon to file 4",
-            },
-        },
+        dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             local harpoon = require("harpoon")
             harpoon:setup({})
+
+            vim.keymap.set("n", "<C-e>", function()
+                harpoon.ui:toggle_quick_menu(harpoon:list())
+            end, { desc = "Harpoon List" })
+
+            vim.keymap.set("n", "<leader>a", function()
+                harpoon:list():add()
+            end, { desc = "Harpoon file" })
+
+            vim.keymap.set("n", "<C-h>", function()
+                harpoon:list():select(1)
+            end, { desc = "Harpoon to file 1" })
+
+            vim.keymap.set("n", "<C-j>", function()
+                harpoon:list():select(2)
+            end, { desc = "Harpoon to file 2" })
+
+            vim.keymap.set("n", "<C-k>", function()
+                harpoon:list():select(3)
+            end, { desc = "Harpoon to file 3" })
+
+            vim.keymap.set("n", "<C-l>", function()
+                harpoon:list():select(4)
+            end, { desc = "Harpoon to file 4" })
         end,
     },
 
@@ -802,38 +768,14 @@ require("lazy").setup({
             { "nvim-telescope/telescope-ui-select.nvim" },
             { "nvim-tree/nvim-web-devicons" },
         },
-        cmd = "Telescope",
-        keys = {
-            { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Search Help" },
-            { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "Search Files" },
-            { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Search current Word" },
-            { "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Search by Grep" },
-            { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Search Diagnostics" },
-            { "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Search Resume" },
-            { "<leader>s.", "<cmd>Telescope oldfiles<cr>", desc = "Search Recent Files" },
-            {
-                "<leader><leader>",
-                "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
-                desc = "Search Buffers",
-            },
-            { "<leader>/", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Fuzzily search in current buffer" },
-            {
-                "<leader>s/",
-                "<cmd>Telescope live_grep grep_open_files=true prompt_title=Live\\ Grep\\ in\\ Open\\ Files<cr>",
-                desc = "Search in Open Files",
-            },
-
-            { "<leader>gc", "<cmd>Telescope git_commits<cr>", desc = "Search Commits" },
-            { "<leader>gs", "<cmd>Telescope git_status<cr>", desc = "Search in Git Status" },
-            { "<leader>gf", "<cmd>Telescope git_files<cr>", desc = "Search Git Files" },
-        },
-        opts = function()
-            pcall(require("telescope").load_extension, "fzf")
-            pcall(require("telescope").load_extension, "ui-select")
+        config = function()
+            local telescope = require("telescope")
+            pcall(telescope.load_extension, "fzf")
+            pcall(telescope.load_extension, "ui-select")
             local actions = require("telescope.actions")
             local action_layout = require("telescope.actions.layout")
 
-            return {
+            telescope.setup({
                 defaults = {
                     path_display = {
                         filename_first = true,
@@ -853,93 +795,127 @@ require("lazy").setup({
                         require("telescope.themes").get_dropdown(),
                     },
                 },
-            }
+            })
+
+            vim.keymap.set("n", "<leader>sh", "<cmd>Telescope help_tags<cr>", { desc = "Search Help" })
+
+            vim.keymap.set("n", "<leader>sf", "<cmd>Telescope find_files<cr>", { desc = "Search Files" })
+
+            vim.keymap.set("n", "<leader>sw", "<cmd>Telescope grep_string<cr>", { desc = "Search current Word" })
+
+            vim.keymap.set("n", "<leader>sg", "<cmd>Telescope live_grep<cr>", { desc = "Search by Grep" })
+
+            vim.keymap.set("n", "<leader>sd", "<cmd>Telescope diagnostics<cr>", { desc = "Search Diagnostics" })
+
+            vim.keymap.set("n", "<leader>sr", "<cmd>Telescope resume<cr>", { desc = "Search Resume" })
+
+            vim.keymap.set("n", "<leader>s.", "<cmd>Telescope oldfiles<cr>", { desc = "Search Recent Files" })
+
+            vim.keymap.set(
+                "n",
+                "<leader><leader>",
+                "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
+                { desc = "Search Buffers" }
+            )
+
+            vim.keymap.set(
+                "n",
+                "<leader>/",
+                "<cmd>Telescope current_buffer_fuzzy_find<cr>",
+                { desc = "Fuzzily search in current buffer" }
+            )
+
+            vim.keymap.set(
+                "n",
+                "<leader>s/",
+                "<cmd>Telescope live_grep grep_open_files=true prompt_title=Live\\ Grep\\ in\\ Open\\ Files<cr>",
+                { desc = "Search in Open Files" }
+            )
+
+            vim.keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Search Commits" })
+
+            vim.keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Search in Git Status" })
+
+            vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<cr>", { desc = "Search Git Files" })
         end,
     },
 
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        event = "VeryLazy",
-        cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
-        keys = {
-            { "<c-space>", desc = "Increment selection" },
-            { "<bs>", desc = "Decrement selection", mode = "x" },
-        },
-        ---@type TSConfig
-        opts = {
-            auto_install = true,
-            highlight = { enable = true },
-            indent = { enable = true },
-            ensure_installed = {
-                "bash",
-                "c",
-                "css",
-                "diff",
-                "dockerfile",
-                "gitcommit",
-                "gitignore",
-                "go",
-                "gomod",
-                "gosum",
-                "gowork",
-                "html",
-                "javascript",
-                "jsdoc",
-                "json",
-                "json5",
-                "jsonc",
-                "lua",
-                "luadoc",
-                "luap",
-                "markdown",
-                "markdown_inline",
-                "query",
-                "regex",
-                "scss",
-                "toml",
-                "tsx",
-                "typescript",
-                "vim",
-                "vimdoc",
-                "yaml",
-            },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection = "<C-space>",
-                    node_incremental = "<C-space>",
-                    scope_incremental = false,
-                    node_decremental = "<bs>",
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                auto_install = true,
+                highlight = { enable = true },
+                indent = { enable = true },
+                ensure_installed = {
+                    "bash",
+                    "c",
+                    "css",
+                    "diff",
+                    "dockerfile",
+                    "gitcommit",
+                    "gitignore",
+                    "go",
+                    "gomod",
+                    "gosum",
+                    "gowork",
+                    "html",
+                    "javascript",
+                    "jsdoc",
+                    "json",
+                    "json5",
+                    "jsonc",
+                    "lua",
+                    "luadoc",
+                    "luap",
+                    "markdown",
+                    "markdown_inline",
+                    "query",
+                    "regex",
+                    "scss",
+                    "toml",
+                    "tsx",
+                    "typescript",
+                    "vim",
+                    "vimdoc",
+                    "yaml",
                 },
-            },
-            textobjects = {
-                select = {
+                incremental_selection = {
                     enable = true,
-                    lookahead = true,
                     keymaps = {
-                        ["aa"] = "@parameter.outer",
-                        ["ia"] = "@parameter.inner",
-                        ["af"] = "@function.outer",
-                        ["if"] = "@function.inner",
+                        init_selection = "<C-space>",
+                        node_incremental = "<C-space>",
+                        scope_incremental = false,
+                        node_decremental = "<bs>",
                     },
                 },
-            },
-        },
-        config = function(_, opts)
-            require("nvim-treesitter.configs").setup(opts)
+                textobjects = {
+                    select = {
+                        enable = true,
+                        lookahead = true,
+                        keymaps = {
+                            ["aa"] = "@parameter.outer",
+                            ["ia"] = "@parameter.inner",
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                        },
+                    },
+                },
+            })
         end,
     },
 
     {
         "nvim-treesitter/nvim-treesitter-context",
-        event = "VeryLazy",
-        opts = {
-            max_lines = 3,
-        },
+        config = function()
+            require("treesitter-context").setup({
+                max_lines = 3,
+            })
+        end,
     },
 
     {
@@ -949,7 +925,12 @@ require("lazy").setup({
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
 
-            { "folke/neodev.nvim", opts = {} },
+            {
+                "folke/neodev.nvim",
+                config = function()
+                    require("neodev").setup({})
+                end,
+            },
 
             "b0o/SchemaStore.nvim",
         },
@@ -1121,25 +1102,22 @@ require("lazy").setup({
     {
         "pmizio/typescript-tools.nvim",
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        opts = {},
+        config = function()
+            require("typescript-tools").setup({})
+        end,
     },
 
     {
         "danymat/neogen",
-        cmd = "Neogen",
-        keys = {
-            {
-                "<leader>cn",
-                "<cmd>Neogen<cr>",
-                desc = "Annotate",
-            },
-        },
-        opts = {},
+        config = function()
+            require("neogen").setup({})
+
+            vim.keymap.set("n", "<leader>cn", "<cmd>Neogen<cr>", { desc = "Annotate" })
+        end,
     },
 
     {
         "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
         dependencies = {
             {
                 "L3MON4D3/LuaSnip",
@@ -1158,12 +1136,12 @@ require("lazy").setup({
                 end,
             },
         },
-        opts = function()
+        config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
             luasnip.config.setup()
 
-            return {
+            cmp.setup({
                 completion = {
                     completeopt = "menu,menuone,noinsert",
                 },
@@ -1206,53 +1184,48 @@ require("lazy").setup({
                         return item
                     end,
                 },
-            }
+            })
         end,
     },
 
     {
         "stevearc/conform.nvim",
-        lazy = false,
-        keys = {
-            {
-                "<leader>cf",
-                function()
-                    require("conform").format({ async = true, lsp_fallback = true })
+        config = function()
+            require("conform").setup({
+                notify_on_error = false,
+                format_on_save = function(bufnr)
+                    -- Disable "format_on_save lsp_fallback" for languages that don't
+                    -- have a well standardized coding style. You can add additional
+                    -- languages here or re-enable it for the disabled ones.
+                    local disable_filetypes = { c = true, cpp = true }
+                    return {
+                        timeout_ms = 500,
+                        lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+                    }
                 end,
-                mode = "",
-                desc = "[F]ormat buffer",
-            },
-        },
-        opts = {
-            notify_on_error = false,
-            format_on_save = function(bufnr)
-                -- Disable "format_on_save lsp_fallback" for languages that don't
-                -- have a well standardized coding style. You can add additional
-                -- languages here or re-enable it for the disabled ones.
-                local disable_filetypes = { c = true, cpp = true }
-                return {
-                    timeout_ms = 500,
-                    lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-                }
-            end,
-            formatters_by_ft = {
-                ["lua"] = { "stylua" },
-                ["sh"] = { "shfmt" },
-                ["javascript"] = { "prettier" },
-                ["javascriptreact"] = { "prettier" },
-                ["typescript"] = { "prettier" },
-                ["typescriptreact"] = { "prettier" },
-                ["css"] = { "prettier" },
-                ["scss"] = { "prettier" },
-                ["html"] = { "prettier" },
-                ["json"] = { "prettier" },
-                ["jsonc"] = { "prettier" },
-                ["yaml"] = { "prettier" },
-                ["markdown"] = { "prettier" },
-                ["markdown.mdx"] = { "prettier" },
-                ["go"] = { "goimports", "gofumpt" },
-            },
-        },
+                formatters_by_ft = {
+                    ["lua"] = { "stylua" },
+                    ["sh"] = { "shfmt" },
+                    ["javascript"] = { "prettier" },
+                    ["javascriptreact"] = { "prettier" },
+                    ["typescript"] = { "prettier" },
+                    ["typescriptreact"] = { "prettier" },
+                    ["css"] = { "prettier" },
+                    ["scss"] = { "prettier" },
+                    ["html"] = { "prettier" },
+                    ["json"] = { "prettier" },
+                    ["jsonc"] = { "prettier" },
+                    ["yaml"] = { "prettier" },
+                    ["markdown"] = { "prettier" },
+                    ["markdown.mdx"] = { "prettier" },
+                    ["go"] = { "goimports", "gofumpt" },
+                },
+            })
+
+            vim.keymap.set("n", "<leader>cf", function()
+                require("conform").format({ async = true, lsp_fallback = true })
+            end, { desc = "[F]ormat buffer" })
+        end,
     },
 }, {
     performance = {
