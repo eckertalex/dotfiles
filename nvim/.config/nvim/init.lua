@@ -25,12 +25,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- [[ netrw ]]
--- size of netrw window as split: 30%
-vim.g.netrw_winsize = 30
--- hide the banner
-vim.g.netrw_banner = 0
-
 -- [[ Setting options ]]
 vim.opt.number = true -- Print line number
 vim.opt.relativenumber = true -- Relative line numbers
@@ -142,17 +136,7 @@ vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
-vim.keymap.set("n", "<leader>bb", "<cmd>e#<cr>", { desc = "Switch to other buffer" })
-vim.keymap.set("n", "<leader>bd", "<cmd>bd<cr>", { desc = "Delete buffer" })
-vim.keymap.set("n", "<leader>bD", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete all buffers" })
-
--- window
-vim.keymap.set("n", "<leader>ww", "<C-w>p", { desc = "Other window", remap = true })
-vim.keymap.set("n", "<leader>wd", "<C-w>c", { desc = "Delete window", remap = true })
-vim.keymap.set("n", "<leader>w-", "<C-w>s", { desc = "Split window below", remap = true })
-vim.keymap.set("n", "<leader>w|", "<C-w>v", { desc = "Split window right", remap = true })
-vim.keymap.set("n", "<leader>-", "<C-w>s", { desc = "Split window below", remap = true })
-vim.keymap.set("n", "<leader>|", "<C-w>v", { desc = "Split window right", remap = true })
+vim.keymap.set("n", "<leader>ba", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete all buffers" })
 
 -- Clear search with <esc>
 vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
@@ -177,10 +161,7 @@ end, { desc = "Toggle Diagnostics" })
 vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnostic" })
 
 -- highlights under cursor
-vim.keymap.set("n", "<leader>i", vim.show_pos, { desc = "Inspect Pos" })
-
--- quit
-vim.keymap.set("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
+vim.keymap.set("n", "<leader>xi", vim.show_pos, { desc = "Inspect Pos" })
 
 -- Diagnostics
 -- Show diagnostics in a floating window
@@ -195,9 +176,6 @@ vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 vim.keymap.set("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 vim.keymap.set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
-
--- netrw
-vim.keymap.set("n", "-", vim.cmd.Ex, { desc = "Explorer" })
 
 -- tmux
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
@@ -458,29 +436,17 @@ require("lazy").setup({
     },
 
     {
-        "mbbill/undotree",
-        keys = {
-            {
-                "<leader>su",
-                "<cmd>UndotreeToggle<cr>",
-                desc = "Undotree",
-            },
-        },
-    },
+        "stevearc/oil.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("oil").setup({
+                view_options = {
+                    show_hidden = true,
+                },
+            })
 
-    {
-        "nvim-pack/nvim-spectre",
-        cmd = "Spectre",
-        opts = { open_cmd = "noswapfile vnew" },
-        keys = {
-            {
-                "<leader>sR",
-                function()
-                    require("spectre").open()
-                end,
-                desc = "Replace in files (Spectre)",
-            },
-        },
+            vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+        end,
     },
 
     {
@@ -515,6 +481,40 @@ require("lazy").setup({
                 },
             })
         end,
+    },
+
+    {
+        "echasnovski/mini.bufremove",
+        event = "VeryLazy",
+        keys = {
+            {
+                "<leader>bd",
+                function()
+                    local bd = require("mini.bufremove").delete
+                    if vim.bo.modified then
+                        local choice =
+                            vim.fn.confirm(("Save changes to %q?"):format(vim.fn.bufname()), "&Yes\n&No\n&Cancel")
+                        if choice == 1 then -- Yes
+                            vim.cmd.write()
+                            bd(0)
+                        elseif choice == 2 then -- No
+                            bd(0, true)
+                        end
+                    else
+                        bd(0)
+                    end
+                end,
+                desc = "Delete Buffer",
+            },
+            {
+                "<leader>bD",
+                function()
+                    require("mini.bufremove").delete(0, true)
+                end,
+                desc = "Delete Buffer (Force)",
+            },
+        },
+        opt = {},
     },
 
     {
@@ -577,12 +577,24 @@ require("lazy").setup({
                 },
                 triggers = {
                     -- Leader triggers
-                    { mode = "n", keys = "<Leader>" },
-                    { mode = "x", keys = "<Leader>" },
+                    { mode = "n", keys = "<leader>" },
+                    { mode = "x", keys = "<leader>" },
 
                     -- `g` key
                     { mode = "n", keys = "g" },
                     { mode = "x", keys = "g" },
+
+                    -- Marks
+                    { mode = "n", keys = "'" },
+                    { mode = "n", keys = "`" },
+                    { mode = "x", keys = "'" },
+                    { mode = "x", keys = "`" },
+
+                    -- Registers
+                    { mode = "n", keys = '"' },
+                    { mode = "x", keys = '"' },
+                    { mode = "i", keys = "<C-r>" },
+                    { mode = "c", keys = "<C-r>" },
 
                     -- Window commands
                     { mode = "n", keys = "<C-w>" },
@@ -593,18 +605,17 @@ require("lazy").setup({
                 },
                 -- Add descriptions for mapping groups
                 clues = {
+                    miniclue.gen_clues.builtin_completion(),
                     miniclue.gen_clues.g(),
+                    miniclue.gen_clues.marks(),
+                    miniclue.gen_clues.registers(),
                     miniclue.gen_clues.windows(),
                     miniclue.gen_clues.z(),
-                    { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
-                    { mode = "n", keys = "<Leader>c", desc = "+Code" },
-                    { mode = "n", keys = "<Leader>d", desc = "+Document" },
-                    { mode = "n", keys = "<Leader>g", desc = "+Git" },
-                    { mode = "n", keys = "<Leader>gh", desc = "+Hunk" },
-                    { mode = "n", keys = "<Leader>q", desc = "+Quit" },
-                    { mode = "n", keys = "<Leader>s", desc = "+Search" },
-                    { mode = "n", keys = "<Leader>w", desc = "+Window" },
-                    { mode = "n", keys = "<Leader>x", desc = "+Diagnostics/Quickfix" },
+                    { mode = "n", keys = "<leader>b", desc = "+Buffers" },
+                    { mode = "n", keys = "<leader>g", desc = "+Git" },
+                    { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
+                    { mode = "n", keys = "<leader>s", desc = "+Search" },
+                    { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
             })
         end,
@@ -953,68 +964,25 @@ require("lazy").setup({
                 group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                 callback = function(event)
                     local map = function(keys, func, desc)
-                        vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+                        vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
                     end
 
-                    -- Jump to the definition of the word under your cursor.
-                    --  This is where a variable was first declared, or where a function is defined, etc.
-                    --  To jump back, press <C-T>.
-                    map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+                    -- :help lsp-defaults
+                    -- :help crr v_crr
+                    -- :help crn
+                    -- :help K
+                    -- :help CTRL-] CTRL-W_]
+                    -- :help i_CTRL-S
+                    -- :help v_CTRL-R_r v_CTRL-R_CTRL-R
 
                     -- Find references for the word under your cursor.
+                    -- :help gr-default
                     map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 
-                    -- Jump to the implementation of the word under your cursor.
-                    --  Useful when your language has ways of declaring types without an actual implementation.
-                    map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-
-                    -- Jump to the type of the word under your cursor.
-                    --  Useful when you're not sure what type a variable is and you want to see
-                    --  the definition of its *type*, not where it was *defined*.
-                    map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-
-                    -- Fuzzy find all the symbols in your current document.
-                    --  Symbols are things like variables, functions, types, etc.
-                    map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-
-                    -- Fuzzy find all the symbols in your current workspace
-                    --  Similar to document symbols, except searches over your whole project.
-                    map(
-                        "<leader>ws",
-                        require("telescope.builtin").lsp_dynamic_workspace_symbols,
-                        "[W]orkspace [S]ymbols"
-                    )
-
-                    -- Rename the variable under your cursor
-                    --  Most Language Servers support renaming across files, etc.
-                    map("<leader>cr", vim.lsp.buf.rename, "[R]e[n]ame")
-
-                    -- Execute a code action, usually your cursor needs to be on top of an error
-                    -- or a suggestion from your LSP for this to activate.
-                    map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-
-                    -- Opens a popup that displays documentation about the word under your cursor
-                    --  See `:help K` for why this keymap
-                    map("K", vim.lsp.buf.hover, "Hover Documentation")
-
-                    -- WARN: This is not Goto Definition, this is Goto Declaration.
-                    --  For example, in C this would take you to the header
-                    map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-                    -- Displays a function's signature information
-                    vim.keymap.set(
-                        { "n", "i" },
-                        "<C-s>",
-                        vim.lsp.buf.signature_help,
-                        { buffer = event.buffer, desc = "Signature Documentation" }
-                    )
-
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                        map("<leader>ch", function()
-                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-                        end, "[T]oggle Inlay [H]ints")
-                    end
+                    -- Jump to the definition of the word under your cursor.
+                    -- This is where a variable was first declared, or where a function is defined, etc.
+                    -- To jump back, press <C-T>.
+                    map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
                 end,
             })
 
