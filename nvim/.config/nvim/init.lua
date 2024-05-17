@@ -74,10 +74,6 @@ vim.opt.conceallevel = 3 -- Hide * markup for bold and italic
 
 vim.opt.pumheight = 10 -- Maximum number of entries in a popup
 
-vim.opt.smoothscroll = true
-
-vim.opt.termguicolors = true -- true color support
-
 vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 
 vim.opt.winminwidth = 5 -- Minimum window width
@@ -162,14 +158,6 @@ vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnost
 
 -- highlights under cursor
 vim.keymap.set("n", "<leader>xi", vim.show_pos, { desc = "Inspect Pos" })
-
--- Diagnostics
--- Show diagnostics in a floating window
-vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
--- Move to the previous diagnostic
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
--- Move to the next diagnostic
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 
 -- Quickfix
 vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
@@ -947,6 +935,11 @@ require("lazy").setup({
                     local map = function(keys, func, desc)
                         vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
                     end
+
+                    -- diagnostics
+                    -- :help CTRL-W_d-default
+                    -- :help [d-default
+                    -- :help [d-default
 
                     -- :help lsp-defaults
                     -- :help crr v_crr
