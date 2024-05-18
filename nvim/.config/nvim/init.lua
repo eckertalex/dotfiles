@@ -340,7 +340,27 @@ require("lazy").setup({
         "tpope/vim-fugitive",
         config = function()
             vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
-            vim.keymap.set("n", "<leader>g", "<cmd>Git<cr>", { desc = "Fugitive" })
+        end,
+    },
+    {
+        "NeogitOrg/neogit",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "sindrets/diffview.nvim",
+        },
+        config = function()
+            require("neogit").setup({
+                mappings = {
+                    status = {
+                        ["="] = "Toggle",
+                    },
+                },
+            })
+
+            vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Neogit" })
+            vim.keymap.set("n", "<leader>gc", "<cmd>Neogit commit<cr>", { desc = "Neogit commit" })
+            vim.keymap.set("n", "<leader>gp", "<cmd>Neogit pull<cr>", { desc = "Neogit pull" })
+            vim.keymap.set("n", "<leader>gP", "<cmd>Neogit push<cr>", { desc = "Neogit push" })
         end,
     },
 
@@ -820,7 +840,7 @@ require("lazy").setup({
                 { desc = "Search in Open Files" }
             )
 
-            vim.keymap.set("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Search Commits" })
+            vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Search Branches" })
 
             vim.keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Search in Git Status" })
 
