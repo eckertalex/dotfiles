@@ -181,6 +181,7 @@ end, {})
 -- [[ Basic Autocommands ]]
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight when yanking (copying) text",
     group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
     callback = function()
         vim.highlight.on_yank()
@@ -284,7 +285,7 @@ local icons = {
 -- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 ---@diagnostic disable-next-line: undefined-field
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -607,6 +608,7 @@ require("lazy").setup({
                     { mode = "n", keys = "<leader>g", desc = "+Git" },
                     { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
                     { mode = "n", keys = "<leader>s", desc = "+Search" },
+                    { mode = "n", keys = "<leader>t", desc = "+Toggle" },
                     { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
             })
@@ -972,6 +974,17 @@ require("lazy").setup({
                     -- This is where a variable was first declared, or where a function is defined, etc.
                     -- To jump back, press <C-T>.
                     map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+
+                    -- The following autocommand is used to enable inlay hints in your
+                    -- code, if the language server you are using supports them
+                    --
+                    -- This may be unwanted, since they displace some of your code
+                    local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+                        map("<leader>th", function()
+                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+                        end, "[T]oggle Inlay [H]ints")
+                    end
                 end,
             })
 
