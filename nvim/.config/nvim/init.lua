@@ -686,27 +686,22 @@ require("lazy").setup({
         config = function()
             require("trouble").setup({ use_diagnostic_signs = true })
 
-            vim.keymap.set(
-                "n",
-                "<leader>xx",
-                "<cmd>TroubleToggle document_diagnostics<cr>",
-                { desc = "Document Diagnostics (Trouble)" }
-            )
+            vim.keymap.set("n", "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Diagnostics (Trouble)" })
 
             vim.keymap.set(
                 "n",
                 "<leader>xX",
-                "<cmd>TroubleToggle workspace_diagnostics<cr>",
-                { desc = "Workspace Diagnostics (Trouble)" }
+                "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+                { desc = "Buffer Diagnostics (Trouble)" }
             )
 
-            vim.keymap.set("n", "<leader>xL", "<cmd>TroubleToggle loclist<cr>", { desc = "Location List (Trouble)" })
+            vim.keymap.set("n", "<leader>xL", "<cmd>Trouble loclist toggle<cr>", { desc = "Location List (Trouble)" })
 
-            vim.keymap.set("n", "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>", { desc = "Quickfix List (Trouble)" })
+            vim.keymap.set("n", "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", { desc = "Quickfix List (Trouble)" })
 
             vim.keymap.set("n", "[q", function()
                 if require("trouble").is_open() then
-                    require("trouble").previous({ skip_groups = true, jump = true })
+                    require("trouble").prev()
                 else
                     local ok, err = pcall(vim.cmd.cprev)
                     if not ok and err then
@@ -717,7 +712,7 @@ require("lazy").setup({
 
             vim.keymap.set("n", "]q", function()
                 if require("trouble").is_open() then
-                    require("trouble").next({ skip_groups = true, jump = true })
+                    require("trouble").next()
                 else
                     local ok, err = pcall(vim.cmd.cnext)
                     if not ok and err then
