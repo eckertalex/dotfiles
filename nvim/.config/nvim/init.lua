@@ -334,6 +334,10 @@ require("lazy").setup({
     },
 
     {
+        "fladson/vim-kitty",
+    },
+
+    {
         "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
     },
 
