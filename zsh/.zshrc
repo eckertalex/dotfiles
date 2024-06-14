@@ -145,7 +145,7 @@ FPATH=$ASDF_DIR/completions:$FPATH
 ##################
 
 # Ctrl-f
-bindkey -s '^f' "tmux-sessionizer\n"
+bindkey -s '^F' "tmux-sessionizer\n"
 
 ###########
 # compinit

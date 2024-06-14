@@ -343,6 +343,7 @@ require("lazy").setup({
             vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
         end,
     },
+
     {
         "NeogitOrg/neogit",
         dependencies = {
@@ -350,13 +351,7 @@ require("lazy").setup({
             "sindrets/diffview.nvim",
         },
         config = function()
-            require("neogit").setup({
-                mappings = {
-                    status = {
-                        ["="] = "Toggle",
-                    },
-                },
-            })
+            require("neogit").setup({})
 
             vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<cr>", { desc = "Neogit" })
             vim.keymap.set("n", "<leader>gc", "<cmd>Neogit commit<cr>", { desc = "Neogit commit" })
@@ -605,10 +600,10 @@ require("lazy").setup({
                     miniclue.gen_clues.windows(),
                     miniclue.gen_clues.z(),
                     { mode = "n", keys = "<leader>b", desc = "+Buffers" },
+                    { mode = "n", keys = "<leader>c", desc = "+Code" },
                     { mode = "n", keys = "<leader>g", desc = "+Git" },
                     { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
                     { mode = "n", keys = "<leader>s", desc = "+Search" },
-                    { mode = "n", keys = "<leader>t", desc = "+Toggle" },
                     { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
             })
@@ -663,12 +658,12 @@ require("lazy").setup({
                 require("todo-comments").jump_prev()
             end, { desc = "Previous todo comment" })
 
-            vim.keymap.set("n", "<leader>xt", "<cmd>TodoTrouble<cr>", { desc = "Todo (Trouble)" })
+            vim.keymap.set("n", "<leader>xt", "<cmd>Trouble todo toggle<cr>", { desc = "Todo (Trouble)" })
 
             vim.keymap.set(
                 "n",
                 "<leader>xT",
-                "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",
+                "<cmd>Trouble todo toggle filter = {tag = {TODO,FIX,FIXME}}<cr>",
                 { desc = "Todo/Fix/Fixme (Trouble)" }
             )
 
@@ -703,7 +698,7 @@ require("lazy").setup({
 
             vim.keymap.set("n", "[q", function()
                 if require("trouble").is_open() then
-                    require("trouble").prev()
+                    require("trouble").prev({}, {})
                 else
                     local ok, err = pcall(vim.cmd.cprev)
                     if not ok and err then
@@ -714,7 +709,7 @@ require("lazy").setup({
 
             vim.keymap.set("n", "]q", function()
                 if require("trouble").is_open() then
-                    require("trouble").next()
+                    require("trouble").next({}, {})
                 else
                     local ok, err = pcall(vim.cmd.cnext)
                     if not ok and err then
@@ -949,41 +944,64 @@ require("lazy").setup({
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                 callback = function(event)
-                    local map = function(keys, func, desc)
-                        vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
-                    end
-
                     -- diagnostics
+
+                    -- <C-W>d show diagnostic float
+                    -- vim.diagnostic.open_float
                     -- :help CTRL-W_d-default
+
+                    -- [d jump to next diagnostic
+                    -- vim.diagnostic.goto_prev
                     -- :help [d-default
-                    -- :help [d-default
+
+                    -- ]d jump to previous diagnostic
+                    -- vim.diagnostic.goto_next
+                    -- :help ]d-default
 
                     -- :help lsp-defaults
-                    -- :help crr v_crr
-                    -- :help crn
-                    -- :help K
+
+                    -- K hover
+                    -- vim.lsp.buf.hover
+                    -- :help K-lsp-default
+
+                    -- <C-]> definition
+                    -- <C-W>] definition in new window
+                    -- vim.lsp.buf.definition
                     -- :help CTRL-] CTRL-W_]
-                    -- :help i_CTRL-S
-                    -- :help v_CTRL-R_r v_CTRL-R_CTRL-R
-
-                    -- Find references for the word under your cursor.
-                    -- :help gr-default
-                    map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-
-                    -- Jump to the definition of the word under your cursor.
-                    -- This is where a variable was first declared, or where a function is defined, etc.
                     -- To jump back, press <C-T>.
-                    map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+                    vim.keymap.set(
+                        "n",
+                        "gd",
+                        vim.lsp.buf.definition,
+                        { buffer = event.buf, desc = "vim.lsp.buf.definition" }
+                    )
 
-                    -- The following autocommand is used to enable inlay hints in your
-                    -- code, if the language server you are using supports them
-                    --
-                    -- This may be unwanted, since they displace some of your code
+                    -- these should be default in neovim v11
+                    vim.keymap.set("n", "grn", vim.lsp.buf.rename, { buffer = event.buf, desc = "vim.lsp.buf.rename" })
+                    vim.keymap.set(
+                        "n",
+                        "gra",
+                        vim.lsp.buf.code_action,
+                        { buffer = event.buf, desc = "vim.lsp.buf.code_action" }
+                    )
+                    vim.keymap.set(
+                        "n",
+                        "grr",
+                        vim.lsp.buf.references,
+                        { buffer = event.buf, desc = "vim.lsp.buf.references" }
+                    )
+                    vim.keymap.set(
+                        "i",
+                        "<C-s>",
+                        vim.lsp.buf.signature_help,
+                        { buffer = event.buf, desc = "vim.lsp.buf.signature_help" }
+                    )
+
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                        map("<leader>th", function()
-                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-                        end, "[T]oggle Inlay [H]ints")
+                        vim.keymap.set("n", "<leader>ch", function()
+                            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
+                        end, { desc = "Toggle inlay hints" })
                     end
                 end,
             })
@@ -1085,6 +1103,9 @@ require("lazy").setup({
                                     "missing-fields",
                                 },
                             },
+                            hint = {
+                                enable = true,
+                            },
                         },
                     },
                 },
@@ -1093,6 +1114,20 @@ require("lazy").setup({
                 pyright = {},
                 sqls = {},
                 tailwindcss = {},
+                vtsls = {
+                    settings = {
+                        typescript = {
+                            inlayHints = {
+                                parameterNames = { enabled = "literals" },
+                                parameterTypes = { enabled = true },
+                                variableTypes = { enabled = true },
+                                propertyDeclarationTypes = { enabled = true },
+                                functionLikeReturnTypes = { enabled = true },
+                                enumMemberValues = { enabled = true },
+                            },
+                        },
+                    },
+                },
             }
 
             require("mason").setup()
@@ -1117,14 +1152,6 @@ require("lazy").setup({
                     end,
                 },
             })
-        end,
-    },
-
-    {
-        "pmizio/typescript-tools.nvim",
-        dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        config = function()
-            require("typescript-tools").setup({})
         end,
     },
 
