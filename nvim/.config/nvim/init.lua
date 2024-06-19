@@ -532,31 +532,6 @@ require("lazy").setup({
     },
 
     {
-        "echasnovski/mini.starter",
-        config = function()
-            local new_section = function(name, action, section)
-                return { name = name, action = action, section = section }
-            end
-
-            local starter = require("mini.starter")
-            starter.setup({
-                evaluate_single = true,
-                query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
-                items = {
-                    new_section("Find file", "Telescope find_files", "Telescope"),
-                    new_section("Recent files", "Telescope oldfiles", "Telescope"),
-                    new_section("Grep text", "Telescope live_grep", "Telescope"),
-                    new_section("init.lua", "e ~/.config/nvim/init.lua", "Config"),
-                    new_section("Lazy", "Lazy", "Config"),
-                    new_section("New file", "ene | startinsert", "Built-in"),
-                    new_section("Quit", "qa", "Built-in"),
-                },
-                footer = "",
-            })
-        end,
-    },
-
-    {
         "echasnovski/mini.clue",
         config = function()
             local miniclue = require("mini.clue")
@@ -607,6 +582,7 @@ require("lazy").setup({
                     { mode = "n", keys = "<leader>c", desc = "+Code" },
                     { mode = "n", keys = "<leader>g", desc = "+Git" },
                     { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
+                    { mode = "n", keys = "<leader>gs", desc = "+Search" },
                     { mode = "n", keys = "<leader>s", desc = "+Search" },
                     { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
@@ -836,11 +812,11 @@ require("lazy").setup({
                 { desc = "Search in Open Files" }
             )
 
-            vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Search Branches" })
+            vim.keymap.set("n", "<leader>gsb", "<cmd>Telescope git_branches<cr>", { desc = "Search Git Branches" })
 
-            vim.keymap.set("n", "<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Search in Git Status" })
+            vim.keymap.set("n", "<leader>gss", "<cmd>Telescope git_status<cr>", { desc = "Search Git Status" })
 
-            vim.keymap.set("n", "<leader>gf", "<cmd>Telescope git_files<cr>", { desc = "Search Git Files" })
+            vim.keymap.set("n", "<leader>gsf", "<cmd>Telescope git_files<cr>", { desc = "Search Git Files" })
         end,
     },
 

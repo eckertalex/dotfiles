@@ -21,8 +21,6 @@
 	features = decorations
 	light = false 
 	syntax-theme = "Catppuccin Macchiato"
-	; light = true 
-	; syntax-theme = "Catppuccin Latte"
 [delta "interactive"]
 	keep-plus-minus-markers = false
 [delta "decorations"]
