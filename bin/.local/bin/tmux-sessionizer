@@ -3,7 +3,9 @@
 if [[ $# -eq 1 ]]; then
 	selected=$1
 else
-  selected=$((find ~/dev -mindepth 1 -maxdepth 1 -type d ; find ~/.dotfiles -not -path "*/.dotfiles/*" -type d) | fzf)
+	options=($(fd --type d --exact-depth 1 --search-path ~/dev))
+	options+=("$HOME/.dotfiles")
+	selected=$(printf '%s\n' "${options[@]}" | fzf)
 fi
 
 if [[ -z $selected ]]; then
@@ -23,7 +25,7 @@ if ! tmux has-session -t=$selected_name 2>/dev/null; then
 fi
 
 if [[ -z $TMUX ]]; then
-    tmux attach -t $selected_name
+	tmux attach -t $selected_name
 else
-    tmux switch-client -t $selected_name
+	tmux switch-client -t $selected_name
 fi
