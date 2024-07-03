@@ -126,13 +126,6 @@ fi
 [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
 FPATH=$ASDF_DIR/completions:$FPATH
 
-##################
-# custom keybinds
-##################
-
-# Ctrl-f
-bindkey -s '^f' "tmux-sessionizer\n"
-
 ###########
 # compinit
 ###########
@@ -187,6 +180,13 @@ zle -N zle-line-init
 echo -ne '\e[6 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
+##################
+# custom keybinds
+##################
+
+# Ctrl-f
+bindkey -s '^f' "tmux-sessionizer\n"
+
 ##########
 # plugins
 ##########
@@ -199,3 +199,4 @@ source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlightin
 source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
 source "$HOME/.p10k.zsh"
+

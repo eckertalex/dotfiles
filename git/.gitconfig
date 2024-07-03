@@ -11,6 +11,7 @@
 	editor = nvim
 	pager = delta
 	excludesfile = ~/.gitignore.global
+	fsmonitor = true
 [interactive]
 	diffFilter = delta --color-only --features=interactive
 [delta]
@@ -44,3 +45,7 @@
 	prune = true
 [commit]
 	template = ~/.gitmessage
+[rerere]
+	enabled = true
+[column]
+	ui = auto
