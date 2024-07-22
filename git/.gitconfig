@@ -47,5 +47,3 @@
 	template = ~/.gitmessage
 [rerere]
 	enabled = true
-[column]
-	ui = auto
