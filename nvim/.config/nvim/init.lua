@@ -836,6 +836,7 @@ require("lazy").setup({
                 highlight = { enable = true },
                 indent = { enable = true },
                 ensure_installed = {
+                    "astro",
                     "bash",
                     "c",
                     "css",
@@ -999,6 +1000,7 @@ require("lazy").setup({
             )
 
             local servers = {
+                astro = {},
                 cssls = {},
                 cssmodules_ls = {},
                 eslint = {
@@ -1236,21 +1238,22 @@ require("lazy").setup({
                     }
                 end,
                 formatters_by_ft = {
-                    ["lua"] = { "stylua" },
-                    ["sh"] = { "shfmt" },
+                    ["astro"] = { "prettier" },
+                    ["css"] = { "prettier" },
+                    ["go"] = { "goimports", "gofumpt" },
+                    ["html"] = { "prettier" },
                     ["javascript"] = { "prettier" },
                     ["javascriptreact"] = { "prettier" },
-                    ["typescript"] = { "prettier" },
-                    ["typescriptreact"] = { "prettier" },
-                    ["css"] = { "prettier" },
-                    ["scss"] = { "prettier" },
-                    ["html"] = { "prettier" },
                     ["json"] = { "prettier" },
                     ["jsonc"] = { "prettier" },
-                    ["yaml"] = { "prettier" },
+                    ["lua"] = { "stylua" },
                     ["markdown"] = { "prettier" },
                     ["markdown.mdx"] = { "prettier" },
-                    ["go"] = { "goimports", "gofumpt" },
+                    ["scss"] = { "prettier" },
+                    ["sh"] = { "shfmt" },
+                    ["typescript"] = { "prettier" },
+                    ["typescriptreact"] = { "prettier" },
+                    ["yaml"] = { "prettier" },
                 },
             })
 
