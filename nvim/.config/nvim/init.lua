@@ -469,7 +469,7 @@ require("lazy").setup({
     {
         "echasnovski/mini.bufremove",
         config = function()
-            require("mini.indentscope").setup({})
+            require("mini.bufremove").setup({})
 
             vim.keymap.set("n", "<leader>bd", function()
                 local bd = require("mini.bufremove").delete
@@ -572,6 +572,25 @@ require("lazy").setup({
                     { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
             })
+        end,
+    },
+
+    {
+        "echasnovski/mini.starter",
+        config = function()
+            require("mini.starter").setup({
+                query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
+            })
+
+            vim.api.nvim_create_user_command("FreshStart", function()
+                for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                    vim.api.nvim_buf_delete(buf, { force = true })
+                end
+
+                require("mini.starter").open(vim.api.nvim_get_current_buf())
+            end, {})
+
+            vim.keymap.set("n", "<leader>qa", "<cmd>FreshStart<cr>", { desc = "Fresh Start" })
         end,
     },
 
