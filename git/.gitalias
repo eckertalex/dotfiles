@@ -1,0 +1,78 @@
+[alias]
+	s = status
+	ss = status
+	a = add
+	ap = add --patch
+	aa = add --all
+	bl = blame -w
+	; blame file but track moves, copies, renames, etc
+	deepblame = blame -w -C -C -C
+	c = commit --verbose
+	cm = commit --message
+	ca = commit --verbose --all
+	cam = commit --verbose --all --message
+	cf = commit --verbose --amend
+	caf = commit --verbose --all --amend
+	cnf = commit --verbose --amend --no-edit
+	canf = commit --verbose --all --amend --no-edit
+	b = branch
+	bd = branch -d
+	bdf = branch -D
+	co = checkout
+	sw = switch
+	swc = switch -c
+	swm = "!git switch $(git-main-branch)"
+	p = push
+	pf = push --force-with-lease
+	pl = pull
+	plra = pull --rebase --autostash
+	rb = rebase
+	rbi = rebase -i
+	rbm = "!git rebase $(git-main-branch)"
+	rbc = rebase --continue
+	rba = rebase --abort
+	st = stash
+	sts = stash list
+	sta = stash --include-untracked
+	staa = stash apply
+	stp = stash pop
+	std = stash drop
+	rst = restore
+	r = reset
+	; undo last commit and keep files
+	uncommit = reset HEAD~1
+	; discard last commit and files
+	discard = reset --hard HEAD~1
+	pristine = reset --hard && git clean -dffx
+	l = log --pretty=\"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset\" --date=short
+	ld = log --pretty=\"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset\" --date=relative
+	ll = log --pretty=\"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset\" --date=short --numstat
+	lg = log --graph --pretty=\"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset\" --date=short
+	; show the history of a file
+	filelog = log -u
+	; show modified files in last commit
+	dl = "!git ll -1"
+	d = diff
+	; show diff of last commit
+	dlc = diff --cached HEAD^
+	; Show content (full diff) of a commit given a revision:
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+	lc  = "!f() { git ll "$1"^.."$1"; }; f"
+	whorank =  shortlog --summary --numbered --no-merges
+	; Find a file path
+	fp = "!git ls-files | grep -i"
+	; list aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+	; Assume a file as unchanged:
+	assume = update-index --assume-unchanged
+	; Unassume a file
+	unassume = update-index --no-assume-unchanged
+	; Show assumed files
+	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
+	; Unassume all the assumed files
+	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
+	; Assume all
+	assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
+
+
+; vim: set ts=4 sw=4 filetype=gitconfig

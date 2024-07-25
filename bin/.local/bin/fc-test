@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "Normal"
 printf "\033[1mBold\033[22m\n"

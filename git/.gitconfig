@@ -6,7 +6,6 @@
 	defaultBranch = main
 [include]
 	path = ~/.gitalias
-	path = ~/.config/delta/config
 [core]
 	editor = nvim
 	pager = delta
@@ -47,3 +46,5 @@
 	template = ~/.gitmessage
 [rerere]
 	enabled = true
+
+# vim: set ts=4 sw=4 filetype=gitconfig

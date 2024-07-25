@@ -1,26 +1,28 @@
 # !/bin/zsh
 
 function zcompile-many() {
-  local f
-  for f; do zcompile -R -- "$f".zwc "$f"; done
+	local f
+	for f; do
+		zcompile -R -- "$f".zwc "$f";
+	done
 }
 
 if [[ ! -e $HOME/.config/zsh/plugins/zsh-syntax-highlighting ]]; then
-  git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.config/zsh/plugins/zsh-syntax-highlighting
-  zcompile-many $HOME/.config/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
+	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.config/zsh/plugins/zsh-syntax-highlighting
+	zcompile-many $HOME/.config/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
 fi
 if [[ ! -e $HOME/.config/zsh/plugins/zsh-autosuggestions ]]; then
-  git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.config/zsh/plugins/zsh-autosuggestions
-  zcompile-many $HOME/.config/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.config/zsh/plugins/zsh-autosuggestions
+	zcompile-many $HOME/.config/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
 fi
 if [[ ! -e $HOME/.config/zsh/plugins/powerlevel10k ]]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/plugins/powerlevel10k
-  make -C $HOME/.config/zsh/plugins/powerlevel10k pkg
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/plugins/powerlevel10k
+	make -C $HOME/.config/zsh/plugins/powerlevel10k pkg
 fi
 
-#########################
+################
 # powerlevel10k
-#########################
+################
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -58,7 +60,7 @@ export VISUAL=nvim
 # -T creates a "tied" pair
 export -U PATH path FPATH fpath MANPATH manpath
 export -UT INFOPATH infopath
-PATH=$HOME/.config/zsh/functions:$HOME/.local/bin:$PATH
+PATH=$HOME/.local/bin:$PATH
 FPATH=$HOME/.config/zsh/completions:$FPATH
 source "$HOME/.config/zsh/pnpm.zsh"
 
@@ -68,9 +70,9 @@ source "$HOME/.config/zsh/pnpm.zsh"
 
 PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 
-############
+###########
 # Homebrew
-############
+###########
 
 export HOMEBREW_NO_ANALYTICS=1
 case $OSTYPE in
@@ -87,9 +89,9 @@ if type brew &> /dev/null; then
 	FPATH=$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH
 fi
 
-#####
+######
 # FZF
-#####
+######
 
 # Auto-completion
 [ -s "/opt/homebrew/opt/fzf/shell/completion.zsh" ] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
@@ -98,17 +100,17 @@ fi
 
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
-#########
+##########
 # THEMING
-#########
+##########
 
 source "$HOME/.config/vivid/catppuccin-macchiato.lscolors"
 export BAT_THEME="Catppuccin Macchiato"
 # Catppuccin Macchiato
 export FZF_DEFAULT_OPTS=" \
---color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
---color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
---color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+	--color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
+	--color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+	--color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
 
 ###########
 # bob/nvim
@@ -158,22 +160,22 @@ bindkey '^e' edit-command-line
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[2 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[6 q'
-  fi
+if [[ ${KEYMAP} == vicmd ]] ||
+	[[ $1 = 'block' ]]; then
+	echo -ne '\e[2 q'
+elif [[ ${KEYMAP} == main ]] ||
+	[[ ${KEYMAP} == viins ]] ||
+	[[ ${KEYMAP} = '' ]] ||
+	[[ $1 = 'beam' ]]; then
+	echo -ne '\e[6 q'
+fi
 }
 zle -N zle-keymap-select
 precmd_functions+=(zle-keymap-select)
 
 zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[6 q"
+zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+echo -ne "\e[6 q"
 }
 zle -N zle-line-init
 
@@ -191,12 +193,16 @@ bindkey -s '^f' "tmux-sessionizer\n"
 # plugins
 ##########
 
+
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 [[ -s "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
+
 source "$HOME/.config/zsh/alias"
 source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
 source "$HOME/.p10k.zsh"
 
+
+# vim: set ts=4 sw=4

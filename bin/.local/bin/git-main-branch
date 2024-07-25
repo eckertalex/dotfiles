@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Check if main exists and use instead of master
+command git rev-parse --git-dir &>/dev/null || exit
+ref=""
+for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
+  if command git show-ref -q --verify $ref; then
+    echo ${ref##*/}
+    unset ref
+    exit 0
+  fi
+done
+unset ref
+
+# If no main branch was found, fall back to master but return error
+echo master
+exit 1
+
+# Unset the global variable 'ref'
