@@ -240,51 +240,8 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
-local icons = {
-    Array = " ",
-    Boolean = "󰨙 ",
-    Class = " ",
-    Codeium = "󰘦 ",
-    Color = " ",
-    Control = " ",
-    Collapsed = " ",
-    Constant = "󰏿 ",
-    Constructor = " ",
-    Copilot = " ",
-    Enum = " ",
-    EnumMember = " ",
-    Event = " ",
-    Field = " ",
-    File = " ",
-    Folder = " ",
-    Function = "󰊕 ",
-    Interface = " ",
-    Key = " ",
-    Keyword = " ",
-    Method = "󰊕 ",
-    Module = " ",
-    Namespace = "󰦮 ",
-    Null = " ",
-    Number = "󰎠 ",
-    Object = " ",
-    Operator = " ",
-    Package = " ",
-    Property = " ",
-    Reference = " ",
-    Snippet = " ",
-    String = " ",
-    Struct = "󰆼 ",
-    TabNine = "󰏚 ",
-    Text = " ",
-    TypeParameter = " ",
-    Unit = " ",
-    Value = " ",
-    Variable = "󰀫 ",
-}
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
----@diagnostic disable-next-line: undefined-field
 if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
@@ -295,7 +252,6 @@ if not vim.uv.fs_stat(lazypath) then
         lazypath,
     })
 end
----@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 -- [[ Configure and install plugins ]]
@@ -419,7 +375,6 @@ require("lazy").setup({
 
     {
         "stevearc/oil.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("oil").setup({
                 view_options = {
@@ -451,6 +406,26 @@ require("lazy").setup({
                     end,
                 },
             })
+        end,
+    },
+
+    {
+        "echasnovski/mini.icons",
+        config = function()
+            require("mini.icons").setup()
+        end,
+        init = function()
+            package.preload["nvim-web-devicons"] = function()
+                require("mini.icons").mock_nvim_web_devicons()
+                return package.loaded["nvim-web-devicons"]
+            end
+        end,
+    },
+
+    {
+        "echasnovski/mini.surround",
+        config = function()
+            require("mini.surround").setup()
         end,
     },
 
@@ -494,16 +469,16 @@ require("lazy").setup({
     },
 
     {
-        "echasnovski/mini.notify",
+        "echasnovski/mini.cursorword",
         config = function()
-            require("mini.notify").setup({})
+            require("mini.cursorword").setup({})
         end,
     },
 
     {
-        "echasnovski/mini.cursorword",
+        "echasnovski/mini.notify",
         config = function()
-            require("mini.cursorword").setup({})
+            require("mini.notify").setup({})
         end,
     },
 
@@ -750,7 +725,6 @@ require("lazy").setup({
                 end,
             },
             { "nvim-telescope/telescope-ui-select.nvim" },
-            { "nvim-tree/nvim-web-devicons" },
         },
         config = function()
             local telescope = require("telescope")
@@ -911,11 +885,18 @@ require("lazy").setup({
             "WhoIsSethDaniel/mason-tool-installer.nvim",
 
             {
-                "folke/neodev.nvim",
+                "folke/lazydev.nvim",
+                ft = "lua",
                 config = function()
-                    require("neodev").setup({})
+                    require("lazydev").setup({
+                        library = {
+                            -- Load luvit types when the `vim.uv` word is found
+                            { path = "luvit-meta/library", words = { "vim%.uv" } },
+                        },
+                    })
                 end,
             },
+            { "Bilal2453/luvit-meta", lazy = true },
 
             "b0o/SchemaStore.nvim",
         },
@@ -957,7 +938,8 @@ require("lazy").setup({
                     vim.keymap.set(
                         "n",
                         "gd",
-                        vim.lsp.buf.definition,
+                        -- vim.lsp.buf.definition,
+                        require("telescope.builtin").lsp_definitions,
                         { buffer = event.buf, desc = "vim.lsp.buf.definition" }
                     )
 
@@ -972,7 +954,8 @@ require("lazy").setup({
                     vim.keymap.set(
                         "n",
                         "grr",
-                        vim.lsp.buf.references,
+                        -- vim.lsp.buf.references,
+                        require("telescope.builtin").lsp_references,
                         { buffer = event.buf, desc = "vim.lsp.buf.references" }
                     )
                     vim.keymap.set(
@@ -1075,9 +1058,6 @@ require("lazy").setup({
                 lua_ls = {
                     settings = {
                         Lua = {
-                            workspace = {
-                                checkThirdParty = false,
-                            },
                             completion = {
                                 callSnippet = "Replace",
                             },
@@ -1122,11 +1102,10 @@ require("lazy").setup({
             vim.list_extend(ensure_installed, {
                 "gofumpt",
                 "goimports",
+                "markdownlint",
                 "prettier",
-                "prettierd",
                 "shfmt",
                 "stylua",
-                "markdownlint",
             })
             require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -1205,6 +1184,7 @@ require("lazy").setup({
                     end, { "i", "s" }),
                 }),
                 sources = cmp.config.sources({
+                    { name = "lazydev", group_index = 0 },
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
                     { name = "path" },
@@ -1213,8 +1193,9 @@ require("lazy").setup({
                 }),
                 formatting = {
                     format = function(_, item)
-                        if icons[item.kind] then
-                            item.kind = icons[item.kind] .. item.kind
+                        local icon, _ = require("mini.icons").get("lsp", item.kind)
+                        if icon ~= nil then
+                            item.kind = icon
                         end
                         return item
                     end,
@@ -1246,22 +1227,22 @@ require("lazy").setup({
                     return { timeout_ms = 500, lsp_format = "fallback" }
                 end,
                 formatters_by_ft = {
-                    ["astro"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["css"] = { "prettierd", "prettier", stop_after_first = true },
+                    ["astro"] = { "prettier" },
+                    ["css"] = { "prettier" },
                     ["go"] = { "goimports", "gofumpt" },
-                    ["html"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["javascript"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["javascriptreact"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["json"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["jsonc"] = { "prettierd", "prettier", stop_after_first = true },
+                    ["html"] = { "prettier" },
+                    ["javascript"] = { "prettier" },
+                    ["javascriptreact"] = { "prettier" },
+                    ["json"] = { "prettier" },
+                    ["jsonc"] = { "prettier" },
                     ["lua"] = { "stylua" },
-                    ["markdown"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["markdown.mdx"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["scss"] = { "prettierd", "prettier", stop_after_first = true },
+                    ["markdown"] = { "prettier" },
+                    ["markdown.mdx"] = { "prettier" },
+                    ["scss"] = { "prettier" },
                     ["sh"] = { "shfmt" },
-                    ["typescript"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["typescriptreact"] = { "prettierd", "prettier", stop_after_first = true },
-                    ["yaml"] = { "prettierd", "prettier", stop_after_first = true },
+                    ["typescript"] = { "prettier" },
+                    ["typescriptreact"] = { "prettier" },
+                    ["yaml"] = { "prettier" },
                 },
             })
             vim.api.nvim_create_user_command("FormatDisable", function(args)
