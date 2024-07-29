@@ -1122,6 +1122,10 @@ require("lazy").setup({
     },
 
     {
+        "lervag/vimtex",
+    },
+
+    {
         "danymat/neogen",
         config = function()
             require("neogen").setup({})
