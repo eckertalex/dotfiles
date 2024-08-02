@@ -257,7 +257,22 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure and install plugins ]]
 require("lazy").setup({
     {
+        "rose-pine/neovim",
+        as = "rose-pine",
+        lazy = false,
+        priority = 1000,
+        config = function()
+            require("rose-pine").setup({
+                dark_variant = "moon",
+            })
+
+            vim.cmd.colorscheme("rose-pine")
+        end,
+    },
+
+    {
         "catppuccin/nvim",
+        enabled = false,
         name = "catppuccin",
         lazy = false,
         priority = 1000,
