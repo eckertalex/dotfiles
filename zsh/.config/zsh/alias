@@ -14,7 +14,7 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
-alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+alias nuke-ds-store="find . -type f -name '*.DS_Store' -ls -delete"
 
 alias showpath='echo -e ${PATH//:/\\n}'
 
@@ -36,6 +36,8 @@ alias mv="mv -vi"
 alias rm="rm -vI"
 alias mkdir="mkdir -pv"
 alias grep="grep --color=auto"
+
+alias upd="brew bundle --global; brew update; brew upgrade; brew cleanup"
 
 #####
 # ls

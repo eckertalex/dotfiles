@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+
+supported_themes=(
+  "catppuccin-frappe"
+  "catppuccin-latte"
+  "catppuccin-macchiato"
+  "catppuccin-mocha"
+  "rose-pine"
+  "rose-pine-dawn"
+  "rose-pine-moon"
+)
+
+if [[ $# -eq 1 ]]; then
+  if (($supported_themes[(Ie)${1}])); then
+    selected=$1
+  else
+    echo "$1 is not a supported theme"
+    exit 1
+  fi
+else
+  selected=$(printf '%s\n' "${supported_themes[@]}" | fzf --prompt="Theme ⟫ " --height=~50% --layout=reverse --border --exit-0)
+fi
+
+if [[ -z $selected ]]; then
+  exit 0
+fi
+

@@ -185,6 +185,9 @@ preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
 
+# Ctrl-t
+bindkey -s '^t' "themes\n"
+
 ##########
 # plugins
 ##########
