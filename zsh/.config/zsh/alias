@@ -36,6 +36,9 @@ alias mv="mv -vi"
 alias rm="rm -vI"
 alias mkdir="mkdir -pv"
 alias grep="grep --color=auto"
+if type gsed &> /dev/null; then
+  alias sed="gsed"
+fi
 
 alias upd="brew bundle --global; brew update; brew upgrade; brew cleanup"
 

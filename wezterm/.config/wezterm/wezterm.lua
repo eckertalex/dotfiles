@@ -1,22 +1,5 @@
-local wezterm = require("wezterm")
-
-local function get_appearance()
-	if wezterm.gui then
-		return wezterm.gui.get_appearance()
-	end
-	return "Dark"
-end
-
-local function scheme_for_appearance(appearance)
-	if appearance:find("Dark") then
-		return "rose-pine-moon"
-	else
-		return "rose-pine-dawn"
-	end
-end
-
 return {
-	color_scheme = scheme_for_appearance(get_appearance()),
+	color_scheme = "rose-pine",
 	font_size = 20,
 	hide_tab_bar_if_only_one_tab = true,
 	scrollback_lines = 10000,

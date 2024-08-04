@@ -254,6 +254,8 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local colorscheme = "rose-pine"
+
 -- [[ Configure and install plugins ]]
 require("lazy").setup({
     {
@@ -262,17 +264,14 @@ require("lazy").setup({
         lazy = false,
         priority = 1000,
         config = function()
-            require("rose-pine").setup({
-                dark_variant = "moon",
-            })
+            require("rose-pine").setup({})
 
-            vim.cmd.colorscheme("rose-pine")
+            vim.cmd.colorscheme(colorscheme)
         end,
     },
 
     {
         "catppuccin/nvim",
-        enabled = false,
         name = "catppuccin",
         lazy = false,
         priority = 1000,
@@ -300,24 +299,7 @@ require("lazy").setup({
                 },
             })
 
-            vim.cmd.colorscheme("catppuccin-macchiato")
-        end,
-    },
-
-    {
-        "f-person/auto-dark-mode.nvim",
-        config = function()
-            require("auto-dark-mode").setup({
-                update_interval = 1000,
-                set_dark_mode = function()
-                    vim.api.nvim_set_option_value("background", "dark", {})
-                    vim.cmd("colorscheme rose-pine")
-                end,
-                set_light_mode = function()
-                    vim.api.nvim_set_option_value("background", "light", {})
-                    vim.cmd("colorscheme rose-pine")
-                end,
-            })
+            vim.cmd.colorscheme(colorscheme)
         end,
     },
 

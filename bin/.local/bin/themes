@@ -1,27 +1,95 @@
 #!/usr/bin/env zsh
 
-supported_themes=(
-  "catppuccin-frappe"
-  "catppuccin-latte"
-  "catppuccin-macchiato"
-  "catppuccin-mocha"
-  "rose-pine"
-  "rose-pine-dawn"
-  "rose-pine-moon"
+dark_themes=(
+    "catppuccin-frappe"
+    "catppuccin-macchiato"
+    "catppuccin-mocha"
+    "rose-pine"
+    "rose-pine-moon"
 )
 
+light_themes=(
+    "catppuccin-latte"
+    "rose-pine-dawn"
+)
+
+supported_themes=(${dark_themes[@]} ${light_themes[@]})
+supported_themes=($(printf "%s\n" "${supported_themes[@]}" | sort))
+
 if [[ $# -eq 1 ]]; then
-  if (($supported_themes[(Ie)${1}])); then
-    selected=$1
-  else
-    echo "$1 is not a supported theme"
-    exit 1
-  fi
+    if (($supported_themes[(Ie)${1}])); then
+        selected=$1
+    else
+        echo "$1 is not a supported theme"
+        exit 1
+    fi
 else
-  selected=$(printf '%s\n' "${supported_themes[@]}" | fzf --prompt="Theme ⟫ " --height=~50% --layout=reverse --border --exit-0)
+    selected=$(printf '%s\n' "${supported_themes[@]}" | fzf --prompt="Theme ⟫ " --height=~50% --layout=reverse --border)
 fi
 
 if [[ -z $selected ]]; then
-  exit 0
+    exit 0
 fi
 
+if type gsed &> /dev/null; then
+    alias sed="gsed"
+fi
+
+if (($light_themes[(Ie)${selected}])); then
+    mode="light"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
+    else
+        # TODO: Linux/Windows preference
+        echo "Please switch to light mode in system settings"
+    fi
+else
+    mode="dark"
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to true"
+    else
+        # TODO: Linux/Windows preference
+        echo "Please switch to dark mode in system settings"
+    fi
+fi
+
+# change git
+sed -i "s/\(syntax-theme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/git/.gitconfig
+if [[ "$mode" == "light" ]]; then
+    sed -i "s/\(light = \)[^\"]*/\1true/" $HOME/.dotfiles/git/.gitconfig
+else
+    sed -i "s/\(light = \)[^\"]*/\1false/" $HOME/.dotfiles/git/.gitconfig
+fi
+
+# change bat
+sed -i "s/\(export BAT_THEME=\"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/zsh/.zshrc
+
+# change fzf
+sed -i "s/\(source \"\$HOME\/.config\/fzf\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HOME/.dotfiles/zsh/.zshrc
+
+# change lscolors
+sed -i "s/\(source \"\$HOME\/.config\/lscolors\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HOME/.dotfiles/zsh/.zshrc
+
+# change wezterm
+sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/wezterm/.config/wezterm/wezterm.lua
+
+# change neovim
+sed -i "s/\(local colorscheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
+
+for __pane in $(tmux list-panes -aF "#S:#I.#P"); do
+    __pane_command=$(tmux display-message -t $__pane -p "#{pane_current_command}")
+    if [[ "$__pane_command" == "nvim" ]]; then
+        __panes_with_nvim+=($__pane)
+        tmux send-keys -t $__pane ":colorscheme $selected" ENTER
+        tmux send-keys -t $__pane ":set background=$mode" ENTER
+        tmux send-keys -t $__pane C-z
+    fi
+
+    tmux send-keys -t $__pane "source \"$HOME/.zshrc\"" ENTER
+done
+
+for __pane in $__panes_with_nvim; do
+    tmux send-keys -t $__pane "fg" ENTER
+done
+
+# vim: ts=4 sw=4

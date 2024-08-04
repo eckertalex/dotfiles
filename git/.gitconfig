@@ -19,8 +19,8 @@
 	line-numbers = true
 	side-by-side = true
 	features = decorations
-	light = false 
-	syntax-theme = "Catppuccin Macchiato"
+	light = false
+	syntax-theme = "rose-pine"
 [delta "interactive"]
 	keep-plus-minus-markers = false
 [delta "decorations"]

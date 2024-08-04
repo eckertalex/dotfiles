@@ -104,9 +104,9 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # THEMING
 ##########
 
-source "$HOME/.config/lscolors/rose-pine-moon.sh"
-source "$HOME/.config/fzf/rose-pine-moon.sh"
-export BAT_THEME="rose-pine-moon"
+source "$HOME/.config/lscolors/rose-pine.sh"
+source "$HOME/.config/fzf/rose-pine.sh"
+export BAT_THEME="rose-pine"
 
 ###########
 # bob/nvim
@@ -185,13 +185,9 @@ preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
 
-# Ctrl-t
-bindkey -s '^t' "themes\n"
-
 ##########
 # plugins
 ##########
-
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
@@ -202,6 +198,5 @@ source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlightin
 source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
 source "$HOME/.p10k.zsh"
-
 
 # vim: set ts=4 sw=4
