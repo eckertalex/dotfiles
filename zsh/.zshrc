@@ -104,9 +104,9 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # THEMING
 ##########
 
-source "$HOME/.config/lscolors/rose-pine.sh"
-source "$HOME/.config/fzf/rose-pine.sh"
-export BAT_THEME="rose-pine"
+source "$HOME/.config/lscolors/rose-pine-dawn.sh"
+source "$HOME/.config/fzf/rose-pine-dawn.sh"
+export BAT_THEME="rose-pine-dawn"
 
 ###########
 # bob/nvim

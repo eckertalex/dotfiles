@@ -76,6 +76,14 @@ sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/wezt
 # change neovim
 sed -i "s/\(local colorscheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
 
+tmux_running=$(pgrep tmux)
+
+source "$HOME/.zshrc"
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+    exit 0
+fi
+
 for __pane in $(tmux list-panes -aF "#S:#I.#P"); do
     __pane_command=$(tmux display-message -t $__pane -p "#{pane_current_command}")
     if [[ "$__pane_command" == "nvim" ]]; then
