@@ -39,17 +39,19 @@ if (($light_themes[(Ie)${selected}])); then
     mode="light"
     if [[ "$(uname -s)" == "Darwin" ]]; then
         osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
+    elif [ -n "${WSL_DISTRO_NAME}" ]; then
+        echo "Please switch to dark mode in windows settings"
     else
-        # TODO: Linux/Windows preference
-        echo "Please switch to light mode in system settings"
+        echo "Please switch to dark mode in linux settings"
     fi
 else
     mode="dark"
     if [[ "$(uname -s)" == "Darwin" ]]; then
         osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to true"
+    elif [ -n "${WSL_DISTRO_NAME}" ]; then
+        echo "Please switch to dark mode in windows settings"
     else
-        # TODO: Linux/Windows preference
-        echo "Please switch to dark mode in system settings"
+        echo "Please switch to dark mode in linux settings"
     fi
 fi
 
@@ -72,6 +74,11 @@ sed -i "s/\(source \"\$HOME\/.config\/lscolors\/\)\(.*\)\(.sh\"\)/\1$selected\3/
 
 # change wezterm
 sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/wezterm/.config/wezterm/wezterm.lua
+
+if [ -n "${WSL_DISTRO_NAME}" ]; then
+    win_user_path=$(wslpath $(cmd.exe /C "echo %USERPROFILE%" 2>/dev/null | tr -d '\r'))
+    sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $win_user_path/.wezterm.lua
+fi
 
 # change neovim
 sed -i "s/\(local colorscheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
@@ -101,3 +108,4 @@ for __pane in $__panes_with_nvim; do
 done
 
 # vim: ts=4 sw=4
+

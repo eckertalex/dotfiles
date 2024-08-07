@@ -1,5 +1,5 @@
 [alias]
-	s = status
+	s = status --short
 	ss = status
 	a = add
 	ap = add --patch
