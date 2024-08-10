@@ -497,6 +497,13 @@ require("lazy").setup({
     },
 
     {
+        "echasnovski/mini.tabline",
+        config = function()
+            require("mini.tabline").setup()
+        end,
+    },
+
+    {
         "echasnovski/mini.statusline",
         config = function()
             require("mini.statusline").setup({
@@ -557,6 +564,7 @@ require("lazy").setup({
                     { mode = "n", keys = "<leader>g", desc = "+Git" },
                     { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
                     { mode = "n", keys = "<leader>gs", desc = "+Search" },
+                    { mode = "n", keys = "<leader>q", desc = "+Quit/Sessions" },
                     { mode = "n", keys = "<leader>s", desc = "+Search" },
                     { mode = "n", keys = "<leader>x", desc = "+Diagnostics/Quickfix" },
                 },
@@ -580,6 +588,26 @@ require("lazy").setup({
             end, {})
 
             vim.keymap.set("n", "<leader>qa", "<cmd>FreshStart<cr>", { desc = "Fresh Start" })
+        end,
+    },
+
+    {
+        "folke/persistence.nvim",
+        config = function()
+            require("persistence").setup({})
+
+            vim.keymap.set("n", "<leader>qs", function()
+                require("persistence").load()
+            end, { desc = "Load current session" })
+            vim.keymap.set("n", "<leader>qS", function()
+                require("persistence").select()
+            end, { desc = "Select session" })
+            vim.keymap.set("n", "<leader>ql", function()
+                require("persistence").load({ last = true })
+            end, { desc = "Last session" })
+            vim.keymap.set("n", "<leader>qd", function()
+                require("persistence").stop()
+            end, { desc = "Stop persistence" })
         end,
     },
 

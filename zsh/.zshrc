@@ -69,6 +69,7 @@ source "$HOME/.config/zsh/pnpm.zsh"
 ##########
 
 PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
+source "$HOME/.config/wezterm/shell-integration.sh"
 
 ###########
 # Homebrew
