@@ -19,8 +19,8 @@
 	line-numbers = true
 	side-by-side = true
 	features = decorations
-	light = true
-	syntax-theme = "rose-pine-dawn"
+	light = false
+	syntax-theme = "rose-pine-moon"
 [delta "interactive"]
 	keep-plus-minus-markers = false
 [delta "decorations"]

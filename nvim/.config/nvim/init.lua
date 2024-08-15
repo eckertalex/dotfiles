@@ -254,7 +254,7 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local colorscheme = "rose-pine-dawn"
+local colorscheme = "rose-pine-moon"
 
 -- [[ Configure and install plugins ]]
 require("lazy").setup({

@@ -72,6 +72,9 @@ sed -i "s/\(source \"\$HOME\/.config\/fzf\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HO
 # change lscolors
 sed -i "s/\(source \"\$HOME\/.config\/lscolors\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HOME/.dotfiles/zsh/.zshrc
 
+# change kitty
+sed -i "s/\(include themes\/\)[^.]*\(.conf\)/\1$selected\2/" $HOME/.dotfiles/kitty/.config/kitty/kitty.conf
+
 # change wezterm
 sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/wezterm/.config/wezterm/wezterm.lua
 
