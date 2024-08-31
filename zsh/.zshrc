@@ -125,6 +125,12 @@ fi
 [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
 FPATH=$ASDF_DIR/completions:$FPATH
 
+################
+# postgresql@15
+################
+
+PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
+
 ###########
 # compinit
 ###########
