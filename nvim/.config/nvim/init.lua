@@ -496,12 +496,12 @@ require("lazy").setup({
         end,
     },
 
-    {
-        "echasnovski/mini.tabline",
-        config = function()
-            require("mini.tabline").setup()
-        end,
-    },
+    -- {
+    --     "echasnovski/mini.tabline",
+    --     config = function()
+    --         require("mini.tabline").setup()
+    --     end,
+    -- },
 
     {
         "echasnovski/mini.statusline",
@@ -1270,7 +1270,7 @@ require("lazy").setup({
                     if bufname:match("/node_modules/") then
                         return
                     end
-                    return { timeout_ms = 500, lsp_format = "fallback" }
+                    return { timeout_ms = 3000, lsp_format = "fallback" }
                 end,
                 formatters_by_ft = {
                     ["astro"] = { "prettier" },
