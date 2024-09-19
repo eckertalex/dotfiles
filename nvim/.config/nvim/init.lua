@@ -111,10 +111,12 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
 -- yank/delete into registers
 vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without losing register" })
-vim.keymap.set("n", "<leader>y", '"+y', { desc = "Yank to system clipboard" })
-vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank to system clipboard" })
-vim.keymap.set("n", "<leader>d", '"_d', { desc = "Delete to empty register" })
-vim.keymap.set("v", "<leader>d", '"_d', { desc = "Delete to empty register" })
+
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to empty register" })
+
+-- Basic clipboard interaction
+vim.keymap.set({ "n", "x", "o" }, "gy", '"+y', { desc = "Copy to clipboard" })
+vim.keymap.set({ "n", "x", "o" }, "gp", '"+p', { desc = "Paste clipboard text" })
 
 -- replace word
 vim.keymap.set(
@@ -496,12 +498,13 @@ require("lazy").setup({
         end,
     },
 
-    -- {
-    --     "echasnovski/mini.tabline",
-    --     config = function()
-    --         require("mini.tabline").setup()
-    --     end,
-    -- },
+    {
+        "echasnovski/mini.tabline",
+        enabled = false,
+        config = function()
+            require("mini.tabline").setup()
+        end,
+    },
 
     {
         "echasnovski/mini.statusline",
@@ -514,6 +517,7 @@ require("lazy").setup({
 
     {
         "echasnovski/mini.clue",
+        enabled = false,
         config = function()
             local miniclue = require("mini.clue")
             miniclue.setup({
@@ -578,16 +582,6 @@ require("lazy").setup({
             require("mini.starter").setup({
                 query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
             })
-
-            vim.api.nvim_create_user_command("FreshStart", function()
-                for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-                    vim.api.nvim_buf_delete(buf, { force = true })
-                end
-
-                require("mini.starter").open(vim.api.nvim_get_current_buf())
-            end, {})
-
-            vim.keymap.set("n", "<leader>qa", "<cmd>FreshStart<cr>", { desc = "Fresh Start" })
         end,
     },
 
@@ -1118,8 +1112,6 @@ require("lazy").setup({
                     },
                 },
                 marksman = {},
-                -- phpactor = {},
-                pyright = {},
                 sqls = {},
                 tailwindcss = {},
                 vtsls = {
@@ -1322,7 +1314,7 @@ require("lazy").setup({
                 require("conform").format({ async = true, lsp_format = "fallback", range = range })
             end, { range = true })
 
-            vim.keymap.set("n", "<leader>cf", "<cmd>Format<cr>", { desc = "Format buffer" })
+            vim.keymap.set({ "n", "x" }, "gq", "<cmd>Format<cr>", { desc = "Format buffer" })
         end,
     },
 }, {
