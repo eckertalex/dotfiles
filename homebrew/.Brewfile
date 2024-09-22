@@ -1,5 +1,4 @@
 tap "homebrew/bundle"
-tap "homebrew/services"
 
 brew "bat"
 brew "btop"
@@ -15,7 +14,6 @@ brew "imagemagick"
 brew "jq"
 brew "lazygit"
 brew "pastel"
-brew "postgresql@15"
 brew "ripgrep"
 brew "slides"
 brew "sqlite"
