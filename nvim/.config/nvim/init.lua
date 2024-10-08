@@ -517,7 +517,7 @@ require("lazy").setup({
 
     {
         "echasnovski/mini.clue",
-        enabled = false,
+        enabled = true,
         config = function()
             local miniclue = require("mini.clue")
             miniclue.setup({
@@ -564,7 +564,7 @@ require("lazy").setup({
                     miniclue.gen_clues.windows(),
                     miniclue.gen_clues.z(),
                     { mode = "n", keys = "<leader>b", desc = "+Buffers" },
-                    { mode = "n", keys = "<leader>c", desc = "+Code" },
+                    { mode = "n", keys = "<leader>c", desc = "+Copilot" },
                     { mode = "n", keys = "<leader>g", desc = "+Git" },
                     { mode = "n", keys = "<leader>gh", desc = "+Hunk" },
                     { mode = "n", keys = "<leader>gs", desc = "+Search" },
@@ -1003,7 +1003,7 @@ require("lazy").setup({
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
                     if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-                        vim.keymap.set("n", "<leader>ch", function()
+                        vim.keymap.set("n", "<leader>xh", function()
                             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
                         end, { desc = "Toggle inlay hints" })
                     end
@@ -1160,15 +1160,6 @@ require("lazy").setup({
     },
 
     {
-        "danymat/neogen",
-        config = function()
-            require("neogen").setup({})
-
-            vim.keymap.set("n", "<leader>cn", "<cmd>Neogen<cr>", { desc = "Annotate" })
-        end,
-    },
-
-    {
         "hrsh7th/nvim-cmp",
         dependencies = {
             {
@@ -1188,12 +1179,12 @@ require("lazy").setup({
                 end,
             },
         },
-        config = function()
+        opts = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
             luasnip.config.setup()
 
-            cmp.setup({
+            return {
                 completion = {
                     completeopt = "menu,menuone,noinsert",
                 },
@@ -1230,15 +1221,20 @@ require("lazy").setup({
                     { name = "buffer" },
                 }),
                 formatting = {
-                    format = function(_, item)
-                        local icon, _ = require("mini.icons").get("lsp", item.kind)
-                        if icon ~= nil then
-                            item.kind = icon
-                        end
+                    format = function(entry, item)
+                        item.kind = require("mini.icons").get("lsp", item.kind)
+                        item.menu = ({
+                            nvim_lsp = "[LSP]",
+                            luasnip = "[LuaSnip]",
+                            buffer = "[Buffer]",
+                            path = "[Path]",
+                            copilot = "[Copilot]",
+                            lazydev = "[LazyDev]",
+                        })[entry.source.name]
                         return item
                     end,
                 },
-            })
+            }
         end,
     },
 
@@ -1316,6 +1312,8 @@ require("lazy").setup({
 
             vim.keymap.set({ "n", "x" }, "gq", "<cmd>Format<cr>", { desc = "Format buffer" })
         end,
+
+        { import = "custom.plugins" },
     },
 }, {
     performance = {
