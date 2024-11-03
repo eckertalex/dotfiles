@@ -306,10 +306,6 @@ require("lazy").setup({
     },
 
     {
-        "fladson/vim-kitty",
-    },
-
-    {
         "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
     },
 
@@ -1279,6 +1275,7 @@ require("lazy").setup({
                     ["yaml"] = { "prettier" },
                 },
             })
+
             vim.api.nvim_create_user_command("FormatDisable", function(args)
                 if args.bang then
                     -- FormatDisable! will disable formatting just for this buffer
@@ -1312,9 +1309,9 @@ require("lazy").setup({
 
             vim.keymap.set({ "n", "x" }, "gq", "<cmd>Format<cr>", { desc = "Format buffer" })
         end,
-
-        { import = "custom.plugins" },
     },
+
+    { import = "custom.plugins" },
 }, {
     performance = {
         rtp = {
