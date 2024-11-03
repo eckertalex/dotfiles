@@ -4,7 +4,9 @@ if [[ $# -eq 1 ]]; then
 	selected=$1
 else
 	options=($(fd --type d --exact-depth 1 --search-path ~/dev))
-	options+=($(fd --type d --exact-depth 1 --search-path ~/code))
+	if [[ -d "~/code" ]]; then
+		options+=($(fd --type d --exact-depth 1 --search-path ~/code))
+	fi
 	options+=("$HOME/.dotfiles")
 	selected=$(printf '%s\n' "${options[@]}" | fzf --prompt="tmux session ⟫ " --height=~50% --layout=reverse --border --exit-0)
 fi
