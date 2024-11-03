@@ -27,10 +27,6 @@ if type lazygit &> /dev/null; then
   alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
 fi
 
-if type lazydocker &> /dev/null; then
-  alias lzd="lazydocker"
-fi
-
 ########
 # utils
 ########
