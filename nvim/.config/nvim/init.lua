@@ -1086,7 +1086,6 @@ require("lazy").setup({
                         },
                     },
                 },
-                kotlin_language_server = {},
                 lua_ls = {
                     settings = {
                         Lua = {
@@ -1313,6 +1312,9 @@ require("lazy").setup({
 
     { import = "custom.plugins" },
 }, {
+    rocks = {
+        enabled = false,
+    },
     performance = {
         rtp = {
             disabled_plugins = {
