@@ -1,0 +1,7 @@
+[[lights]]
+	name = "Left"
+	ip = "192.168.2.164:9123"
+
+[[lights]]
+	name = "Right"
+	ip = "192.168.2.165:9123"
