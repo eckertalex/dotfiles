@@ -62,7 +62,6 @@ export -U PATH path FPATH fpath MANPATH manpath
 export -UT INFOPATH infopath
 PATH=$HOME/.local/bin:$PATH
 FPATH=$HOME/.config/zsh/completions:$FPATH
-source "$HOME/.config/zsh/pnpm.zsh"
 
 ##########
 # Wezterm

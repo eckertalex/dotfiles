@@ -31,7 +31,6 @@ fi
 # utils
 ########
 
-alias vim="nvim"
 alias cp="cp -vi"
 alias mv="mv -vi"
 alias rm="rm -vI"
