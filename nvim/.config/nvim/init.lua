@@ -574,6 +574,7 @@ require("lazy").setup({
 
     {
         "echasnovski/mini.starter",
+        enabled = false,
         config = function()
             require("mini.starter").setup({
                 query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
