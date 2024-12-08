@@ -63,13 +63,6 @@ export -UT INFOPATH infopath
 PATH=$HOME/.local/bin:$PATH
 FPATH=$HOME/.config/zsh/completions:$FPATH
 
-##########
-# Wezterm
-##########
-
-PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
-source "$HOME/.config/wezterm/shell-integration.sh"
-
 ###########
 # Homebrew
 ###########
