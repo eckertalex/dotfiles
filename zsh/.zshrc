@@ -101,14 +101,6 @@ source "$HOME/.config/lscolors/rose-pine-moon.sh"
 source "$HOME/.config/fzf/rose-pine-moon.sh"
 export BAT_THEME="rose-pine-moon"
 
-###########
-# bob/nvim
-###########
-
-if type bob &> /dev/null; then
-	PATH=$HOME/.local/share/bob/nvim-bin:$PATH
-fi
-
 #######
 # asdf
 #######

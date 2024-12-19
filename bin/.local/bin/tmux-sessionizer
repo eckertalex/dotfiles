@@ -4,7 +4,7 @@ if [[ $# -eq 1 ]]; then
 	selected=$1
 else
 	options=($(fd --type d --exact-depth 1 --search-path ~/dev))
-	if [[ -d "~/code" ]]; then
+	if [[ -d "$HOME/code" ]]; then
 		options+=($(fd --type d --exact-depth 1 --search-path ~/code))
 	fi
 	options+=("$HOME/.dotfiles")

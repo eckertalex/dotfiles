@@ -38,7 +38,7 @@ vim.opt.mouse = "a" -- Enable mouse mode
 
 vim.opt.showmode = false -- Dont show mode since we have a statusline
 
--- vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
+vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
 vim.opt.wrap = false -- Disable line wrap
 vim.opt.breakindent = true -- Enable break indent
 
@@ -280,18 +280,33 @@ require("lazy").setup({
         config = function()
             require("catppuccin").setup({
                 integrations = {
-                    cmp = true,
+                    blink_cmp = true,
+                    copilot_vim = true,
                     gitsigns = true,
                     lsp_trouble = true,
                     mason = true,
-                    mini = true,
+                    mini = {
+                        enabled = true,
+                        indentscope_color = "", -- catppuccin color (eg. `lavender`) Default: text
+                    },
                     native_lsp = {
                         enabled = true,
+                        virtual_text = {
+                            errors = { "italic" },
+                            hints = { "italic" },
+                            warnings = { "italic" },
+                            information = { "italic" },
+                            ok = { "italic" },
+                        },
                         underlines = {
-                            errors = { "undercurl" },
-                            hints = { "undercurl" },
-                            warnings = { "undercurl" },
-                            information = { "undercurl" },
+                            errors = { "underline" },
+                            hints = { "underline" },
+                            warnings = { "underline" },
+                            information = { "underline" },
+                            ok = { "underline" },
+                        },
+                        inlay_hints = {
+                            background = true,
                         },
                     },
                     semantic_tokens = true,
@@ -303,10 +318,6 @@ require("lazy").setup({
 
             vim.cmd.colorscheme(colorscheme)
         end,
-    },
-
-    {
-        "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
     },
 
     {
@@ -444,12 +455,7 @@ require("lazy").setup({
     {
         "echasnovski/mini.indentscope",
         config = function()
-            require("mini.indentscope").setup({
-                symbol = "│",
-                options = {
-                    try_as_border = true,
-                },
-            })
+            require("mini.indentscope").setup({})
         end,
     },
 
@@ -505,9 +511,7 @@ require("lazy").setup({
     {
         "echasnovski/mini.statusline",
         config = function()
-            require("mini.statusline").setup({
-                set_vim_settings = false,
-            })
+            require("mini.statusline").setup({})
         end,
     },
 
@@ -840,7 +844,16 @@ require("lazy").setup({
         config = function()
             require("nvim-treesitter.configs").setup({
                 auto_install = true,
-                highlight = { enable = true },
+                highlight = {
+                    enable = true,
+                    disable = function(_, buf)
+                        local max_filesize = 100 * 1024 -- 100 KB
+                        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                        if ok and stats and stats.size > max_filesize then
+                            return true
+                        end
+                    end,
+                },
                 indent = { enable = true },
                 ensure_installed = {
                     "astro",
@@ -913,25 +926,18 @@ require("lazy").setup({
     {
         "neovim/nvim-lspconfig",
         dependencies = {
+            "saghen/blink.cmp",
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
             "WhoIsSethDaniel/mason-tool-installer.nvim",
-
             {
                 "folke/lazydev.nvim",
-                ft = "lua",
-                config = function()
-                    require("lazydev").setup({
-                        library = {
-                            -- Load luvit types when the `vim.uv` word is found
-                            { path = "luvit-meta/library", words = { "vim%.uv" } },
-                        },
-                    })
-                end,
+                opts = {
+                    library = {
+                        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+                    },
+                },
             },
-            { "Bilal2453/luvit-meta", lazy = true },
-
-            "b0o/SchemaStore.nvim",
         },
         config = function()
             vim.diagnostic.config({
@@ -943,31 +949,6 @@ require("lazy").setup({
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                 callback = function(event)
-                    -- diagnostics
-
-                    -- <C-W>d show diagnostic float
-                    -- vim.diagnostic.open_float
-                    -- :help CTRL-W_d-default
-
-                    -- [d jump to next diagnostic
-                    -- vim.diagnostic.goto_prev
-                    -- :help [d-default
-
-                    -- ]d jump to previous diagnostic
-                    -- vim.diagnostic.goto_next
-                    -- :help ]d-default
-
-                    -- :help lsp-defaults
-
-                    -- K hover
-                    -- vim.lsp.buf.hover
-                    -- :help K-lsp-default
-
-                    -- <C-]> definition
-                    -- <C-W>] definition in new window
-                    -- vim.lsp.buf.definition
-                    -- :help CTRL-] CTRL-W_]
-                    -- To jump back, press <C-T>.
                     vim.keymap.set(
                         "n",
                         "gd",
@@ -976,26 +957,12 @@ require("lazy").setup({
                         { buffer = event.buf, desc = "vim.lsp.buf.definition" }
                     )
 
-                    -- these should be default in neovim v11
-                    vim.keymap.set("n", "grn", vim.lsp.buf.rename, { buffer = event.buf, desc = "vim.lsp.buf.rename" })
-                    vim.keymap.set(
-                        "n",
-                        "gra",
-                        vim.lsp.buf.code_action,
-                        { buffer = event.buf, desc = "vim.lsp.buf.code_action" }
-                    )
                     vim.keymap.set(
                         "n",
                         "grr",
                         -- vim.lsp.buf.references,
                         require("telescope.builtin").lsp_references,
                         { buffer = event.buf, desc = "vim.lsp.buf.references" }
-                    )
-                    vim.keymap.set(
-                        "i",
-                        "<C-s>",
-                        vim.lsp.buf.signature_help,
-                        { buffer = event.buf, desc = "vim.lsp.buf.signature_help" }
                     )
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -1007,12 +974,12 @@ require("lazy").setup({
                 end,
             })
 
-            local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+            local blink_cmp = require("blink.cmp")
             local capabilities = vim.tbl_deep_extend(
                 "force",
                 {},
                 vim.lsp.protocol.make_client_capabilities(),
-                has_cmp and cmp_nvim_lsp.default_capabilities() or {}
+                blink_cmp.get_lsp_capabilities()
             )
 
             local servers = {
@@ -1076,7 +1043,6 @@ require("lazy").setup({
                 jsonls = {
                     on_new_config = function(new_config)
                         new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-                        vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
                     end,
                     settings = {
                         format = {
@@ -1156,82 +1122,19 @@ require("lazy").setup({
     },
 
     {
-        "hrsh7th/nvim-cmp",
-        dependencies = {
-            {
-                "L3MON4D3/LuaSnip",
-                build = "make install_jsregexp",
+        "saghen/blink.cmp",
+        dependencies = "rafamadriz/friendly-snippets",
+        version = "v0.*",
+        ---@module 'blink.cmp'
+        ---@type blink.cmp.Config
+        opts = {
+            keymap = { preset = "default" },
+            appearance = {
+                use_nvim_cmp_as_default = true,
+                nerd_font_variant = "mono",
             },
-            "saadparwaiz1/cmp_luasnip",
-
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-
-            {
-                "rafamadriz/friendly-snippets",
-                config = function()
-                    require("luasnip.loaders.from_vscode").lazy_load()
-                end,
-            },
+            signature = { enabled = true },
         },
-        opts = function()
-            local cmp = require("cmp")
-            local luasnip = require("luasnip")
-            luasnip.config.setup()
-
-            return {
-                completion = {
-                    completeopt = "menu,menuone,noinsert",
-                },
-                snippet = {
-                    expand = function(args)
-                        require("luasnip").lsp_expand(args.body)
-                    end,
-                },
-                mapping = cmp.mapping.preset.insert({
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-
-                    ["<C-Space>"] = cmp.mapping.complete(),
-
-                    ["<C-l>"] = cmp.mapping(function()
-                        if luasnip.expand_or_locally_jumpable() then
-                            luasnip.expand_or_jump()
-                        end
-                    end, { "i", "s" }),
-                    ["<C-h>"] = cmp.mapping(function()
-                        if luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
-                        end
-                    end, { "i", "s" }),
-                }),
-                sources = cmp.config.sources({
-                    { name = "lazydev", group_index = 0 },
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                    { name = "path" },
-                }, {
-                    { name = "buffer" },
-                }),
-                formatting = {
-                    format = function(entry, item)
-                        item.kind = require("mini.icons").get("lsp", item.kind)
-                        item.menu = ({
-                            nvim_lsp = "[LSP]",
-                            luasnip = "[LuaSnip]",
-                            buffer = "[Buffer]",
-                            path = "[Path]",
-                            copilot = "[Copilot]",
-                            lazydev = "[LazyDev]",
-                        })[entry.source.name]
-                        return item
-                    end,
-                },
-            }
-        end,
     },
 
     {
