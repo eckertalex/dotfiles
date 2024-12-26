@@ -38,7 +38,12 @@ vim.opt.mouse = "a" -- Enable mouse mode
 
 vim.opt.showmode = false -- Dont show mode since we have a statusline
 
-vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+vim.schedule(function()
+    vim.opt.clipboard = "unnamedplus" -- Sync with system clipboard
+end)
+
 vim.opt.wrap = false -- Disable line wrap
 vim.opt.breakindent = true -- Enable break indent
 
