@@ -59,6 +59,3 @@ set formatoptions+=j      " Smart join of comment lines
 set sessionoptions-=options
 set viewoptions-=options
 set clipboard=unnamed,unnamedplus
-
-" Color Scheme
-colorscheme habamax
