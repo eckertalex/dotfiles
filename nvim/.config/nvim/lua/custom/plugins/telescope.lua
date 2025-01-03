@@ -92,7 +92,7 @@ return {
                 builtin.find_files({ cwd = vim.fn.stdpath("config") })
             end, { desc = "Search config" })
 
-            vim.keymap.set("n", "<space>sp", function()
+            vim.keymap.set("n", "<leader>sp", function()
                 require("telescope.builtin").find_files({
                     cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
                 })

@@ -1,5 +1,9 @@
 -- [[ Setting options ]]
 
+-- Set <space> as the leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 vim.opt.number = true -- Print line number
 vim.opt.relativenumber = true -- Relative line numbers
 
