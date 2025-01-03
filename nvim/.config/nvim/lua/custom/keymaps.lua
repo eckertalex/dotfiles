@@ -37,10 +37,10 @@ vim.keymap.set({ "n", "x", "o" }, "gp", '"+p', { desc = "Paste clipboard text" }
 
 -- replace word
 vim.keymap.set(
-    "n",
-    "<leader>r",
-    [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-    { desc = "Replace word in Buffer" }
+	"n",
+	"<leader>r",
+	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+	{ desc = "Replace word in Buffer" }
 )
 
 -- new file
@@ -63,14 +63,14 @@ vim.keymap.set("v", ">", ">gv")
 -- toggle diagnostics
 local enabled = true
 vim.keymap.set("n", "<leader>xd", function()
-    enabled = not enabled
-    if enabled then
-        vim.diagnostic.enable()
-        vim.notify("Enabled diagnostics", vim.log.levels.INFO)
-    else
-        vim.diagnostic.enable(false)
-        vim.notify("Disabled diagnostics", vim.log.levels.WARN)
-    end
+	enabled = not enabled
+	if enabled then
+		vim.diagnostic.enable()
+		vim.notify("Enabled diagnostics", vim.log.levels.INFO)
+	else
+		vim.diagnostic.enable(false)
+		vim.notify("Disabled diagnostics", vim.log.levels.WARN)
+	end
 end, { desc = "Toggle Diagnostics" })
 
 vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnostic" })

@@ -1,21 +1,37 @@
 return {
-    {
-        "folke/persistence.nvim",
-        config = function()
-            require("persistence").setup({})
-
-            vim.keymap.set("n", "<leader>qs", function()
-                require("persistence").load()
-            end, { desc = "Load current session" })
-            vim.keymap.set("n", "<leader>qS", function()
-                require("persistence").select()
-            end, { desc = "Select session" })
-            vim.keymap.set("n", "<leader>ql", function()
-                require("persistence").load({ last = true })
-            end, { desc = "Last session" })
-            vim.keymap.set("n", "<leader>qd", function()
-                require("persistence").stop()
-            end, { desc = "Stop persistence" })
-        end,
-    },
+	{
+		"folke/persistence.nvim",
+		event = { "BufReadPre" },
+		keys = {
+			{
+				"<leader>qs",
+				function()
+					require("persistence").load()
+				end,
+				desc = "Restore Session",
+			},
+			{
+				"<leader>qS",
+				function()
+					require("persistence").select()
+				end,
+				desc = "Select Session",
+			},
+			{
+				"<leader>ql",
+				function()
+					require("persistence").load({ last = true })
+				end,
+				desc = "Restore Last Session",
+			},
+			{
+				"<leader>qd",
+				function()
+					require("persistence").stop()
+				end,
+				desc = "Don't Save Current Session",
+			},
+		},
+		opts = {},
+	},
 }
