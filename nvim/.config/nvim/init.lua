@@ -1112,7 +1112,7 @@ require("lazy").setup({
     {
         "saghen/blink.cmp",
         dependencies = "rafamadriz/friendly-snippets",
-        version = "v0.*",
+        version = "*",
         ---@module 'blink.cmp'
         ---@type blink.cmp.Config
         opts = {
@@ -1121,8 +1121,13 @@ require("lazy").setup({
                 use_nvim_cmp_as_default = true,
                 nerd_font_variant = "mono",
             },
+            sources = {
+                default = { "lsp", "path", "snippets", "buffer" },
+                cmdline = {},
+            },
             signature = { enabled = true },
         },
+        opts_extend = { "sources.default" },
     },
 
     {
