@@ -267,14 +267,10 @@ local colorscheme = "rose-pine-moon"
 require("lazy").setup({
     {
         "rose-pine/neovim",
-        as = "rose-pine",
+        name = "rose-pine",
         lazy = false,
         priority = 1000,
-        config = function()
-            require("rose-pine").setup({})
-
-            vim.cmd.colorscheme(colorscheme)
-        end,
+        opts = {},
     },
 
     {
@@ -282,47 +278,43 @@ require("lazy").setup({
         name = "catppuccin",
         lazy = false,
         priority = 1000,
-        config = function()
-            require("catppuccin").setup({
-                integrations = {
-                    blink_cmp = true,
-                    copilot_vim = true,
-                    gitsigns = true,
-                    lsp_trouble = true,
-                    mason = true,
-                    mini = {
-                        enabled = true,
-                        indentscope_color = "", -- catppuccin color (eg. `lavender`) Default: text
-                    },
-                    native_lsp = {
-                        enabled = true,
-                        virtual_text = {
-                            errors = { "italic" },
-                            hints = { "italic" },
-                            warnings = { "italic" },
-                            information = { "italic" },
-                            ok = { "italic" },
-                        },
-                        underlines = {
-                            errors = { "underline" },
-                            hints = { "underline" },
-                            warnings = { "underline" },
-                            information = { "underline" },
-                            ok = { "underline" },
-                        },
-                        inlay_hints = {
-                            background = true,
-                        },
-                    },
-                    semantic_tokens = true,
-                    telescope = true,
-                    treesitter = true,
-                    treesitter_context = true,
+        opts = {
+            integrations = {
+                blink_cmp = true,
+                copilot_vim = true,
+                gitsigns = true,
+                lsp_trouble = true,
+                mason = true,
+                mini = {
+                    enabled = true,
+                    indentscope_color = "", -- catppuccin color (eg. `lavender`) Default: text
                 },
-            })
-
-            vim.cmd.colorscheme(colorscheme)
-        end,
+                native_lsp = {
+                    enabled = true,
+                    virtual_text = {
+                        errors = { "italic" },
+                        hints = { "italic" },
+                        warnings = { "italic" },
+                        information = { "italic" },
+                        ok = { "italic" },
+                    },
+                    underlines = {
+                        errors = { "underline" },
+                        hints = { "underline" },
+                        warnings = { "underline" },
+                        information = { "underline" },
+                        ok = { "underline" },
+                    },
+                    inlay_hints = {
+                        background = true,
+                    },
+                },
+                semantic_tokens = true,
+                telescope = true,
+                treesitter = true,
+                treesitter_context = true,
+            },
+        },
     },
 
     {
@@ -1227,6 +1219,8 @@ require("lazy").setup({
         },
     },
 })
+
+vim.cmd.colorscheme(colorscheme)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sw=4
