@@ -261,8 +261,6 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local colorscheme = "rose-pine-moon"
-
 -- [[ Configure and install plugins ]]
 require("lazy").setup({
     {
@@ -271,50 +269,9 @@ require("lazy").setup({
         lazy = false,
         priority = 1000,
         opts = {},
-    },
-
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        lazy = false,
-        priority = 1000,
-        opts = {
-            integrations = {
-                blink_cmp = true,
-                copilot_vim = true,
-                gitsigns = true,
-                lsp_trouble = true,
-                mason = true,
-                mini = {
-                    enabled = true,
-                    indentscope_color = "", -- catppuccin color (eg. `lavender`) Default: text
-                },
-                native_lsp = {
-                    enabled = true,
-                    virtual_text = {
-                        errors = { "italic" },
-                        hints = { "italic" },
-                        warnings = { "italic" },
-                        information = { "italic" },
-                        ok = { "italic" },
-                    },
-                    underlines = {
-                        errors = { "underline" },
-                        hints = { "underline" },
-                        warnings = { "underline" },
-                        information = { "underline" },
-                        ok = { "underline" },
-                    },
-                    inlay_hints = {
-                        background = true,
-                    },
-                },
-                semantic_tokens = true,
-                telescope = true,
-                treesitter = true,
-                treesitter_context = true,
-            },
-        },
+        config = function()
+            vim.cmd.colorscheme("rose-pine-moon")
+        end,
     },
 
     {
@@ -1219,8 +1176,6 @@ require("lazy").setup({
         },
     },
 })
-
-vim.cmd.colorscheme(colorscheme)
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sw=4

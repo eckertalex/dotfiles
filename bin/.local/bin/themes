@@ -1,15 +1,11 @@
 #!/usr/bin/env zsh
 
 dark_themes=(
-    "catppuccin-frappe"
-    "catppuccin-macchiato"
-    "catppuccin-mocha"
     "rose-pine"
     "rose-pine-moon"
 )
 
 light_themes=(
-    "catppuccin-latte"
     "rose-pine-dawn"
 )
 
@@ -82,7 +78,7 @@ if [ -n "${WSL_DISTRO_NAME}" ]; then
 fi
 
 # change neovim
-sed -i "s/\(local colorscheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
+sed -i "s/\(vim.cmd.colorscheme(\"\)[^\"]*\(\"\))/\1$selected\2)/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
 
 tmux_running=$(pgrep tmux)
 
