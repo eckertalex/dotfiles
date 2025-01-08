@@ -75,6 +75,7 @@ return {
 			local miniclue = require("mini.clue")
 			return {
 				window = {
+					delay = 0,
 					config = {
 						width = "auto",
 					},
