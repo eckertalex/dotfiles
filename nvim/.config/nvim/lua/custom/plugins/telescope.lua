@@ -60,9 +60,9 @@ local live_multigrep = function()
 			end
 
 			return vim.iter({
-				args,
-				{ "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" },
-			})
+					args,
+					{ "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case" },
+				})
 				:flatten()
 				:totable()
 		end,
@@ -99,21 +99,23 @@ return {
 				end,
 			},
 			{
-				"nvim-telescope/telescope-ui-select.nvim",
-				config = function()
-					local telescope = require("telescope")
-					telescope.load_extension("ui-select")
-				end,
-			},
+				'stevearc/dressing.nvim',
+				opts = {
+					select = {
+						telescope = require('telescope.themes').get_cursor()
+					}
+				},
+			}
+
 		},
 		keys = {
-			{ "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Search Help" },
-			{ "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "Search Files" },
+			{ "<leader>sh", "<cmd>Telescope help_tags<cr>",   desc = "Search Help" },
+			{ "<leader>sf", "<cmd>Telescope find_files<cr>",  desc = "Search Files" },
 			{ "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "Search current Word" },
-			{ "<leader>sg", "<cmd>Telescope live_grep<cr>", desc = "Search by Grep" },
+			{ "<leader>sg", "<cmd>Telescope live_grep<cr>",   desc = "Search by Grep" },
 			{ "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Search Diagnostics" },
-			{ "<leader>sr", "<cmd>Telescope resume<cr>", desc = "Search Resume" },
-			{ "<leader>s.", "<cmd>Telescope oldfiles<cr>", desc = "Search Recent Files" },
+			{ "<leader>sr", "<cmd>Telescope resume<cr>",      desc = "Search Resume" },
+			{ "<leader>s.", "<cmd>Telescope oldfiles<cr>",    desc = "Search Recent Files" },
 			{
 				"<leader><leader>",
 				"<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>",
@@ -135,8 +137,8 @@ return {
 				desc = "Search Multi Grep",
 			},
 			{ "<leader>gsb", "<cmd>Telescope git_branches<cr>", desc = "Search Git Branches" },
-			{ "<leader>gss", "<cmd>Telescope git_status<cr>", desc = "Search Git Status" },
-			{ "<leader>gsf", "<cmd>Telescope git_files<cr>", desc = "Search Git Files" },
+			{ "<leader>gss", "<cmd>Telescope git_status<cr>",   desc = "Search Git Status" },
+			{ "<leader>gsf", "<cmd>Telescope git_files<cr>",    desc = "Search Git Files" },
 			{
 				"<leader>sn",
 				function()
@@ -181,11 +183,6 @@ return {
 							["<C-h>"] = action_layout.toggle_preview,
 							["q"] = actions.close,
 						},
-					},
-				},
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown(),
 					},
 				},
 			}
