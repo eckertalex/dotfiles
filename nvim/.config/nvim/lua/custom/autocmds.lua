@@ -60,3 +60,23 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.spell = true
 	end,
 })
+
+-- use spaces instead of tabs for these
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("spaces", { clear = true }),
+	pattern = { "haskell", "cabal" },
+	callback = function()
+		vim.opt_local.expandtab = true
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.tabstop = 2
+	end,
+})
+
+-- don't set conceallevel for json
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("spaces", { clear = true }),
+	pattern = { "json", "markdown" },
+	callback = function()
+		vim.opt_local.conceallevel = 0
+	end,
+})

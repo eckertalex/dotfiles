@@ -109,11 +109,15 @@ export BAT_THEME="rose-pine-moon"
 [ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
 FPATH=$ASDF_DIR/completions:$FPATH
 
-################
-# postgresql@15
-################
+########
+# OCaml
+########
+[ -s "$HOME/.opam/opam-init/init.zsh" ] && source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
 
-PATH=/opt/homebrew/opt/postgresql@15/bin:$PATH
+##########
+# Haskell
+##########
+[ -s "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
 
 ###########
 # compinit
