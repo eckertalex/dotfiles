@@ -86,9 +86,6 @@ return {
 					},
 				},
 				graphql = {},
-				hls = {
-					filetypes = { 'haskell', 'lhaskell', 'cabal' },
-				},
 				html = {},
 				jsonls = {
 					on_new_config = function(new_config)
