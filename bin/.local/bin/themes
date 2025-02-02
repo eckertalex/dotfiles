@@ -1,11 +1,20 @@
 #!/usr/bin/env zsh
 
 dark_themes=(
+	"ashen"
+	"catppuccin-frappe"
+	"catppuccin-macchiato"
+	"catppuccin-mocha"
+	"tokyonight-moon"
+	"tokyonight-night"
+	"tokyonight-storm"
     "rose-pine"
     "rose-pine-moon"
 )
 
 light_themes=(
+	"catppuccin-latte"
+	"tokyonight-day"
     "rose-pine-dawn"
 )
 
@@ -63,10 +72,10 @@ fi
 sed -i "s/\(export BAT_THEME=\"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/zsh/.zshrc
 
 # change fzf
-sed -i "s/\(source \"\$HOME\/.config\/fzf\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HOME/.dotfiles/zsh/.zshrc
+sed -i "s|\(\[ -s \"\$HOME/.config/fzf/\)\([^ ]*\)\(.sh\" ] && source \"\$HOME/.config/fzf/\)\([^ ]*\)\(.sh\"\)|\1$selected\3$selected\5|g" "$HOME/.dotfiles/zsh/.zshrc"
 
 # change lscolors
-sed -i "s/\(source \"\$HOME\/.config\/lscolors\/\)\(.*\)\(.sh\"\)/\1$selected\3/" $HOME/.dotfiles/zsh/.zshrc
+sed -i "s|\(\[ -s \"\$HOME/.config/lscolors/\)\([^ ]*\)\(.sh\" ] && source \"\$HOME/.config/lscolors/\)\([^ ]*\)\(.sh\"\)|\1$selected\3$selected\5|g" "$HOME/.dotfiles/zsh/.zshrc"
 
 # change ghostty
 sed -i "/theme/c\theme = $selected" $HOME/.dotfiles/ghostty/.config/ghostty/config
@@ -79,30 +88,6 @@ fi
 
 # change neovim
 sed -i "s/\(vim.cmd.colorscheme(\"\)[^\"]*\(\"\))/\1$selected\2)/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
-
-tmux_running=$(pgrep tmux)
-
-source "$HOME/.zshrc"
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    exit 0
-fi
-
-for __pane in $(tmux list-panes -aF "#S:#I.#P"); do
-    __pane_command=$(tmux display-message -t $__pane -p "#{pane_current_command}")
-    if [[ "$__pane_command" == "nvim" ]]; then
-        __panes_with_nvim+=($__pane)
-        tmux send-keys -t $__pane ":colorscheme $selected" ENTER
-        tmux send-keys -t $__pane ":set background=$mode" ENTER
-        tmux send-keys -t $__pane C-z
-    fi
-
-    tmux send-keys -t $__pane "source \"$HOME/.zshrc\"" ENTER
-done
-
-for __pane in $__panes_with_nvim; do
-    tmux send-keys -t $__pane "fg" ENTER
-done
 
 # vim: ts=4 sw=4
 

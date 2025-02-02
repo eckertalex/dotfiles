@@ -26,5 +26,7 @@ require("custom.keymaps")
 require("custom.autocmds")
 require("custom.lazy")
 
+vim.cmd.colorscheme("ashen")
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sw=4
