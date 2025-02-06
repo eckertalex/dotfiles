@@ -97,9 +97,9 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # THEMING
 ##########
 
-[ -s "$HOME/.config/lscolors/ashen.sh" ] && source "$HOME/.config/lscolors/ashen.sh"
-[ -s "$HOME/.config/fzf/ashen.sh" ] && source "$HOME/.config/fzf/ashen.sh"
-export BAT_THEME="ashen"
+[ -s "$HOME/.config/lscolors/rose-pine.sh" ] && source "$HOME/.config/lscolors/rose-pine.sh"
+[ -s "$HOME/.config/fzf/rose-pine.sh" ] && source "$HOME/.config/fzf/rose-pine.sh"
+export BAT_THEME="rose-pine"
 
 #######
 # asdf
