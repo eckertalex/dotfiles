@@ -1,5 +1,6 @@
 tap "homebrew/bundle"
 
+brew "asdf"
 brew "bat"
 brew "btop"
 brew "coreutils"

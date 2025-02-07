@@ -101,23 +101,24 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 [ -s "$HOME/.config/fzf/rose-pine.sh" ] && source "$HOME/.config/fzf/rose-pine.sh"
 export BAT_THEME="rose-pine"
 
-#######
-# asdf
-#######
-
-[ -s "$HOME/.asdf/asdf.sh" ] && source "$HOME/.asdf/asdf.sh"
-[ -s "$HOME/.asdf/plugins/golang/set-env.zsh" ] && source "$HOME/.asdf/plugins/golang/set-env.zsh"
-FPATH=$ASDF_DIR/completions:$FPATH
-
 ########
 # OCaml
 ########
+
 [ -s "$HOME/.opam/opam-init/init.zsh" ] && source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
 
 ##########
 # Haskell
 ##########
+
 [ -s "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
+
+#######
+# asdf
+#######
+
+export ASDF_DATA_DIR=$HOME/.asdf
+PATH=$ASDF_DATA_DIR/shims:$PATH
 
 ###########
 # compinit
