@@ -1,3 +1,5 @@
+local prettier = { "prettierd", "prettier", stop_after_first = true }
+
 return {
 	{
 		"stevearc/conform.nvim",
@@ -7,8 +9,8 @@ return {
 			{ "gq", "<cmd>Format<cr>", desc = "Format buffer", mode = { "n", "x" } },
 		},
 		opts = {
-			notify_on_error = false,
 			format_on_save = function(bufnr)
+				print("hello world")
 				-- Disable autoformat on certain filetypes
 				local ignore_filetypes = { "sql", "java", "c", "cpp" }
 				if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
@@ -26,26 +28,27 @@ return {
 				return { timeout_ms = 3000, lsp_format = "fallback" }
 			end,
 			formatters_by_ft = {
-				["astro"] = { "prettier" },
-				["css"] = { "prettier" },
+				["astro"] = prettier,
+				["css"] = prettier,
 				["go"] = { "goimports", "gofumpt" },
-				["graphql"] = { "prettier" },
-				["html"] = { "prettier" },
-				["javascript"] = { "prettier" },
-				["javascriptreact"] = { "prettier" },
-				["json"] = { "prettier" },
-				["jsonc"] = { "prettier" },
+				["graphql"] = prettier,
+				["html"] = prettier,
+				["javascript"] = prettier,
+				["javascriptreact"] = prettier,
+				["json"] = prettier,
+				["jsonc"] = prettier,
 				["lua"] = { "stylua" },
-				["markdown"] = { "prettier" },
-				["markdown.mdx"] = { "prettier" },
-				["scss"] = { "prettier" },
+				["markdown"] = prettier,
+				["markdown.mdx"] = prettier,
+				["scss"] = prettier,
 				["sh"] = { "shfmt" },
-				["typescript"] = { "prettier" },
-				["typescriptreact"] = { "prettier" },
-				["yaml"] = { "prettier" },
+				["typescript"] = prettier,
+				["typescriptreact"] = prettier,
+				["yaml"] = prettier,
 			},
 		},
-		config = function()
+		config = function(_, opts)
+			require("conform").setup(opts)
 			vim.api.nvim_create_user_command("FormatDisable", function(args)
 				if args.bang then
 					-- FormatDisable! will disable formatting just for this buffer
