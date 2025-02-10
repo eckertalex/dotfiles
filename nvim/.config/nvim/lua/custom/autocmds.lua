@@ -74,9 +74,17 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- don't set conceallevel for json
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("spaces", { clear = true }),
+	group = vim.api.nvim_create_augroup("conceallevel", { clear = true }),
 	pattern = { "json", "markdown" },
 	callback = function()
 		vim.opt_local.conceallevel = 0
 	end,
 })
+
+-- set default filetypes
+vim.filetype.add({
+  extension = {
+    query = "graphql",
+  },
+})
+

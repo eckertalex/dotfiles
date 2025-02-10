@@ -29,6 +29,7 @@ return {
 				["astro"] = { "prettier" },
 				["css"] = { "prettier" },
 				["go"] = { "goimports", "gofumpt" },
+				["graphql"] = { "prettier" },
 				["html"] = { "prettier" },
 				["javascript"] = { "prettier" },
 				["javascriptreact"] = { "prettier" },
