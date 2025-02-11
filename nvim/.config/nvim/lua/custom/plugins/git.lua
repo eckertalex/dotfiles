@@ -4,7 +4,7 @@ return {
 		event = { "VeryLazy" },
 		cmd = { "G", "Git" },
 		keys = {
-			{ "<leader>gg", "<cmd>Git<cr>",       desc = "Fugitive" },
+			{ "<leader>gg", "<cmd>Git<cr>", desc = "Fugitive" },
 			{ "<leader>gb", "<cmd>Git blame<cr>", desc = "Blame file" },
 		},
 	},

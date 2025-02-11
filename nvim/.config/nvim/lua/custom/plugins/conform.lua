@@ -10,7 +10,6 @@ return {
 		},
 		opts = {
 			format_on_save = function(bufnr)
-				print("hello world")
 				-- Disable autoformat on certain filetypes
 				local ignore_filetypes = { "sql", "java", "c", "cpp" }
 				if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then

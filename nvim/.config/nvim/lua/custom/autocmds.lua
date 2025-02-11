@@ -83,8 +83,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- set default filetypes
 vim.filetype.add({
-  extension = {
-    query = "graphql",
-  },
+	extension = {
+		query = "graphql",
+	},
 })
-
