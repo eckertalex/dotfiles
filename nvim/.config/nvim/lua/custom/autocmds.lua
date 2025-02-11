@@ -9,6 +9,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- resize splits if window got resized
+vim.api.nvim_create_autocmd({ "VimResized" }, {
+	group = vim.api.nvim_create_augroup("resize_splits", { clear = true }),
+	callback = function()
+		local current_tab = vim.fn.tabpagenr()
+		vim.cmd("tabdo wincmd =")
+		vim.cmd("tabnext " .. current_tab)
+	end,
+})
+
 -- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
 	group = vim.api.nvim_create_augroup("last_loc", { clear = true }),
@@ -39,7 +49,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		"notify",
 		"qf",
 		"query",
-		"spectre_panel",
 		"startuptime",
 		"tsplayground",
 		"checkhealth",
@@ -54,7 +63,7 @@ vim.api.nvim_create_autocmd("FileType", {
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("wrap_spell", { clear = true }),
-	pattern = { "gitcommit", "markdown" },
+	pattern = { "text", "plaintex", "gitcommit", "markdown" },
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.spell = true
@@ -72,10 +81,10 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
--- don't set conceallevel for json
-vim.api.nvim_create_autocmd("FileType", {
+-- Fix conceallevel for json and markdown files
+vim.api.nvim_create_autocmd({ "FileType" }, {
 	group = vim.api.nvim_create_augroup("conceallevel", { clear = true }),
-	pattern = { "json", "markdown" },
+	pattern = { "json", "jsonc", "json5", "markdown" },
 	callback = function()
 		vim.opt_local.conceallevel = 0
 	end,
