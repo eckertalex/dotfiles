@@ -25,7 +25,7 @@ require("custom.options")
 require("custom.keymaps")
 require("custom.autocmds")
 require("custom.lazy")
-pcall(require, "custom.work")
+pcall(require, "custom.private")
 
 vim.cmd.colorscheme("rose-pine")
 
