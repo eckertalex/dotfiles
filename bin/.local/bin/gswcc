@@ -9,7 +9,7 @@
 set -e
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    cat <<EOF
+	cat <<EOF
 Usage: $(basename "$0") "commit message"
 Creates a git branch from the commit message, stages all changes,
 commits them with the provided message, and pushes to remote.
@@ -17,17 +17,17 @@ commits them with the provided message, and pushes to remote.
 Options:
   -h, --help    Show this help message
 EOF
-    exit 0
+	exit 0
 fi
 
 if [[ -z "$1" ]]; then
-    echo "Error: Please provide a commit message"
-    exit 1
+	echo "Error: Please provide a commit message"
+	exit 1
 fi
 
 if [[ $# -gt 1 ]]; then
-    echo "Error: $(basename "$0") only takes one argument"
-    exit 1
+	echo "Error: $(basename "$0") only takes one argument"
+	exit 1
 fi
 
 # Create branch name from commit message
@@ -38,26 +38,26 @@ fi
 branch=$(echo "$1" | tr -cs '[:alnum:]/' '-' | sed -E 's/^-+|-+$//g' | sed -E 's/-+/-/g')
 
 if git switch -c "$branch"; then
-    echo "Created branch: $branch"
+	echo "Created branch: $branch"
 else
-    echo "Error: Failed to create git branch: $branch" >&2
-    exit 1
+	echo "Error: Failed to create git branch: $branch" >&2
+	exit 1
 fi
 
 git add --all
 
 if git commit -m "$1"; then
-    echo "Changes committed successfully"
+	echo "Changes committed successfully"
 else
-    echo "Error: Failed to commit changes" >&2
-    exit 1
+	echo "Error: Failed to commit changes" >&2
+	exit 1
 fi
 
 if git push; then
-    echo "Successfully pushed to remote"
+	echo "Successfully pushed to remote"
 else
-    echo "Error: Failed to push changes" >&2
-    exit 1
+	echo "Error: Failed to push changes" >&2
+	exit 1
 fi
 
 # vim: ts=4 sw=4
