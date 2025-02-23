@@ -4,6 +4,11 @@ return {
 		name = "rose-pine",
 		lazy = false,
 		priority = 1000,
+		opts = {
+			styles = {
+				transparency = true,
+			},
+		},
 	},
 
 	{
@@ -15,6 +20,7 @@ return {
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
+		lazy = false,
 		priority = 1000,
 	},
 

@@ -152,7 +152,7 @@ return {
 				"<leader>sp",
 				function()
 					require("telescope.builtin").find_files({
-						cwd = vim.fs.joinpath(vim.fn.stdpath("data")[1], "lazy"),
+						cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy"),
 						prompt_title = "Plugins data",
 					})
 				end,
