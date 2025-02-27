@@ -1,55 +1,65 @@
+[branch]
+	sort = -committerdate
+[column]
+	ui = auto
+[commit]
+	template = ~/.gitmessage
+	verbose = true
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore
+	fsmonitor = true
+	pager = delta
+	untrackedCache = true
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[help]
+	autocorrect = prompt
 [include]
 	path = ~/.gitconfig.local
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/.gitconfig.private
-[init]
-	defaultBranch = main
 [include]
 	path = ~/.gitalias
-[core]
-	editor = nvim
-	pager = delta
-	excludesfile = ~/.gitignore.global
-	fsmonitor = true
+[init]
+	defaultBranch = main
 [interactive]
-	diffFilter = delta --color-only --features=interactive
-[delta]
-	navigate = true
-	hyperlinks = true
-	line-numbers = true
-	side-by-side = true
-	features = decorations
-	light = false
-	syntax-theme = "rose-pine"
-[delta "interactive"]
-	keep-plus-minus-markers = false
-[delta "decorations"]
-	commit-decoration-style = blue ol
-	commit-style = raw
-	file-style = omit
-	hunk-header-decoration-style = blue box
-	hunk-header-file-style = red
-	hunk-header-line-number-style = "#067a00"
-	hunk-header-style = file line-number syntax
+	diffFilter = delta --color-only
 [merge]
 	ff = only
-	conflictstyle = diff3
-	tool = nvim
+	conflictstyle = zdiff3
+	tool = fugitive
 [mergetool]
 	keepBackup = false
-[mergetool "nvim"]
-	cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED
-[diff]
-	colorMoved = default
-[push]
-	autoSetupRemote = true
+[mergetool "fugitive"]
+	cmd = 'nvim -f -c "Gvdiffsplit!" "$MERGED"'
 [pull]
-	rebase = false
-[fetch]
-	prune = true
-[commit]
-	template = ~/.gitmessage
+	rebase = true
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
 [rerere]
+	autoupdate = true
 	enabled = true
+[tag]
+	sort = version:refname
+[delta]
+	dark = true
+	hyperlinks = true
+	line-numbers = true
+	navigate = true
+	syntax-theme = "rose-pine"
 
 # vim: set ts=4 sw=4 filetype=gitconfig

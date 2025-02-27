@@ -7,14 +7,14 @@
 	bl = blame -w
 	; blame file but track moves, copies, renames, etc
 	deepblame = blame -w -C -C -C
-	c = commit --verbose
+	c = commit
 	cm = commit --message
-	ca = commit --verbose --all
-	cam = commit --verbose --all --message
-	cf = commit --verbose --amend
-	caf = commit --verbose --all --amend
-	cnf = commit --verbose --amend --no-edit
-	canf = commit --verbose --all --amend --no-edit
+	ca = commit --all
+	cam = commit --all --message
+	cf = commit --amend
+	caf = commit --all --amend
+	cnf = commit --amend --no-edit
+	canf = commit --all --amend --no-edit
 	b = branch
 	bd = branch -d
 	bdf = branch -D
@@ -73,6 +73,5 @@
 	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 	; Assume all
 	assumeall = "!git st -s | awk {'print $2'} | xargs git assume"
-
 
 ; vim: set ts=4 sw=4 filetype=gitconfig
