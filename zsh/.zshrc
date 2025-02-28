@@ -1,4 +1,7 @@
-# !/bin/zsh
+#!/bin/zsh
+#
+# .zshrc - Run on interactive Zsh session.
+#
 
 function zcompile-many() {
 	local f
@@ -7,15 +10,15 @@ function zcompile-many() {
 	done
 }
 
-if [[ ! -e $HOME/.config/zsh/plugins/zsh-syntax-highlighting ]]; then
+if [[ ! -d $HOME/.config/zsh/plugins/zsh-syntax-highlighting ]]; then
 	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.config/zsh/plugins/zsh-syntax-highlighting
 	zcompile-many $HOME/.config/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
 fi
-if [[ ! -e $HOME/.config/zsh/plugins/zsh-autosuggestions ]]; then
+if [[ ! -d $HOME/.config/zsh/plugins/zsh-autosuggestions ]]; then
 	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.config/zsh/plugins/zsh-autosuggestions
 	zcompile-many $HOME/.config/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
 fi
-if [[ ! -e $HOME/.config/zsh/plugins/powerlevel10k ]]; then
+if [[ ! -d $HOME/.config/zsh/plugins/powerlevel10k ]]; then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/plugins/powerlevel10k
 	make -C $HOME/.config/zsh/plugins/powerlevel10k pkg
 fi
@@ -24,7 +27,7 @@ fi
 # powerlevel10k
 ################
 
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+if [[ -f "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
@@ -50,11 +53,6 @@ unsetopt HIST_VERIFY          # Execute commands using history (e.g.: using !$) 
 
 HISTSIZE=50000
 SAVEHIST=50000
-
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export PAGER=less
-export EDITOR=nvim
-export VISUAL=nvim
 
 # -U ensures each entry in these is Unique (that is, discards duplicates)
 # -T creates a "tied" pair
@@ -84,9 +82,9 @@ fi
 ######
 
 # Auto-completion
-[ -s "/opt/homebrew/opt/fzf/shell/completion.zsh" ] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
+[[ -f "/opt/homebrew/opt/fzf/shell/completion.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
 # Key bindings
-[ -s "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+[[ -f "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
@@ -94,21 +92,21 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # THEMING
 ##########
 
-[ -s "$HOME/.config/lscolors/rose-pine.sh" ] && source "$HOME/.config/lscolors/rose-pine.sh"
-[ -s "$HOME/.config/fzf/rose-pine.sh" ] && source "$HOME/.config/fzf/rose-pine.sh"
+[[ -f "$HOME/.config/lscolors/rose-pine.sh" ]] && source "$HOME/.config/lscolors/rose-pine.sh"
+[[ -f "$HOME/.config/fzf/rose-pine.sh" ]] && source "$HOME/.config/fzf/rose-pine.sh"
 export BAT_THEME="rose-pine"
 
 ########
 # OCaml
 ########
 
-[ -s "$HOME/.opam/opam-init/init.zsh" ] && source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
+[[ -f "$HOME/.opam/opam-init/init.zsh" ]] && source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
 
 ##########
 # Haskell
 ##########
 
-[ -s "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
+[[ -f "$HOME/.ghcup/env" ]] && source "$HOME/.ghcup/env"
 
 #######
 # asdf
@@ -149,15 +147,15 @@ bindkey '^e' edit-command-line
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
-if [[ ${KEYMAP} == vicmd ]] ||
-	[[ $1 = 'block' ]]; then
-	echo -ne '\e[2 q'
-elif [[ ${KEYMAP} == main ]] ||
-	[[ ${KEYMAP} == viins ]] ||
-	[[ ${KEYMAP} = '' ]] ||
-	[[ $1 = 'beam' ]]; then
-	echo -ne '\e[6 q'
-fi
+	if [[ ${KEYMAP} == vicmd ]] ||
+		[[ $1 = 'block' ]]; then
+			echo -ne '\e[2 q'
+		elif [[ ${KEYMAP} == main ]] ||
+			[[ ${KEYMAP} == viins ]] ||
+			[[ ${KEYMAP} = '' ]] ||
+			[[ $1 = 'beam' ]]; then
+					echo -ne '\e[6 q'
+	fi
 }
 zle -N zle-keymap-select
 precmd_functions+=(zle-keymap-select)
@@ -182,14 +180,18 @@ bindkey -s '^f' "tmux-sessionizer\n"
 # plugins
 ##########
 
+
+[[ -r "$HOME/.zlocal" ]] && source "$HOME/.zlocal"
+
+[[ -r ${ZDOTDIR:-$HOME}/.zalias ]] && source ${ZDOTDIR:-$HOME}/.zalias
+
+source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-[[ -s "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
-
-source "$HOME/.config/zsh/alias"
-source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
+
 source "$HOME/.p10k.zsh"
 
 # vim: set ts=4 sw=4
