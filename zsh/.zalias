@@ -1,11 +1,16 @@
 #!/bin/zsh
+#
+# .zalias - Zsh aliases
+#
 
 ########
 # Basic
 ########
 
-alias benchmark_hyperfine="hyperfine --warmup 3 \"$SHELL -i -c exit\""
-alias benchmark="for i in \$(seq 1 10); do time \$SHELL -i -c exit; done"
+alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
+
+alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
+alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
 alias shellclean="rm -rf ~/*.zwc ~/.zcompdump* ~/.zcompcache ~/.config/zsh/plugins ~/.cache/p10k* ~/.cache/gitstatus"
 
@@ -16,15 +21,17 @@ alias .....="cd ../../../.."
 
 alias nuke-ds-store="find . -type f -name '*.DS_Store' -ls -delete"
 
-alias showpath='echo -e ${PATH//:/\\n}'
+alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
+alias print-path='echo $PATH | tr ":" "\n"'
+alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
 
 ##########
 # lazygit
 ##########
 
-if type lazygit &> /dev/null; then
-  alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
-  alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
+if [[ -x "$(command -v lazygit)" ]]; then
+    alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
+    alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
 fi
 
 ########
@@ -36,26 +43,33 @@ alias mv="mv -vi"
 alias rm="rm -vI"
 alias mkdir="mkdir -pv"
 alias grep="grep --color=auto"
-if type gsed &> /dev/null; then
-  alias sed="gsed"
+if [[ -x "$(command -v gsed)" ]]; then
+    alias sed="gsed"
 fi
 
-alias upd="brew bundle --global; brew update; brew upgrade; brew cleanup"
+#####
+# Homebrew
+#####
+
+if [[ $(uname) == "Darwin" ]]; then
+    alias brewup="brew bundle --global; brew update; brew upgrade; brew cleanup"
+    alias brewinfo="brew leaves | xargs brew desc --eval-all"
+fi
 
 #####
 # ls
 #####
 
-if type gls &> /dev/null; then
-  alias ls="gls -F --color"
-  alias l="gls -lFA --color"
-  alias ll="gls -lF --color"
-  alias la='gls -FA --color'
+if [[ -x "$(command -v gls)" ]]; then
+    alias ls="gls -F --color"
+    alias l="gls -lFA --color"
+    alias ll="gls -lF --color"
+    alias la='gls -FA --color'
 else
-  alias ls="ls -F --color"
-  alias l="ls -lFA --color"
-  alias ll="ls -lF --color"
-  alias la='ls -FA --color'
+    alias ls="ls -F --color"
+    alias l="ls -lFA --color"
+    alias ll="ls -lF --color"
+    alias la='ls -FA --color'
 fi
 
 #######
@@ -71,7 +85,7 @@ alias tree="tree -Fa"
 alias g=git
 
 for al in `git --list-cmds=alias`; do
-	alias g$al="git $al"
+    alias g$al="git $al"
 done
 
 #######
