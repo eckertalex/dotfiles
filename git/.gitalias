@@ -25,7 +25,7 @@
 	p = push
 	pf = push --force-with-lease
 	pl = pull
-	plra = pull --rebase --autostash
+	pla = pull --autostash
 	rb = rebase
 	rbi = rebase -i
 	rbm = "!git rebase $(git-main-branch)"

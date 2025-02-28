@@ -180,18 +180,13 @@ bindkey -s '^f' "tmux-sessionizer\n"
 # plugins
 ##########
 
-
-[[ -r "$HOME/.zlocal" ]] && source "$HOME/.zlocal"
-
-[[ -r ${ZDOTDIR:-$HOME}/.zalias ]] && source ${ZDOTDIR:-$HOME}/.zalias
-
-source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
-source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
+[[ -f "$HOME/.zlocal" ]] && source "$HOME/.zlocal"
+source "$HOME/.zalias"
+source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
-
 source "$HOME/.p10k.zsh"
 
 # vim: set ts=4 sw=4
