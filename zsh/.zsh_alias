@@ -7,12 +7,10 @@
 # Basic
 ########
 
-alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
-
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
-alias shellclean="rm -rf ~/.config/zsh/.zcompdump* ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
+alias shellclean="rm -rf ~/.zcompdump* ~/*.zwc ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -30,8 +28,8 @@ alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 ##########
 
 if (( $+commands[lazygit] )); then
-    alias lazygit="lazygit -use-config-dir=\"$HOME/.config/lazygit\""
-    alias lzg="lazygit -use-config-dir=\"$HOME/.config/lazygit\""
+    alias lazygit="lazygit -use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
+    alias lzg="lazygit -use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
 fi
 
 ########
@@ -51,7 +49,7 @@ fi
 # Homebrew
 #####
 
-if [[ $(uname) == "Darwin" ]]; then
+if (( $+commands[brew] )); then
     alias brewup="brew bundle --global; brew update; brew upgrade; brew cleanup"
     alias brewinfo="brew leaves | xargs brew desc --eval-all"
 fi
