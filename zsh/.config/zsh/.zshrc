@@ -3,6 +3,18 @@
 # .zshrc - Run on interactive Zsh session.
 #
 
+################
+# powerlevel10k
+################
+
+if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+	source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+####################
+# plugin management
+####################
+
 function zcompile-many() {
 	local f
 	for f; do
@@ -10,25 +22,18 @@ function zcompile-many() {
 	done
 }
 
-if [[ ! -d $HOME/.config/zsh/plugins/zsh-syntax-highlighting ]]; then
-	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.config/zsh/plugins/zsh-syntax-highlighting
-	zcompile-many $HOME/.config/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
+ZPLUGINDIR="$XDG_DATA_HOME/zsh/plugins"
+if [[ ! -d "$ZPLUGINDIR/zsh-syntax-highlighting" ]]; then
+	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZPLUGINDIR/zsh-syntax-highlighting"
+	zcompile-many $ZPLUGINDIR/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
 fi
-if [[ ! -d $HOME/.config/zsh/plugins/zsh-autosuggestions ]]; then
-	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.config/zsh/plugins/zsh-autosuggestions
-	zcompile-many $HOME/.config/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+if [[ ! -d "$ZPLUGINDIR/zsh-autosuggestions" ]]; then
+	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZPLUGINDIR/zsh-autosuggestions"
+	zcompile-many $ZPLUGINDIR/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
 fi
-if [[ ! -d $HOME/.config/zsh/plugins/powerlevel10k ]]; then
-	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/plugins/powerlevel10k
-	make -C $HOME/.config/zsh/plugins/powerlevel10k pkg
-fi
-
-################
-# powerlevel10k
-################
-
-if [[ -f "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+if [[ ! -d "$ZPLUGINDIR/powerlevel10k" ]]; then
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZPLUGINDIR/powerlevel10k"
+	make -C "$ZPLUGINDIR/powerlevel10k" pkg
 fi
 
 ##########
@@ -51,6 +56,7 @@ unsetopt HIST_VERIFY          # Execute commands using history (e.g.: using !$) 
 # Environment variables
 ########################
 
+HISTFILE="$XDG_DATA_HOME/zsh/zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000
 
@@ -58,8 +64,8 @@ SAVEHIST=50000
 # -T creates a "tied" pair
 export -U PATH path FPATH fpath MANPATH manpath
 export -UT INFOPATH infopath
-PATH=$HOME/.local/bin:$PATH
-FPATH=$HOME/.config/zsh/completions:$FPATH
+PATH="$HOME/.local/bin:$PATH"
+FPATH="$ZDOTDIR/completions:$FPATH"
 
 ###########
 # Homebrew
@@ -73,47 +79,32 @@ case $OSTYPE in
 esac
 
 if type brew &> /dev/null; then
-	PATH=$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH
-	FPATH=$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH
+	PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+	FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH"
 fi
 
 ######
 # FZF
 ######
 
-# Auto-completion
-[[ -f "/opt/homebrew/opt/fzf/shell/completion.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/completion.zsh"
-# Key bindings
-[[ -f "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
-
+[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
+[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 ##########
 # THEMING
 ##########
 
-[[ -f "$HOME/.config/lscolors/rose-pine.sh" ]] && source "$HOME/.config/lscolors/rose-pine.sh"
-[[ -f "$HOME/.config/fzf/rose-pine.sh" ]] && source "$HOME/.config/fzf/rose-pine.sh"
+[[ -r "$XDG_CONFIG_HOME/lscolors/rose-pine.sh" ]] && source "$XDG_CONFIG_HOME/lscolors/rose-pine.sh"
+[[ -r "$XDG_CONFIG_HOME/fzf/rose-pine.sh" ]] && source "$XDG_CONFIG_HOME/fzf/rose-pine.sh"
 export BAT_THEME="rose-pine"
-
-########
-# OCaml
-########
-
-[[ -f "$HOME/.opam/opam-init/init.zsh" ]] && source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
-
-##########
-# Haskell
-##########
-
-[[ -f "$HOME/.ghcup/env" ]] && source "$HOME/.ghcup/env"
 
 #######
 # asdf
 #######
 
-export ASDF_DATA_DIR=$HOME/.asdf
-PATH=$ASDF_DATA_DIR/shims:$PATH
+export ASDF_DATA_DIR="$HOME/.asdf"
+PATH="$ASDF_DATA_DIR/shims:$PATH"
 
 ###########
 # compinit
@@ -121,7 +112,7 @@ PATH=$ASDF_DATA_DIR/shims:$PATH
 
 # Enable the "new" completion system (compsys).
 autoload -Uz compinit && compinit
-[[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile-many ~/.zcompdump
+[[ "$ZDOTDIR/.zcompdump.zwc" -nt "$ZDOTDIR/.zcompdump" ]] || zcompile-many "$ZDOTDIR/.zcompdump"
 unfunction zcompile-many
 
 ######
@@ -182,11 +173,12 @@ bindkey -s '^f' "tmux-sessionizer\n"
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-[[ -f "$HOME/.zlocal" ]] && source "$HOME/.zlocal"
-source "$HOME/.zalias"
-source "$HOME/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$HOME/.config/zsh/plugins/powerlevel10k/powerlevel10k.zsh-theme"
-source "$HOME/.p10k.zsh"
+source "$ZPLUGINDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$ZPLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$ZPLUGINDIR/powerlevel10k/powerlevel10k.zsh-theme"
+
+source "$ZDOTDIR/.zsh_alias"
+[[ -r "$ZDOTDIR/.zsh_local" ]] && source "$ZDOTDIR/.zsh_local"
+source "$ZDOTDIR/.p10k.zsh"
 
 # vim: set ts=4 sw=4

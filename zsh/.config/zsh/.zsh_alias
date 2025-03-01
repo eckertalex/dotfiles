@@ -12,7 +12,7 @@ alias zshrc='${EDITOR:-vim} "${ZDOTDIR:-$HOME}"/.zshrc'
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
-alias shellclean="rm -rf ~/*.zwc ~/.zcompdump* ~/.zcompcache ~/.config/zsh/plugins ~/.cache/p10k* ~/.cache/gitstatus"
+alias shellclean="rm -rf ~/.config/zsh/.zcompdump* ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -23,15 +23,15 @@ alias nuke-ds-store="find . -type f -name '*.DS_Store' -ls -delete"
 
 alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
 alias print-path='echo $PATH | tr ":" "\n"'
-alias print-functions='print -l ${(k)functions[(I)[^_]*]} | sort'
+alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
 ##########
 # lazygit
 ##########
 
-if [[ -x "$(command -v lazygit)" ]]; then
-    alias lazygit="lazygit -use-config-dir=$HOME/.config/lazygit/"
-    alias lzg="lazygit -use-config-dir=$HOME/.config/lazygit/"
+if (( $+commands[lazygit] )); then
+    alias lazygit="lazygit -use-config-dir=\"$HOME/.config/lazygit\""
+    alias lzg="lazygit -use-config-dir=\"$HOME/.config/lazygit\""
 fi
 
 ########
@@ -43,7 +43,7 @@ alias mv="mv -vi"
 alias rm="rm -vI"
 alias mkdir="mkdir -pv"
 alias grep="grep --color=auto"
-if [[ -x "$(command -v gsed)" ]]; then
+if (( $+commands[gsed] )); then
     alias sed="gsed"
 fi
 
@@ -60,7 +60,7 @@ fi
 # ls
 #####
 
-if [[ -x "$(command -v gls)" ]]; then
+if (( $+commands[gls] )); then
     alias ls="gls -F --color"
     alias l="gls -lFA --color"
     alias ll="gls -lF --color"
