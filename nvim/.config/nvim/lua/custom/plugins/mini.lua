@@ -58,6 +58,12 @@ return {
 	},
 
 	{
+		"echasnovski/mini.notify",
+		event = "VeryLazy",
+		opts = {},
+	},
+
+	{
 		"echasnovski/mini.statusline",
 		opts = {},
 	},

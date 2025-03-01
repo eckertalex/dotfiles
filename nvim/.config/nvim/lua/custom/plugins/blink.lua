@@ -2,9 +2,11 @@ return {
 	{
 		"saghen/blink.cmp",
 		dependencies = "rafamadriz/friendly-snippets",
-		tag = "v0.11.0",
 		event = "InsertEnter",
 		opts = {
+			fuzzy = {
+				implementation = "lua",
+			},
 			keymap = { preset = "default" },
 			appearance = {
 				use_nvim_cmp_as_default = true,
@@ -12,7 +14,6 @@ return {
 			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer" },
-				cmdline = {},
 			},
 			signature = { enabled = true },
 		},

@@ -1,6 +1,6 @@
 {
   "ashen.nvim": { "branch": "main", "commit": "adc111c573cd509809377546102ec4d3aefeaede" },
-  "blink.cmp": { "branch": "main", "commit": "b6f11a0aa33e601c469a126e3ed6e35208fe3ea3" },
+  "blink.cmp": { "branch": "main", "commit": "02a2e30675b3957cb1ae0170888e3630461f3fe8" },
   "catppuccin": { "branch": "main", "commit": "5b5e3aef9ad7af84f463d17b5479f06b87d5c429" },
   "conform.nvim": { "branch": "master", "commit": "a6f5bdb78caa305496357d17e962bbc4c0b392e2" },
   "dressing.nvim": { "branch": "master", "commit": "2d7c2db2507fa3c4956142ee607431ddb2828639" },
@@ -18,6 +18,7 @@
   "mini.cursorword": { "branch": "main", "commit": "939ffcc8c57694608ac0896418d4b9a7c5273909" },
   "mini.icons": { "branch": "main", "commit": "ec61af6e606fc89ee3b1d8f2f20166a3ca917a36" },
   "mini.indentscope": { "branch": "main", "commit": "8ce41a77eed7f4121c83c67fda5e2e86af999e6d" },
+  "mini.notify": { "branch": "main", "commit": "d73fd2125914f9eb75b56bfd6d61fa6f8a7fec56" },
   "mini.statusline": { "branch": "main", "commit": "83209bfbca156f9e4a5ec47a2a8ce1e5ce26311d" },
   "nvim-lspconfig": { "branch": "master", "commit": "a3f8422b752e03334dbaf4a46940d8aee0acdebf" },
   "nvim-treesitter": { "branch": "master", "commit": "c1efc9a9058bb54cfcb6f0a4fc14a4ac8a66bdaa" },
