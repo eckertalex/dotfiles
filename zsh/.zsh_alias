@@ -10,7 +10,7 @@
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
-alias shellclean="rm -rf ~/.zcompdump* ~/*.zwc ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
+alias shellclean="rm -rf ~/.local/share/zsh/zcompdump* ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
 
 alias ..="cd .."
 alias ...="cd ../.."
