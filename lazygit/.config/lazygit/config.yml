@@ -3,10 +3,10 @@ git:
   paging:
     colorArg: always
     pager: delta --dark --paging=never
-gui: # stuff relating to the UI
+gui:
   showRandomTip: false
   nerdFontsVersion: "3"
 notARepository: "skip" # one of: 'prompt' | 'create' | 'skip' | 'quit'
 os:
   editPreset: nvim
-promptToReturnFromSubprocess: false # display confirmation when subprocess terminates
+promptToReturnFromSubprocess: false
