@@ -61,5 +61,7 @@ vim.opt.virtualedit = "block" -- Allow cursor to move where there is no text in 
 
 vim.opt.winminwidth = 5 -- Minimum window width
 
+vim.opt.winborder = "rounded" -- Border style of floating windows
+
 vim.opt.winbar = "%=%m %f" -- Buffer local statusline
 vim.opt.laststatus = 3
