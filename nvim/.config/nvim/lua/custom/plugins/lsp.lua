@@ -14,7 +14,6 @@ return {
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			"saghen/blink.cmp",
-			"nvim-telescope/telescope.nvim",
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -165,11 +164,14 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 				callback = function(event)
+					---@module 'snacks'
 					vim.keymap.set(
 						"n",
 						"gd",
 						-- vim.lsp.buf.definition,
-						require("telescope.builtin").lsp_definitions,
+						function()
+							Snacks.picker.lsp_definitions()
+						end,
 						{ buffer = event.buf, desc = "vim.lsp.buf.definition" }
 					)
 
@@ -177,16 +179,11 @@ return {
 						"n",
 						"grr",
 						-- vim.lsp.buf.references,
-						require("telescope.builtin").lsp_references,
+						function()
+							Snacks.picker.lsp_references()
+						end,
 						{ buffer = event.buf, desc = "vim.lsp.buf.references" }
 					)
-
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-						vim.keymap.set("n", "<leader>xh", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({}))
-						end, { desc = "Toggle inlay hints" })
-					end
 				end,
 			})
 		end,

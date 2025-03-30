@@ -51,7 +51,6 @@ vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
-vim.keymap.set("n", "<leader>ba", "<cmd>%bd|e#|bd#<cr>", { desc = "Delete all buffers" })
 
 -- Clear search with <esc>
 vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
@@ -59,19 +58,6 @@ vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
-
--- toggle diagnostics
-local enabled = true
-vim.keymap.set("n", "<leader>xd", function()
-	enabled = not enabled
-	if enabled then
-		vim.diagnostic.enable()
-		vim.notify("Enabled diagnostics", vim.log.levels.INFO)
-	else
-		vim.diagnostic.enable(false)
-		vim.notify("Disabled diagnostics", vim.log.levels.WARN)
-	end
-end, { desc = "Toggle Diagnostics" })
 
 vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnostic" })
 
@@ -83,6 +69,3 @@ vim.keymap.set("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 vim.keymap.set("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 vim.keymap.set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
-
--- tmux
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
