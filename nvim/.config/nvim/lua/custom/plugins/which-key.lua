@@ -14,6 +14,12 @@ return {
 				{ "<leader>s", group = "Search", mode = { "n", "v" } },
 				{ "<leader>t", group = "Toggle" },
 				{ "<leader>x", group = "Diagnostics/Quickfix" },
+
+				{ "<leader>p", icon = "", desc = "Paste without losing register" },
+				{ "<leader>d", icon = "󰆴", desc = "Delete to empty register" },
+				{ "gy", icon = "", desc = "Copy to clipboard" },
+				{ "gp", icon = "", desc = "Paste clipboard text" },
+				{ "<leader>r", icon = "", desc = "Replace word in Buffer" },
 			},
 		},
 		keys = {
