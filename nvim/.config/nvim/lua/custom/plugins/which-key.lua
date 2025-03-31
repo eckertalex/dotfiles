@@ -7,7 +7,6 @@ return {
 			preset = "helix",
 			spec = {
 				{ "<leader>b", group = "Buffers" },
-				{ "<leader>c", group = "Copilot" },
 				{ "<leader>f", group = "Find" },
 				{ "<leader>g", group = "Git" },
 				{ "<leader>h", group = "Git Hunk", mode = { "n", "v" } },
