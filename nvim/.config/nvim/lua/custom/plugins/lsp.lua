@@ -13,21 +13,12 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			"saghen/blink.cmp",
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
+			"mason-org/mason.nvim",
+			"mason-org/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 		},
 		event = { "BufReadPost", "BufWritePost", "BufNewFile", "VeryLazy" },
 		config = function()
-			local blink_cmp = require("blink.cmp")
-			local capabilities = vim.tbl_deep_extend(
-				"force",
-				{},
-				vim.lsp.protocol.make_client_capabilities(),
-				blink_cmp.get_lsp_capabilities()
-			)
-
 			local servers = {
 				astro = {},
 				cssls = {},
@@ -141,24 +132,27 @@ return {
 			require("mason").setup()
 
 			local ensure_installed = vim.tbl_keys(servers or {})
-			vim.list_extend(ensure_installed, {
-				"gofumpt",
-				"goimports",
-				"markdownlint",
-				"prettier",
-				"shfmt",
-				"stylua",
-			})
-			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
-
 			require("mason-lspconfig").setup({
+				ensure_installed = ensure_installed,
+				automatic_enable = true,
 				handlers = {
 					function(server_name)
 						local server = servers[server_name] or {}
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
 						require("lspconfig")[server_name].setup(server)
 					end,
 				},
+			})
+
+			require("mason-tool-installer").setup({
+				ensure_installed = {
+					"gofumpt",
+					"goimports",
+					"markdownlint",
+					"prettier",
+					"shfmt",
+					"stylua",
+				},
+				automatic_enable = true,
 			})
 
 			vim.api.nvim_create_autocmd("LspAttach", {
