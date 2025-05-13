@@ -4,11 +4,6 @@ return {
 		name = "rose-pine",
 		lazy = false,
 		priority = 1000,
-		opts = {
-			styles = {
-				transparency = true,
-			},
-		},
 	},
 
 	{
