@@ -26,6 +26,7 @@ return {
 				"css",
 				"diff",
 				"dockerfile",
+				"elixir",
 				"gitcommit",
 				"gitignore",
 				"go",

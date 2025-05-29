@@ -28,9 +28,10 @@ return {
 						workingDirectories = { mode = "auto" },
 					},
 					on_attach = function()
-						vim.keymap.set("", "<leader>cx", "<cmd>EslintFixAll<cr>", { desc = "EslintFixAll" })
+						vim.keymap.set("", "<leader>cx", "<cmd>LspEslintFixAll<cr>", { desc = "LspEslintFixAll" })
 					end,
 				},
+				elixirls = {},
 				gopls = {
 					settings = {
 						gopls = {

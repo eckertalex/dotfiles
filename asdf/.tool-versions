@@ -1,5 +1,7 @@
 golang 1.24.0
 nodejs 22.14.0
+erlang 27.3.4
+elixir 1.18.4-otp-27
+python 3.13.3
 pnpm 10.6.2
 stylua 2.0.2
-python 3.13.3
