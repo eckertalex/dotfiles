@@ -28,11 +28,23 @@ return {
 						},
 					},
 				},
+				jump = {
+					reuse_win = false,
+				},
 			},
 			quickfile = {},
 			image = {},
 			statuscolumn = {},
 			toggle = {},
+			zen = {
+				toggles = {
+					dim = false,
+					git_signs = false,
+				},
+				show = {
+					statusline = true,
+				},
+			},
 		},
 		-- stylua: ignore
 		keys = {
@@ -77,6 +89,8 @@ return {
 			{ "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 			{ "<leader>sr", function() Snacks.picker.resume() end, desc = "Resume" },
 			{ "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+            -- zen
+			{ "<leader>z", function() Snacks.zen() end, desc = "Zen Mode" },
 		},
 		config = function(_, opts)
 			require("snacks").setup(opts)

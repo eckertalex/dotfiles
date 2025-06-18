@@ -107,6 +107,7 @@ export BAT_THEME="rose-pine"
 
 export ASDF_DATA_DIR="$HOME/.asdf"
 PATH="$ASDF_DATA_DIR/shims:$PATH"
+source $ASDF_DATA_DIR/plugins/golang/set-env.zsh
 
 ###########
 # compinit
