@@ -110,6 +110,12 @@ PATH="$ASDF_DATA_DIR/shims:$PATH"
 source $ASDF_DATA_DIR/plugins/golang/set-env.zsh
 
 ###########
+# opencode
+###########
+#
+export PATH="$HOME/.opencode/bin:$PATH"
+
+###########
 # compinit
 ###########
 
