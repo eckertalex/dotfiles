@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 -- [[ Configure and install plugins ]]
 
 require("lazy").setup({
-	{ import = "custom.plugins" },
+	{ import = "plugins" },
 }, {
 	rocks = {
 		enabled = false,
