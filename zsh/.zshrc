@@ -23,7 +23,7 @@ function zcompile-many() {
 }
 
 # INFO: I don't want to use ZDOTDIR because it can break when moving to othe systems.
-# I still want to keep plugins, completiosn, and zcompdump out of the home directory.
+# I still want to keep plugins, completions, and zcompdump out of the home directory.
 Z_DATA_DIR="$XDG_DATA_HOME/zsh"
 
 Z_PLUGIN_DIR="$Z_DATA_DIR/plugins"

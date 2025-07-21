@@ -44,8 +44,6 @@ else
 	exit 1
 fi
 
-git add --all
-
 if git commit -m "$1"; then
 	echo "Changes committed successfully"
 else
