@@ -74,7 +74,6 @@ return {
 			{ "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
 			{ "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
 			{ "<leader>sg", function() Snacks.picker.grep() end, desc = "Grep" },
-			{ "<leader>sm", function() require('custom.config.multigrep').multigrep() end, desc = "Multigrep" },
 			{ "<leader>sw", function() Snacks.picker.grep_word() end, desc = "Visual selection or word", mode = { "n", "x" } },
 			-- search
 			{ "<leader>sn", function() Snacks.picker.notifications() end, desc = "Notification History" },
@@ -90,6 +89,7 @@ return {
 			{ "<leader>sq", function() Snacks.picker.qflist() end, desc = "Quickfix List" },
 			{ "<leader>sr", function() Snacks.picker.resume() end, desc = "Resume" },
 			{ "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
+			{ "<leader>sm", function() Snacks.picker.marks() end, desc = "Marks" },
             -- zen
 			{ "<leader>z", function() Snacks.zen() end, desc = "Zen Mode" },
 		},
