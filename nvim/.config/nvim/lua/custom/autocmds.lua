@@ -1,27 +1,28 @@
 -- [[ Basic Autocommands ]]
 
--- Highlight on yank
+local group = vim.api.nvim_create_augroup("BasicAutocommands", {})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+	group = group,
 	callback = function()
 		vim.highlight.on_yank()
 	end,
+	desc = "Highlight when yanking (copying) text",
 })
 
--- resize splits if window got resized
-vim.api.nvim_create_autocmd({ "VimResized" }, {
-	group = vim.api.nvim_create_augroup("resize_splits", { clear = true }),
+vim.api.nvim_create_autocmd("VimResized", {
+	group = group,
 	callback = function()
 		local current_tab = vim.fn.tabpagenr()
 		vim.cmd("tabdo wincmd =")
 		vim.cmd("tabnext " .. current_tab)
 	end,
+	desc = "Resize splits when window is resized",
 })
 
 -- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd("BufReadPost", {
-	group = vim.api.nvim_create_augroup("last_loc", { clear = true }),
+	group = group,
 	callback = function(event)
 		local exclude = { "gitcommit" }
 		local buf = event.buf
@@ -35,11 +36,21 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 			pcall(vim.api.nvim_win_set_cursor, 0, mark)
 		end
 	end,
+	desc = "Restore cursor position to last known location when reopening files",
 })
 
--- close some filetypes with <q>
+-- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
+-- Do on `FileType` to always override these changes from filetype plugins.
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("close_with_q", { clear = true }),
+	group = group,
+	callback = function()
+		vim.cmd("setlocal formatoptions-=c formatoptions-=o")
+	end,
+	desc = "Don't auto-wrap comments or continue comment on 'o' or 'O'",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = group,
 	pattern = {
 		"PlenaryTestPopup",
 		"netrw",
@@ -58,41 +69,56 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.bo[event.buf].buflisted = false
 		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
 	end,
+	desc = "Close special buffers with 'q' and exclude from buffer list",
 })
 
--- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("wrap_spell", { clear = true }),
+	group = group,
 	pattern = { "text", "plaintex", "gitcommit", "markdown" },
 	callback = function()
 		vim.opt_local.wrap = true
 		vim.opt_local.spell = true
 	end,
+	desc = "Wrap and check spelling in text-like files",
 })
 
--- use spaces instead of tabs for these
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("spaces", { clear = true }),
+	group = group,
 	pattern = { "haskell", "cabal" },
 	callback = function()
 		vim.opt_local.expandtab = true
 		vim.opt_local.shiftwidth = 2
 		vim.opt_local.tabstop = 2
 	end,
+	desc = "Use spaces instead of tabs for Haskell and Cabal files",
 })
 
--- Fix conceallevel for json and markdown files
-vim.api.nvim_create_autocmd({ "FileType" }, {
-	group = vim.api.nvim_create_augroup("conceallevel", { clear = true }),
+vim.api.nvim_create_autocmd("FileType", {
+	group = group,
 	pattern = { "json", "jsonc", "json5", "markdown" },
 	callback = function()
 		vim.opt_local.conceallevel = 0
 	end,
+	desc = "Set conceallevel to 0 for JSON and Markdown files",
 })
 
--- set default filetypes
-vim.filetype.add({
-	extension = {
-		query = "graphql",
-	},
+vim.api.nvim_create_autocmd("ModeChanged", {
+	group = group,
+	pattern = "*:[V\x16]*",
+	callback = function()
+		-- Show relative numbers only when they matter (linewise and blockwise
+		-- selection) and 'number' is set (avoids horizontal flickering)
+		vim.wo.relativenumber = vim.wo.number
+	end,
+	desc = "Show relative line numbers",
+})
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+	group = group,
+	pattern = "[V\x16]*:*",
+	callback = function()
+		-- Hide relative numbers when neither linewise/blockwise
+		vim.wo.relativenumber = string.find(vim.fn.mode(), "^[V\22]") ~= nil
+	end,
+	desc = "Hide relative line numbers",
 })

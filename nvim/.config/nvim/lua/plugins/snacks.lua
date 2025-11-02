@@ -49,8 +49,8 @@ return {
 		-- stylua: ignore
 		keys = {
             -- bufdelete
-			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
-			{ "<leader>bD", function() Snacks.bufdelete({ force = true }) end, desc = "Delete Buffer" },
+			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete" },
+			{ "<leader>bD", function() Snacks.bufdelete({ force = true }) end, desc = "Delete!" },
 			{ "<leader>ba", function() Snacks.bufdelete.all() end, desc = "Delete all buffers" },
 			{ "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete other buffers" },
 

@@ -1,20 +1,80 @@
 -- [[ Setting options ]]
 
--- Set <space> as the leader key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+-- General ====================================================================
+vim.g.mapleader = " " -- Use `<Space>` as <Leader> key
 
-vim.o.number = true -- Print line number
+vim.o.mouse = "a" -- Enable mouse
+vim.o.undofile = true -- Enable persistent undo
+
+vim.o.backup = false -- Don't store backup while overwriting the file
+vim.o.writebackup = false -- Don't store backup while overwriting the file
+
+vim.cmd("filetype plugin indent on") -- Enable all filetype plugins
+
+-- UI =========================================================================
+vim.o.breakindent = true -- Indent wrapped lines to match line start
+vim.o.colorcolumn = "+1" -- Draw column on the right of maximum width
+vim.o.cursorline = true -- Highlight current line
+vim.o.cursorlineopt = "screenline,number" -- Show cursor line per screen line
+vim.o.fillchars = "eob: ,fold:╌"
+vim.o.linebreak = true -- Wrap long lines at 'breakat' (if 'wrap' is set)
+vim.o.list = true -- Show helpful text indicators
+vim.o.number = true -- Show line numbers
+vim.o.pumblend = 10 -- Make builtin completion menus slightly transparent
+vim.o.pumheight = 10 -- Make popup menu smaller
 vim.o.relativenumber = true -- Relative line numbers
+vim.o.ruler = false -- Don't show cursor position in command line
+vim.o.scrolloff = 4 -- Lines of context
+vim.o.shortmess = "CFOSWaco" -- Disable some built-in completion messages
+vim.o.showmode = false -- Don't show mode in command line
+vim.o.sidescrolloff = 4 -- Columns of context
+vim.o.signcolumn = "yes" -- Always show sign column (otherwise it will shift text)
+vim.o.splitbelow = true -- Horizontal splits will be below
+vim.o.splitkeep = "screen" -- Reduce scroll during window split
+vim.o.splitright = true -- Vertical splits will be to the right
+vim.o.termguicolors = true -- Enable gui colors
+vim.o.winblend = 10 -- Make floating windows slightly transparent
+vim.o.winborder = "rounded" -- Use border in floating windows
+vim.o.wrap = false -- Display long lines as just one line
 
-vim.o.foldcolumn = "1"
-vim.o.foldlevel = 99
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+-- Special UI symbols
+vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
 
-vim.o.mouse = "a" -- Enable mouse mode
+vim.o.foldlevel = 10 -- Fold nothing by default; set to 0 or 1 to fold
+vim.o.foldmethod = "indent" -- Fold based on indent level
+vim.o.foldnestmax = 10 -- Limit number of fold levels
+vim.o.foldtext = "" -- Show text under fold with its highlighting
+-- vim.o.foldcolumn = "1"
+-- vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.o.foldmethod = "expr"
 
-vim.o.showmode = false -- Dont show mode since we have a statusline
+-- Editing ====================================================================
+vim.o.autoindent = true -- Use auto indent
+vim.o.expandtab = true -- Convert tabs to spaces
+vim.o.formatoptions = "rqnl1j" -- Improve comment editing
+vim.o.ignorecase = true -- Ignore case when searching (use `\C` to force not doing that)
+vim.o.inccommand = "split" -- shows partial off-screen results in a preview window
+vim.o.incsearch = true -- Show search results while typing
+vim.o.infercase = true -- Infer letter cases for a richer built-in keyword completion
+vim.o.shiftwidth = 4 -- Use this number of spaces for indentation
+vim.o.smartcase = true -- Don't ignore case when searching if pattern has upper case
+vim.o.smartindent = true -- Make indenting smart
+vim.o.spelloptions = "camel" -- Treat camelCase word parts as separate words
+vim.o.tabstop = 4 -- Number of spaces tabs count for
+vim.o.timeoutlen = 300 -- timeout
+vim.o.updatetime = 200 -- Save swap file and trigger CursorHold
+vim.o.virtualedit = "block" -- Allow going past end of line in blockwise mode
+
+vim.o.iskeyword = "@,48-57,_,192-255,-" -- Treat dash as `word` textobject part
+
+-- Pattern for a start of numbered list (used in `gw`). This reads as
+-- "Start of list item is: at least one special character (digit, -, +, *)
+-- possibly followed by punctuation (. or `)`) followed by at least one space".
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
+
+-- Built-in completion
+vim.o.complete = ".,w,b,kspell" -- Use less sources
+vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -22,46 +82,36 @@ vim.schedule(function()
 	vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
 end)
 
-vim.o.wrap = false -- Disable line wrap
-vim.o.breakindent = true -- Enable break indent
+-- Diagnostics ================================================================
 
-vim.o.undofile = true -- Save undo history
+-- Neovim has built-in support for showing diagnostic messages. This configures
+-- a more conservative display while still being useful.
+local diagnostic_opts = {
+	-- Show signs on top of any other sign, but only for warnings and errors
+	signs = { priority = 9999, severity = { min = "WARN", max = "ERROR" } },
 
-vim.o.ignorecase = true -- Ignore case
-vim.o.smartcase = true -- Don't ignore case with capitals
+	-- Show all diagnostics as underline
+	underline = { severity = { min = "HINT", max = "ERROR" } },
 
-vim.o.signcolumn = "yes" -- Keep signcolumn on by default
+	-- Show more details immediately for errors on the current line
+	virtual_lines = false,
+	virtual_text = {
+		current_line = true,
+		severity = { min = "ERROR", max = "ERROR" },
+	},
 
-vim.o.updatetime = 200 -- Save swap file and trigger CursorHold
-vim.o.timeoutlen = 300 -- timeout
+	-- Don't update diagnostics when typing
+	update_in_insert = false,
+}
 
-vim.o.splitbelow = true -- Put new windows below current
-vim.o.splitright = true -- Put new windows right of current
+-- source this later to avoid sourcing `vim.diagnostic` on startup
+vim.schedule(function()
+	vim.diagnostic.config(diagnostic_opts)
+end)
 
-vim.o.list = true
-vim.o.listchars = "tab:» ,trail:·,nbsp:␣"
-
-vim.o.inccommand = "split" -- shows partial off-screen results in a preview window
-
-vim.o.cursorline = true -- Enable highlighting of the current line
-
-vim.o.scrolloff = 10 -- Lines of context
-vim.o.sidescrolloff = 8 -- Columns of context
-
-vim.o.shiftround = true -- Round indent
-vim.o.shiftwidth = 4 -- Size of an indent
-vim.o.tabstop = 4 -- Number of spaces tabs count for
--- vim.o.expandtab = true -- Use spaces instead of tabs
-
-vim.o.conceallevel = 3 -- Hide * markup for bold and italic
-
-vim.o.pumheight = 10 -- Maximum number of entries in a popup
-
-vim.o.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-
-vim.o.winminwidth = 5 -- Minimum window width
-
-vim.o.winborder = "rounded" -- Border style of floating windows
-
-vim.o.winbar = "%=%m %f" -- Buffer local statusline
-vim.o.laststatus = 3
+-- set default filetypes
+vim.filetype.add({
+	extension = {
+		query = "graphql",
+	},
+})
