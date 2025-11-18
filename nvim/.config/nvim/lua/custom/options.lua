@@ -78,9 +78,9 @@ vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
-vim.schedule(function()
-	vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
-end)
+-- vim.schedule(function()
+vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
+-- end)
 
 -- Diagnostics ================================================================
 

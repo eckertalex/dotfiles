@@ -44,14 +44,16 @@
 	; discard last commit and files
 	discard = reset --hard HEAD~1
 	pristine = reset --hard && git clean -dffx
-	l = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short
-	ld = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=relative
-	ll = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short --numstat
-	lg = log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short
+	l = log --date=iso --abbrev-commit
+	ll = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=iso --abbrev-commit
+	lll = "!git ll --numstat"
+    la = "!git l --author=\"$(git config user.email)\""
+    lla = "!git ll --author=\"$(git config user.email)\""
+    llla = "!git lll --author=\"$(git config user.email)\""
 	; show the history of a file
 	filelog = log -u
 	; show modified files in last commit
-	dl = "!git ll -1"
+	dl = "!git l -1"
 	d = diff
 	; show diff of last commit
 	dlc = diff --cached HEAD^
@@ -62,7 +64,7 @@
 	; Find a file path
 	fp = "!git ls-files | grep -i"
 	; list aliases
-	la = "!git config -l | grep alias | cut -c 7-"
+	alias = "!git config -l | grep alias | cut -c 7-"
 	; Assume a file as unchanged:
 	assume = update-index --assume-unchanged
 	; Unassume a file
