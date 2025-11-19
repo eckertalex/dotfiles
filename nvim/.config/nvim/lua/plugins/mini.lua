@@ -1,6 +1,6 @@
 return {
 	{
-		"echasnovski/mini.icons",
+		"nvim-mini/mini.icons",
 		lazy = true,
 		opts = {},
 		init = function()
@@ -12,13 +12,20 @@ return {
 	},
 
 	{
-		"echasnovski/mini.cursorword",
+		"nvim-mini/mini.cursorword",
 		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
 		opts = {},
 	},
 
 	{
-		"echasnovski/mini.statusline",
+		"nvim-mini/mini.statusline",
 		opts = {},
+	},
+
+	{
+		"nvim-mini/mini.starter",
+		opts = {
+			query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
+		},
 	},
 }

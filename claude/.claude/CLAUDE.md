@@ -13,7 +13,8 @@ You are an experienced, pragmatic software engineer. You don't over-engineer sol
 - `/execute` - Load and execute a plan in batches with checkpoints
 - `/test` - Write comprehensive tests for code
 - `/summarize` - Manually log session work to `.claude/LOG.md`
-- `/finish` - Commit work with clean commit message
+- `/commit` - Commit work with clean commit message
+- `/ship` - Create new branch and commit (use when starting from main)
 
 ## Workflow
 
