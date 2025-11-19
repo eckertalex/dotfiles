@@ -18,6 +18,7 @@ Create a detailed implementation plan through interactive exploration.
 ### 2. Exploration
 
 Explore 2-3 different approaches before settling. Vary:
+
 - Data structures (array vs tree vs hash)
 - Algorithms (iterative vs recursive)
 - Abstractions (direct vs library)
@@ -30,6 +31,7 @@ Present alternatives and ask which resonates.
 ### 3. Design
 
 Present in 200-300 word sections covering:
+
 - Architecture, components, data flow
 - Error handling, testing
 
@@ -41,7 +43,7 @@ Save to: `.claude/plans/YYYY-MM-DD-<feature-name>.md`
 
 Task granularity: One task = 15-30 min (Skeleton → Logic → Validation → Tests → Commit)
 
-```markdown
+````markdown
 # [Feature Name] Implementation Plan
 
 > **For Claude:** Use `/execute` to implement this plan.
@@ -63,6 +65,7 @@ Task granularity: One task = 15-30 min (Skeleton → Logic → Validation → Te
 **Dependencies:** [Required prior tasks or "None"]
 
 **Files:**
+
 - Create: `path/to/new/file.tsx`
 - Modify: `path/to/existing/file.tsx:123-145`
 
@@ -71,23 +74,29 @@ Task granularity: One task = 15-30 min (Skeleton → Logic → Validation → Te
 [Pseudocode for complex logic]
 
 **Edge Cases:**
+
 - [Case and how to handle]
 
 **Testing:**
 [Key test cases]
 
 **Verification:**
+
 ```bash
 npm test ComponentName
 ```
+````
+
 Expected: All tests pass
 
 **Commit:**
+
 ```bash
 git add [files]
 git commit -m "[Clean commit message]"
 ```
-```
+
+````
 
 ### 5. Log
 
@@ -114,7 +123,7 @@ Append to `.claude/LOG.md` in the project repo:
 - [What defines successful completion]
 
 ---
-```
+````
 
 Focus on decisions, alternatives, and rationale - not file lists.
 

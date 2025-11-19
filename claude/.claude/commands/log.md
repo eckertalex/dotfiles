@@ -12,11 +12,11 @@ Manually append entry to unified session log at `.claude/LOG.md` in project repo
 ## Process
 
 1. **Ask for context** if not obvious:
-   - What feature/bug/project?
-   - What type of work?
-   - What was done and why?
-   - What decisions were made and what alternatives?
-   - What problems occurred and how solved?
+    - What feature/bug/project?
+    - What type of work?
+    - What was done and why?
+    - What decisions were made and what alternatives?
+    - What problems occurred and how solved?
 
 2. **Append entry:**
 
@@ -33,13 +33,16 @@ Manually append entry to unified session log at `.claude/LOG.md` in project repo
 [2-3 sentences describing work and context]
 
 **Completed:**
+
 - [What was accomplished]
 
 **Decisions Made:**
+
 - [Key decisions with rationales]
 - [Alternatives considered]
 
 **Problems Encountered:**
+
 - [Issues faced and how resolved]
 
 **Test Results:** [If notable]

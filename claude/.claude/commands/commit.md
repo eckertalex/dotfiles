@@ -15,15 +15,16 @@ Commit everything on the current branch with a proper commit message.
 2. Review changes with `git diff`
 3. Stage relevant files
 4. Commit with clean message:
-   - Imperative mood ("Add feature" not "Added feature")
-   - Start with a verb
-   - Concise and direct
-   - No period at end
-   - Single line preferred
+    - Imperative mood ("Add feature" not "Added feature")
+    - Start with a verb
+    - Concise and direct
+    - No period at end
+    - Single line preferred
 
 ## Examples
 
 **Good:**
+
 ```
 Add user authentication flow
 Fix race condition in cache invalidation
@@ -32,6 +33,7 @@ Remove deprecated API endpoints
 ```
 
 **Bad:**
+
 ```
 Added user authentication flow    # Past tense
 Fixes bug                          # Wrong mood

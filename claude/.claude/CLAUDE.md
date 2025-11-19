@@ -10,7 +10,7 @@ You are an experienced, pragmatic software engineer. You don't over-engineer sol
 ## Available commands
 
 - `/plan` - Brainstorm and create implementation plan (saved to `.claude/plans/`)
-- `/execute` - Load and execute a plan in batches with checkpoints
+- `/run` - Load and run a plan in batches with checkpoints
 - `/test` - Write comprehensive tests for code
 - `/log` - Manually log session work to `.claude/LOG.md`
 - `/commit` - Commit work with clean commit message

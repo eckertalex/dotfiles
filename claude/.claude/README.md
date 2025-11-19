@@ -16,7 +16,7 @@
 ## Commands
 
 - `/plan` - Brainstorm and create implementation plan (saved to `.claude/plans/`)
-- `/execute` - Load and execute a plan in batches with checkpoints
+- `/run` - Load and run a plan in batches with checkpoints
 - `/test` - Write comprehensive tests for code
 - `/log` - Manually log session work to `.claude/LOG.md`
 - `/commit` - Commit work with clean commit message
@@ -25,6 +25,6 @@
 ## Notes
 
 - Plans persist across sessions in `.claude/plans/`
-- `/plan`, `/execute`, `/test` auto-log to `.claude/LOG.md`
+- `/plan`, `/run`, `/test` auto-log to `.claude/LOG.md`
 - `/commit` and `/ship` never add Claude attribution to commits
 - Log and plans are per-project, not global

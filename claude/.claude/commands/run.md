@@ -1,11 +1,11 @@
 ---
-name: Execute Implementation Plan
-description: Load and execute a persisted plan in batches with review checkpoints. Often run in a new session.
+name: Run Implementation Plan
+description: Load and run a persisted plan in batches with review checkpoints. Often run in a new session.
 ---
 
-# Execute Implementation Plan
+# Run Implementation Plan
 
-Load plan, review critically, execute in batches with checkpoints.
+Load plan, review critically, run in batches with checkpoints.
 
 ## Process
 
@@ -16,16 +16,18 @@ Load plan, review critically, execute in batches with checkpoints.
 3. Raise concerns before starting
 4. Create TodoWrite with all tasks from plan
 
-### 2. Execute Batch (2-3 tasks)
+### 2. Run Batch (2-3 tasks)
 
 For each task:
 
 **Start:**
+
 1. Mark `in_progress` in TodoWrite
 2. Follow plan phases: Skeleton → Logic → Validation → Tests → Verification
 3. Run all verifications
 
 **Complete:**
+
 1. Edit plan file: change `- [ ] Task N` to `- [x] Task N`
 2. Mark `completed` in TodoWrite
 3. Verify checkbox is checked by reading plan file
@@ -36,10 +38,12 @@ For each task:
 ## Batch [N] Complete
 
 **Implemented:**
+
 - Task 1: [description] ✓ Plan updated
 - Task 2: [description] ✓ Plan updated
 
 **Verification:**
+
 - Task 1: [Pass/Fail + details]
 - Task 2: [Pass/Fail + details]
 
@@ -61,7 +65,7 @@ When all tasks done, append to `.claude/LOG.md` in project repo:
 
 **Type:** Feature | Bugfix | Refactor
 
-**Action:** Executed implementation plan
+**Action:** Ran implementation plan
 
 **Branch:** [branch-name]
 
@@ -71,13 +75,16 @@ When all tasks done, append to `.claude/LOG.md` in project repo:
 [2-3 sentences about what was implemented]
 
 **Completed:**
+
 - [High-level list of accomplishments]
 
 **Decisions Made:**
+
 - [Implementation decisions that differed from plan]
 - [Technical approaches chosen during implementation]
 
 **Problems Encountered:**
+
 - [Issues faced and how resolved]
 - [Blockers and workarounds]
 
