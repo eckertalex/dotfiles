@@ -17,12 +17,15 @@ Create a new branch (if needed) and commit work with a proper commit message.
     - If already on feature branch: warn user they're not on main (they probably want `/commit`)
 3. Review changes with `git diff`
 4. Stage relevant files
-5. Commit with clean message:
-    - Imperative mood ("Add feature" not "Added feature")
-    - Start with a verb
-    - Concise and direct
-    - No period at end
-    - Single line preferred
+5. Assess scope of changes:
+    - **Simple:** Single focused change, self-explanatory from diff
+    - **Substantial:** Multiple related changes, non-obvious reasoning, or significant impact
+6. Commit with clean message following these rules:
+    - **Summary line:** Imperative mood, start with verb, max 72 chars, no period
+    - **For simple changes:** Single line is fine
+    - **For substantial changes:** Add blank line + detailed body explaining what and why
+    - Body should wrap at 72 characters
+    - Explain the reasoning behind changes, not just what changed
 
 ## Branch naming
 
@@ -36,13 +39,32 @@ Use kebab-case throughout (no slashes) and keep it concise.
 
 ## Examples
 
-**Good commits:**
+**Simple changes (single line):**
 
 ```
 Add user authentication flow
 Fix race condition in cache invalidation
-Refactor error handling to use Result types
 Remove deprecated API endpoints
+```
+
+**Substantial changes (with body):**
+
+```
+Refactor error handling to use Result types
+
+The previous error handling used exceptions which made control flow
+hard to follow. This changes the API to return Result<T, Error>
+types instead, making error cases explicit and forcing callers to
+handle them. This also eliminates silent failures in the retry logic.
+```
+
+```
+Add caching layer to reduce database load
+
+Implements Redis-based caching for user profile queries which were
+causing performance issues under load. Cache invalidation happens on
+profile updates via pub/sub. This reduces DB queries by ~80% in
+production traffic patterns.
 ```
 
 **Bad commits:**
