@@ -5,7 +5,7 @@ description: Manually add entry to unified session log at <repo>/.claude/LOG.md.
 
 # Log Session Entry
 
-Manually append entry to unified session log at `.claude/LOG.md` in project repo.
+Manually add entry to unified session log at `.claude/LOG.md` in project repo.
 
 **Note:** Auto-triggered by `/plan`, `/execute`, `/test`. Use manually for other work.
 
@@ -18,7 +18,11 @@ Manually append entry to unified session log at `.claude/LOG.md` in project repo
     - What decisions were made and what alternatives?
     - What problems occurred and how solved?
 
-2. **Append entry:**
+2. **ALWAYS PREPEND entry at the beginning:**
+
+   **CRITICAL:** New entries MUST be inserted at the BEGINNING of the file, immediately after the header and separator line (`---`). NEVER append to the end. Most recent entries should always be at the top.
+
+   Entry format:
 
 ```markdown
 ## YYYY-MM-DD - [Feature/Bug/Project Name]
@@ -63,17 +67,22 @@ Unified log of all development work across sessions.
 
 ---
 
-[entries]
+[new entry goes here - always after the separator]
 ```
+
+   **Remember:** When adding to existing file, insert new entry immediately after the `---` line.
 
 4. **Confirm:** "Entry logged to LOG.md"
 
 ## Guidelines
 
+- **ALWAYS prepend new entries at the beginning** - Insert immediately after the `---` separator, NEVER at the end
 - Clear feature/project name in each entry
 - Focus on decisions and outcomes - not file lists
 - Omit empty sections
-- Append only - never modify existing entries
+- Never modify existing entries
 - Reference commits by hash when relevant
 
 Focus on why decisions were made, what problems occurred, what was learned.
+
+**REMINDER:** Most recent work must always appear first in the log file.

@@ -41,7 +41,7 @@ Ask after each: "Does this look right?"
 
 Save to: `.claude/plans/YYYY-MM-DD-<feature-name>.md`
 
-Task granularity: One task = 15-30 min (Skeleton → Logic → Validation → Tests → Commit)
+Task granularity: One task = 15-30 min (Skeleton → Logic → Validation → Tests)
 
 ````markdown
 # [Feature Name] Implementation Plan
@@ -88,13 +88,6 @@ npm test ComponentName
 ````
 
 Expected: All tests pass
-
-**Commit:**
-
-```bash
-git add [files]
-git commit -m "[Clean commit message]"
-```
 
 ````
 
