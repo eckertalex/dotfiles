@@ -1,31 +1,31 @@
 return {
-	{
-		"nvim-mini/mini.icons",
-		lazy = true,
-		opts = {},
-		init = function()
-			package.preload["nvim-web-devicons"] = function()
-				require("mini.icons").mock_nvim_web_devicons()
-				return package.loaded["nvim-web-devicons"]
-			end
-		end,
-	},
+    {
+        "nvim-mini/mini.icons",
+        lazy = true,
+        opts = {},
+        init = function()
+            package.preload["nvim-web-devicons"] = function()
+                require("mini.icons").mock_nvim_web_devicons()
+                return package.loaded["nvim-web-devicons"]
+            end
+        end,
+    },
 
-	{
-		"nvim-mini/mini.cursorword",
-		event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-		opts = {},
-	},
+    {
+        "nvim-mini/mini.cursorword",
+        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
+        opts = {},
+    },
 
-	{
-		"nvim-mini/mini.statusline",
-		opts = {},
-	},
+    {
+        "nvim-mini/mini.statusline",
+        opts = {},
+    },
 
-	{
-		"nvim-mini/mini.starter",
-		opts = {
-			query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
-		},
-	},
+    {
+        "nvim-mini/mini.starter",
+        opts = {
+            query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
+        },
+    },
 }

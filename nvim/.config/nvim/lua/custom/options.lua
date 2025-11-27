@@ -38,7 +38,7 @@ vim.o.winborder = "rounded" -- Use border in floating windows
 vim.o.wrap = false -- Display long lines as just one line
 
 -- Special UI symbols
-vim.o.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
+vim.o.listchars = "nbsp:␣,tab:> ,trail:⋅"
 
 vim.o.foldlevel = 10 -- Fold nothing by default; set to 0 or 1 to fold
 vim.o.foldmethod = "indent" -- Fold based on indent level
@@ -76,42 +76,47 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.complete = ".,w,b,kspell" -- Use less sources
 vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
--- vim.schedule(function()
 vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
--- end)
 
 -- Diagnostics ================================================================
 
 -- Neovim has built-in support for showing diagnostic messages. This configures
 -- a more conservative display while still being useful.
-local diagnostic_opts = {
-	-- Show signs on top of any other sign, but only for warnings and errors
-	signs = { priority = 9999, severity = { min = "WARN", max = "ERROR" } },
+vim.diagnostic.config({
+    -- Show signs on top of any other sign, but only for warnings and errors
+    signs = {
+        priority = 9999,
+        severity = {
+            min = vim.diagnostic.severity.WARN,
+            max = vim.diagnostic.severity.ERROR,
+        },
+    },
 
-	-- Show all diagnostics as underline
-	underline = { severity = { min = "HINT", max = "ERROR" } },
+    -- Show all diagnostics as underline
+    underline = {
+        severity = {
+            min = vim.diagnostic.severity.HINT,
+            max = vim.diagnostic.severity.ERROR,
+        },
+    },
 
-	-- Show more details immediately for errors on the current line
-	virtual_lines = false,
-	virtual_text = {
-		current_line = true,
-		severity = { min = "ERROR", max = "ERROR" },
-	},
+    -- Show more details immediately for errors on the current line
+    virtual_lines = false,
+    virtual_text = {
+        current_line = true,
+        severity = {
+            min = vim.diagnostic.severity.ERROR,
+            max = vim.diagnostic.severity.ERROR,
+        },
+    },
 
-	-- Don't update diagnostics when typing
-	update_in_insert = false,
-}
-
--- source this later to avoid sourcing `vim.diagnostic` on startup
-vim.schedule(function()
-	vim.diagnostic.config(diagnostic_opts)
-end)
+    -- Don't update diagnostics when typing
+    update_in_insert = false,
+})
 
 -- set default filetypes
 vim.filetype.add({
-	extension = {
-		query = "graphql",
-	},
+    extension = {
+        query = "graphql",
+    },
 })

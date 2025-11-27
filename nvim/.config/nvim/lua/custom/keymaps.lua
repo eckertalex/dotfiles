@@ -26,28 +26,28 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Focus on right window" })
 
 -- Window resize (respecting `v:count`)
 vim.keymap.set(
-	"n",
-	"<C-Left>",
-	'"<Cmd>vertical resize -" . v:count1 . "<CR>"',
-	{ expr = true, replace_keycodes = false, desc = "Decrease window width" }
+    "n",
+    "<C-Left>",
+    '"<Cmd>vertical resize -" . v:count1 . "<CR>"',
+    { expr = true, replace_keycodes = false, desc = "Decrease window width" }
 )
 vim.keymap.set(
-	"n",
-	"<C-Down>",
-	'"<Cmd>resize -"          . v:count1 . "<CR>"',
-	{ expr = true, replace_keycodes = false, desc = "Decrease window height" }
+    "n",
+    "<C-Down>",
+    '"<Cmd>resize -"          . v:count1 . "<CR>"',
+    { expr = true, replace_keycodes = false, desc = "Decrease window height" }
 )
 vim.keymap.set(
-	"n",
-	"<C-Up>",
-	'"<Cmd>resize +"          . v:count1 . "<CR>"',
-	{ expr = true, replace_keycodes = false, desc = "Increase window height" }
+    "n",
+    "<C-Up>",
+    '"<Cmd>resize +"          . v:count1 . "<CR>"',
+    { expr = true, replace_keycodes = false, desc = "Increase window height" }
 )
 vim.keymap.set(
-	"n",
-	"<C-Right>",
-	'"<Cmd>vertical resize +" . v:count1 . "<CR>"',
-	{ expr = true, replace_keycodes = false, desc = "Increase window width" }
+    "n",
+    "<C-Right>",
+    '"<Cmd>vertical resize +" . v:count1 . "<CR>"',
+    { expr = true, replace_keycodes = false, desc = "Increase window width" }
 )
 
 -- Move lines
@@ -78,15 +78,15 @@ vim.keymap.set("x", "gp", '"+P', { desc = "Paste from system clipboard" })
 
 -- replace word
 vim.keymap.set(
-	"n",
-	"<leader>r",
-	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-	{ desc = "Replace word in Buffer" }
+    "n",
+    "<leader>r",
+    [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = "Replace word in Buffer" }
 )
 
 -- buffers
 local new_scratch_buffer = function()
-	vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
+    vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
 end
 
 vim.keymap.set("n", "<leader>bb", "<Cmd>b#<CR>", { desc = "Alternate" })

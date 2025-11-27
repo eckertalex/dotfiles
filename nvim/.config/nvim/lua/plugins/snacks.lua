@@ -1,51 +1,51 @@
 ---@module 'snacks'
 
 return {
-	{
-		"folke/snacks.nvim",
-		event = { "VeryLazy" },
-		lazy = false,
-		priority = 1000,
-		---@type snacks.Config
-		opts = {
-			bigfile = {},
-			bufdelete = {},
-			indent = {},
-			input = {},
-			notifier = {},
-			picker = {
-				formatters = {
-					file = {
-						filename_first = true,
-					},
-				},
-				win = {
-					input = {
-						keys = {
-							["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-							["<c-t>"] = { "toggle_preview", mode = { "i", "n" } },
-							["<c-w>"] = { "cycle_win", mode = { "i", "n" } },
-						},
-					},
-				},
-				jump = {
-					reuse_win = false,
-				},
-			},
-			quickfile = {},
-			image = {},
-			statuscolumn = {},
-			toggle = {},
-			zen = {
-				toggles = {
-					dim = false,
-					git_signs = false,
-				},
-				show = {
-					statusline = true,
-				},
-			},
-		},
+    {
+        "folke/snacks.nvim",
+        event = { "VeryLazy" },
+        lazy = false,
+        priority = 1000,
+        ---@type snacks.Config
+        opts = {
+            bigfile = {},
+            bufdelete = {},
+            indent = {},
+            input = {},
+            notifier = {},
+            picker = {
+                formatters = {
+                    file = {
+                        filename_first = true,
+                    },
+                },
+                win = {
+                    input = {
+                        keys = {
+                            ["<c-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+                            ["<c-t>"] = { "toggle_preview", mode = { "i", "n" } },
+                            ["<c-w>"] = { "cycle_win", mode = { "i", "n" } },
+                        },
+                    },
+                },
+                jump = {
+                    reuse_win = false,
+                },
+            },
+            quickfile = {},
+            image = {},
+            statuscolumn = {},
+            toggle = {},
+            zen = {
+                toggles = {
+                    dim = false,
+                    git_signs = false,
+                },
+                show = {
+                    statusline = true,
+                },
+            },
+        },
 		-- stylua: ignore
 		keys = {
             -- bufdelete
@@ -93,90 +93,90 @@ return {
             -- zen
 			{ "<leader>z", function() Snacks.zen() end, desc = "Zen Mode" },
 		},
-		config = function(_, opts)
-			require("snacks").setup(opts)
+        config = function(_, opts)
+            require("snacks").setup(opts)
 
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "VeryLazy",
-				callback = function()
-					Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
-					Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
-					Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>tL")
-					Snacks.toggle.diagnostics():map("<leader>td")
-					Snacks.toggle.line_number():map("<leader>tl")
-					Snacks.toggle
-						.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-						:map("<leader>tc")
-					Snacks.toggle.treesitter():map("<leader>tT")
-					Snacks.toggle.inlay_hints():map("<leader>th")
-					Snacks.toggle.indent():map("<leader>tg")
-				end,
-			})
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "VeryLazy",
+                callback = function()
+                    Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ts")
+                    Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>tw")
+                    Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>tL")
+                    Snacks.toggle.diagnostics():map("<leader>td")
+                    Snacks.toggle.line_number():map("<leader>tl")
+                    Snacks.toggle
+                        .option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
+                        :map("<leader>tc")
+                    Snacks.toggle.treesitter():map("<leader>tT")
+                    Snacks.toggle.inlay_hints():map("<leader>th")
+                    Snacks.toggle.indent():map("<leader>tg")
+                end,
+            })
 
-			---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
-			local progress = vim.defaulttable()
-			vim.api.nvim_create_autocmd("LspProgress", {
-				---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-				callback = function(ev)
-					local client = vim.lsp.get_client_by_id(ev.data.client_id)
-					local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
-					if not client or type(value) ~= "table" then
-						return
-					end
-					local p = progress[client.id]
+            ---@type table<number, {token:lsp.ProgressToken, msg:string, done:boolean}[]>
+            local progress = vim.defaulttable()
+            vim.api.nvim_create_autocmd("LspProgress", {
+                ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+                callback = function(ev)
+                    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                    local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
+                    if not client or type(value) ~= "table" then
+                        return
+                    end
+                    local p = progress[client.id]
 
-					for i = 1, #p + 1 do
-						if i == #p + 1 or p[i].token == ev.data.params.token then
-							p[i] = {
-								token = ev.data.params.token,
-								msg = ("[%3d%%] %s%s"):format(
-									value.kind == "end" and 100 or value.percentage or 100,
-									value.title or "",
-									value.message and (" **%s**"):format(value.message) or ""
-								),
-								done = value.kind == "end",
-							}
-							break
-						end
-					end
+                    for i = 1, #p + 1 do
+                        if i == #p + 1 or p[i].token == ev.data.params.token then
+                            p[i] = {
+                                token = ev.data.params.token,
+                                msg = ("[%3d%%] %s%s"):format(
+                                    value.kind == "end" and 100 or value.percentage or 100,
+                                    value.title or "",
+                                    value.message and (" **%s**"):format(value.message) or ""
+                                ),
+                                done = value.kind == "end",
+                            }
+                            break
+                        end
+                    end
 
-					local msg = {} ---@type string[]
-					progress[client.id] = vim.tbl_filter(function(v)
-						return table.insert(msg, v.msg) or not v.done
-					end, p)
+                    local msg = {} ---@type string[]
+                    progress[client.id] = vim.tbl_filter(function(v)
+                        return table.insert(msg, v.msg) or not v.done
+                    end, p)
 
-					local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-					vim.notify(table.concat(msg, "\n"), "info", {
-						id = "lsp_progress",
-						title = client.name,
-						opts = function(notif)
-							notif.icon = #progress[client.id] == 0 and " "
-								or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-						end,
-					})
-				end,
-			})
-		end,
-	},
+                    local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+                    vim.notify(table.concat(msg, "\n"), "info", {
+                        id = "lsp_progress",
+                        title = client.name,
+                        opts = function(notif)
+                            notif.icon = #progress[client.id] == 0 and " "
+                                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+                        end,
+                    })
+                end,
+            })
+        end,
+    },
 
-	{
-		"folke/todo-comments.nvim",
-		optional = true,
-		keys = {
-			{
-				"<leader>st",
-				function()
-					Snacks.picker.todo_comments({ hidden = true })
-				end,
-				desc = "Todo",
-			},
-			{
-				"<leader>sT",
-				function()
-					Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" }, hidden = true })
-				end,
-				desc = "Todo/Fix/Fixme",
-			},
-		},
-	},
+    {
+        "folke/todo-comments.nvim",
+        optional = true,
+        keys = {
+            {
+                "<leader>st",
+                function()
+                    Snacks.picker.todo_comments({ hidden = true })
+                end,
+                desc = "Todo",
+            },
+            {
+                "<leader>sT",
+                function()
+                    Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" }, hidden = true })
+                end,
+                desc = "Todo/Fix/Fixme",
+            },
+        },
+    },
 }
