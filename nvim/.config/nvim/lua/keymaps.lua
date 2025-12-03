@@ -70,24 +70,15 @@ vim.keymap.set({ "n", "v" }, "<leader>yp", yank.yank_absolute, { desc = "Yank ab
 vim.keymap.set({ "n", "v" }, "<leader>yr", yank.yank_relative, { desc = "Yank relative path" })
 
 -- yank/delete into registers
-vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without losing register" })
-
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete to empty register" })
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete _" })
 
 -- Basic clipboard interaction
 -- Copy/paste with system clipboard
 vim.keymap.set({ "n", "x" }, "gy", '"+y', { desc = "Copy to system clipboard" })
 vim.keymap.set("n", "gp", '"+p', { desc = "Paste from system clipboard" })
--- - Paste in Visual with `P` to not copy selected text (`:h v_P`)
-vim.keymap.set("x", "gp", '"+P', { desc = "Paste from system clipboard" })
 
 -- replace word
-vim.keymap.set(
-    "n",
-    "<leader>r",
-    [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-    { desc = "Replace word in Buffer" }
-)
+vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word" })
 
 -- buffers
 local new_scratch_buffer = function()

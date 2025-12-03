@@ -7,20 +7,9 @@ return {
         priority = 1000,
         ---@type snacks.Config
         opts = {
-            bufdelete = {},
-            indent = {},
-            input = {},
             notifier = {},
             statuscolumn = {},
         },
-		-- stylua: ignore
-		keys = {
-            -- bufdelete
-			{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete" },
-			{ "<leader>bD", function() Snacks.bufdelete({ force = true }) end, desc = "Delete!" },
-			{ "<leader>ba", function() Snacks.bufdelete.all() end, desc = "Delete all buffers" },
-			{ "<leader>bo", function() Snacks.bufdelete.other() end, desc = "Delete other buffers" },
-		},
         config = function(_, opts)
             require("snacks").setup(opts)
 

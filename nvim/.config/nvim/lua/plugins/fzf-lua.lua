@@ -24,7 +24,6 @@ return {
 
             local fzf_frecency = require("fzf-lua-frecency")
 
-            -- helper to simplify repetitive mapping pattern
             local map = function(lhs, rhs, desc, mode)
                 vim.keymap.set(mode or "n", lhs, rhs, { desc = desc })
             end
