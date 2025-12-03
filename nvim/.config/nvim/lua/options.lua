@@ -76,7 +76,7 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.complete = ".,w,b,kspell" -- Use less sources
 vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
-vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
+-- vim.o.clipboard = "unnamedplus" -- Sync with system clipboard
 
 -- Diagnostics ================================================================
 

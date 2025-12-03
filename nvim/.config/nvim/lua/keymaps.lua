@@ -1,3 +1,5 @@
+local yank = require("yank")
+
 -- [[ Basic Keymaps ]]
 --
 -- This file contains definitions of custom general and Leader mappings.
@@ -63,6 +65,9 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Center on half page scroll
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
+
+vim.keymap.set({ "n", "v" }, "<leader>yp", yank.yank_absolute, { desc = "Yank absolute path" })
+vim.keymap.set({ "n", "v" }, "<leader>yr", yank.yank_relative, { desc = "Yank relative path" })
 
 -- yank/delete into registers
 vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without losing register" })

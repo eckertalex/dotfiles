@@ -159,13 +159,14 @@ return {
             vim.api.nvim_create_autocmd("LspAttach", {
                 group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
                 callback = function(event)
-                    ---@module 'snacks'
+                    local fzf = require("fzf-lua")
+
                     vim.keymap.set(
                         "n",
                         "gd",
                         -- vim.lsp.buf.definition,
                         function()
-                            Snacks.picker.lsp_definitions()
+                            fzf.lsp_definitions()
                         end,
                         { buffer = event.buf, desc = "vim.lsp.buf.definition" }
                     )
@@ -175,7 +176,7 @@ return {
                         "grr",
                         -- vim.lsp.buf.references,
                         function()
-                            Snacks.picker.lsp_references()
+                            fzf.lsp_references()
                         end,
                         { buffer = event.buf, desc = "vim.lsp.buf.references" }
                     )

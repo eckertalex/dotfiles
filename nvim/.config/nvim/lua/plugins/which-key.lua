@@ -14,6 +14,7 @@ return {
                 { "<leader>s", group = "Search", mode = { "n", "v" } },
                 { "<leader>t", group = "Toggle" },
                 { "<leader>x", group = "Diagnostics/Quickfix" },
+                { "<leader>y", group = "Yank", mode = { "n", "v" } },
 
                 { "<leader>p", icon = "", desc = "Paste without losing register" },
                 { "<leader>d", icon = "󰆴", desc = "Delete to empty register" },
