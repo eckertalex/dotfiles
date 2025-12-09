@@ -10,9 +10,15 @@ return {
         config = function()
             local fzf = require("fzf-lua")
             fzf.setup({
+                winopts = {
+                    ---@diagnostic disable-next-line: missing-fields
+                    preview = {
+                        layout = "vertical",
+                    },
+                },
                 keymap = {
                     builtin = {
-                        ["<alt-p>"] = "toggle-preview",
+                        ["<a-p>"] = "toggle-preview",
                     },
                 },
                 defaults = {

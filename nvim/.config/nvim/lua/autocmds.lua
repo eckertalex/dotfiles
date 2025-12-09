@@ -1,14 +1,4 @@
--- [[ Basic Autocommands ]]
-
 local group = vim.api.nvim_create_augroup("BasicAutocommands", {})
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-    group = group,
-    callback = function()
-        vim.highlight.on_yank()
-    end,
-    desc = "Highlight when yanking (copying) text",
-})
 
 vim.api.nvim_create_autocmd("VimResized", {
     group = group,
