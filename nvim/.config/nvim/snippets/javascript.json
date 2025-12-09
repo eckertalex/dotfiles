@@ -1,0 +1,63 @@
+{
+    "useState": {
+        "prefix": "us",
+        "body": "const [${1:state}, set${2:State}] = useState(${3:initValue})$0",
+        "description": "React useState() hook"
+    },
+    "useEffect": {
+        "prefix": "ue",
+        "body": ["useEffect(() => {", "\t$1", "}, [${2:dependencies}])$0"],
+        "description": "React useEffect() hook"
+    },
+    "useEffect with cleanup": {
+        "prefix": "uec",
+        "body": [
+            "useEffect(() => {",
+            "\t$1",
+            "\n\treturn () => {",
+            "\t\t$2",
+            "\t}",
+            "}, [${3:dependencies}])$0"
+        ],
+        "description": "React useEffect() hook with a cleanup function"
+    },
+    "describeBlock": {
+        "prefix": "desc",
+        "body": ["describe('$1', () => {", "  $0", "})", ""],
+        "description": "Testing `describe` block"
+    },
+    "itBlock": {
+        "prefix": "tit",
+        "body": ["it('should $1', () => {", "  $0", "})", ""],
+        "description": "Testing `it` block"
+    },
+    "itAsyncBlock": {
+        "prefix": "tita",
+        "body": ["it('should $1', async () => {", "  $0", "})", ""],
+        "description": "Testing async `it` block"
+    },
+    "screen.debug": {
+        "prefix": "sd",
+        "body": "screen.debug(undefined, Number.MAX_SAFE_INTEGER)",
+        "description": "screen debug"
+    },
+    "query.role": {
+        "prefix": "qr",
+        "body": [
+            "screen.${1|getBy,getAllBy,queryBy,queryAllBy,findBy,findByAll|}Role('${2:id}', { name: ${3:displayText} })$0"
+        ],
+        "description": "Role query"
+    },
+    "query.text": {
+        "prefix": "qt",
+        "body": [
+            "screen.${1|getBy,getAllBy,queryBy,queryAllBy,findBy,findByAll|}Text($2)$0"
+        ],
+        "description": "Text query"
+    },
+    "wait.for": {
+        "prefix": "wf",
+        "body": ["await waitFor(() => {", "\t$0", "})"],
+        "description": "wait for"
+    }
+}

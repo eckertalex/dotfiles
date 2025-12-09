@@ -1,4 +1,35 @@
 return {
+    -- Text Editing ============================================================
+    {
+        "nvim-mini/mini.comment",
+        dependencies = {
+            "JoosepAlviste/nvim-ts-context-commentstring",
+        },
+        config = function()
+            require("mini.comment").setup({
+                options = {
+                    custom_commentstring = function()
+                        return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+                    end,
+                },
+            })
+        end,
+    },
+
+    {
+        "nvim-mini/mini.snippets",
+        config = function()
+            local snippets = require("mini.snippets")
+            snippets.setup({
+                snippets = {
+                    snippets.gen_loader.from_file("~/.config/nvim/snippets/global.json"),
+                    snippets.gen_loader.from_lang(),
+                },
+            })
+        end,
+    },
+
+    -- General =================================================================
     {
         "nvim-mini/mini.basics",
         config = function()
@@ -25,131 +56,12 @@ return {
     },
 
     {
-        "nvim-mini/mini.comment",
-        dependencies = {
-            "JoosepAlviste/nvim-ts-context-commentstring",
-        },
-        config = function()
-            require("mini.comment").setup({
-                options = {
-                    custom_commentstring = function()
-                        return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
-                    end,
-                },
-            })
-        end,
-    },
-
-    {
-        "nvim-mini/mini.icons",
-        config = function()
-            require("mini.icons").setup()
-        end,
-    },
-
-    {
         "nvim-mini/mini.bufremove",
         config = function()
             require("mini.bufremove").setup()
 
             vim.keymap.set("n", "<leader>bd", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete" })
             vim.keymap.set("n", "<leader>bD", "<cmd>lua MiniBufremove.delete(0, true)<cr>", { desc = "Delete!" })
-        end,
-    },
-
-    {
-        "nvim-mini/mini.cursorword",
-        config = function()
-            require("mini.cursorword").setup()
-        end,
-    },
-
-    {
-        "nvim-mini/mini.hipatterns",
-        config = function()
-            local hipatterns = require("mini.hipatterns")
-
-            local function make_pattern(word)
-                return string.format("()%%f[%%w_]%s()%%f[^%%w_]", word)
-            end
-
-            hipatterns.setup({
-                highlighters = {
-                    fixme = {
-                        pattern = {
-                            make_pattern("FIXME"),
-                            make_pattern("FIX"),
-                        },
-                        group = "MiniHipatternsFixme",
-                    },
-                    hack = {
-                        pattern = {
-                            make_pattern("HACK"),
-                            make_pattern("WARN"),
-                            make_pattern("WARNING"),
-                        },
-                        group = "MiniHipatternsHack",
-                    },
-                    todo = {
-                        pattern = make_pattern("TODO"),
-                        group = "MiniHipatternsTodo",
-                    },
-                    note = {
-                        pattern = {
-                            make_pattern("NOTE"),
-                            make_pattern("INFO"),
-                        },
-                        group = "MiniHipatternsNote",
-                    },
-                    hex_color = hipatterns.gen_highlighter.hex_color(),
-                },
-            })
-        end,
-    },
-
-    {
-        "nvim-mini/mini.indentscope",
-        opts = {},
-    },
-
-    {
-        "nvim-mini/mini.statusline",
-        opts = {},
-    },
-
-    {
-        "nvim-mini/mini.starter",
-        config = function()
-            local starter = require("mini.starter")
-            starter.setup({
-                query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
-                evaluate_single = true,
-                items = {
-                    starter.sections.builtin_actions(),
-                    starter.sections.recent_files(9, true, false),
-                },
-                content_hooks = {
-                    starter.gen_hook.adding_bullet(),
-                    starter.gen_hook.indexing("all", { "Builtin actions" }),
-                    starter.gen_hook.aligning("center", "center"),
-                },
-            })
-        end,
-    },
-
-    {
-        "nvim-mini/mini.notify",
-        config = function()
-            local win_config = function()
-                local has_statusline = vim.o.laststatus > 0
-                local pad = vim.o.cmdheight + (has_statusline and 1 or 0)
-                return { anchor = "SE", col = vim.o.columns, row = vim.o.lines - pad }
-            end
-            require("mini.notify").setup({
-                window = {
-                    config = win_config,
-                },
-            })
         end,
     },
 
@@ -210,6 +122,114 @@ return {
                     miniclue.gen_clues.z(),
                 },
             })
+        end,
+    },
+
+    -- Appearance ==============================================================
+    {
+        "nvim-mini/mini.cursorword",
+        config = function()
+            require("mini.cursorword").setup()
+        end,
+    },
+
+    {
+        "nvim-mini/mini.hipatterns",
+        config = function()
+            local hipatterns = require("mini.hipatterns")
+
+            local function make_pattern(word)
+                return string.format("()%%f[%%w_]%s()%%f[^%%w_]", word)
+            end
+
+            hipatterns.setup({
+                highlighters = {
+                    fixme = {
+                        pattern = {
+                            make_pattern("FIXME"),
+                            make_pattern("FIX"),
+                        },
+                        group = "MiniHipatternsFixme",
+                    },
+                    hack = {
+                        pattern = {
+                            make_pattern("HACK"),
+                            make_pattern("WARN"),
+                            make_pattern("WARNING"),
+                        },
+                        group = "MiniHipatternsHack",
+                    },
+                    todo = {
+                        pattern = make_pattern("TODO"),
+                        group = "MiniHipatternsTodo",
+                    },
+                    note = {
+                        pattern = {
+                            make_pattern("NOTE"),
+                            make_pattern("INFO"),
+                        },
+                        group = "MiniHipatternsNote",
+                    },
+                    hex_color = hipatterns.gen_highlighter.hex_color(),
+                },
+            })
+        end,
+    },
+
+    {
+        "nvim-mini/mini.icons",
+        config = function()
+            require("mini.icons").setup()
+        end,
+    },
+
+    {
+        "nvim-mini/mini.indentscope",
+        config = function()
+            require("mini.indentscope").setup()
+        end,
+    },
+
+    {
+        "nvim-mini/mini.notify",
+        config = function()
+            local win_config = function()
+                local has_statusline = vim.o.laststatus > 0
+                local pad = vim.o.cmdheight + (has_statusline and 1 or 0)
+                return { anchor = "SE", col = vim.o.columns, row = vim.o.lines - pad }
+            end
+            require("mini.notify").setup({
+                window = {
+                    config = win_config,
+                },
+            })
+        end,
+    },
+
+    {
+        "nvim-mini/mini.starter",
+        config = function()
+            local starter = require("mini.starter")
+            starter.setup({
+                query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
+                evaluate_single = true,
+                items = {
+                    starter.sections.builtin_actions(),
+                    starter.sections.recent_files(9, true, false),
+                },
+                content_hooks = {
+                    starter.gen_hook.adding_bullet(),
+                    starter.gen_hook.indexing("all", { "Builtin actions" }),
+                    starter.gen_hook.aligning("center", "center"),
+                },
+            })
+        end,
+    },
+
+    {
+        "nvim-mini/mini.statusline",
+        config = function()
+            require("mini.statusline").setup()
         end,
     },
 }
