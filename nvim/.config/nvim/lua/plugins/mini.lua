@@ -51,7 +51,12 @@ return {
     {
         "nvim-mini/mini.bracketed",
         config = function()
-            require("mini.bracketed").setup()
+            require("mini.bracketed").setup({
+                -- use ]c [c for diff jumping
+                comment = { suffix = "" },
+                -- use keymap from mini.indentscope
+                indent = { suffix = "" },
+            })
         end,
     },
 

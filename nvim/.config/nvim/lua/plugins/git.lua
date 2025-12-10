@@ -3,80 +3,81 @@ return {
         "tpope/vim-fugitive",
         dependencies = {
             { "tpope/vim-rhubarb" },
-            { "shumphrey/fugitive-gitlab.vim" },
         },
-        event = { "VeryLazy" },
-        cmd = { "G", "Git" },
-        keys = {
-            { "<leader>gg", "<cmd>Git<cr>", desc = "Fugitive" },
-            { "<leader>gb", "<cmd>Git blame<cr>", desc = "Blame file" },
-        },
+        config = function()
+            vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
+        end,
     },
 
     {
         "lewis6991/gitsigns.nvim",
-        event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-        opts = {
-            signs = {
-                add = { text = "+" },
-                change = { text = "~" },
-                delete = { text = "_" },
-                topdelete = { text = "‾" },
-                changedelete = { text = "~" },
-            },
-            on_attach = function(bufnr)
-                local gs = package.loaded.gitsigns
+        config = function()
+            local gitsigns = require("gitsigns")
 
+            local function on_attach(bufnr)
                 local function map(mode, l, r, opts)
                     opts = opts or {}
                     opts.buffer = bufnr
                     vim.keymap.set(mode, l, r, opts)
                 end
 
-                -- Navigation
-                map({ "n", "v" }, "]c", function()
+                local function next_hunk()
                     if vim.wo.diff then
-                        return "]c"
+                        vim.cmd.normal({ args = { "]c" }, bang = true })
+                    else
+                        require("gitsigns").nav_hunk({ direction = "next" })
                     end
-                    vim.schedule(function()
-                        gs.next_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, desc = "Next hunk" })
+                end
 
-                map({ "n", "v" }, "[c", function()
+                local function prev_hunk()
                     if vim.wo.diff then
-                        return "[c"
+                        vim.cmd.normal({ args = { "[c" }, bang = true })
+                    else
+                        require("gitsigns").nav_hunk({ direction = "prev" })
                     end
-                    vim.schedule(function()
-                        gs.prev_hunk()
-                    end)
-                    return "<Ignore>"
-                end, { expr = true, desc = "Previous hunk" })
+                end
 
-                -- Actions
-                -- visual mode
+                map({ "n", "v" }, "]c", next_hunk, { desc = "Next hunk" })
+                map({ "n", "v" }, "[c", prev_hunk, { desc = "Previous hunk" })
+
+                map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage hunk" })
+                map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset hunk" })
+
                 map("v", "<leader>hs", function()
-                    gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                end, { desc = "Stage hunk" })
+                    gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                end, { desc = "Stage selected hunk" })
                 map("v", "<leader>hr", function()
-                    gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-                end, { desc = "Reset hunk" })
-                -- normal mode
-                map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
-                map("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
-                map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
-                map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
-                map("n", "<leader>hR", gs.reset_buffer, { desc = "Reset buffer" })
-                map("n", "<leader>hp", gs.preview_hunk, { desc = "Preview hunk" })
+                    gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                end, { desc = "Reset selected hunk" })
+
+                map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage buffer" })
+                map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset buffer" })
+                map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview hunk" })
+                map("n", "<leader>hi", gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
+
                 map("n", "<leader>hb", function()
-                    gs.blame_line({ full = false })
+                    gitsigns.blame_line({ full = true })
                 end, { desc = "Blame line" })
-                map("n", "<leader>hd", gs.diffthis, { desc = "Diff this" })
+
+                map("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff this" })
                 map("n", "<leader>hD", function()
-                    gs.diffthis("~")
+                    gitsigns.diffthis({ base = "~" })
                 end, { desc = "Diff this ~" })
-            end,
-        },
+
+                map("n", "<leader>hq", gitsigns.setqflist, { desc = "Populate qflist with hunks" })
+                map("n", "<leader>hQ", function()
+                    gitsigns.setqflist({ target = "all" })
+                end, { desc = "Populate qflist with all hunks" })
+
+                map("n", "\\g", gitsigns.toggle_current_line_blame, { desc = "Toggle git line blame" })
+                map("n", "\\W", gitsigns.toggle_word_diff, { desc = "Toggle git word diff highlight" })
+
+                map({ "o", "x" }, "gh", gitsigns.select_hunk, { desc = "Select hunk text object" })
+            end
+
+            gitsigns.setup({
+                on_attach = on_attach,
+            })
+        end,
     },
 }
