@@ -25,7 +25,9 @@ now_if_args(function()
         "css",
         "diff",
         "dockerfile",
-        "elixir",
+        "git_config",
+        "git_rebase",
+        "gitattributes",
         "gitcommit",
         "gitignore",
         "go",
@@ -33,24 +35,19 @@ now_if_args(function()
         "gosum",
         "gowork",
         "html",
+        "java",
         "javascript",
-        "jsdoc",
-        "json",
         "json5",
-        "jsonc",
         "lua",
-        "luadoc",
-        "luap",
+        "kotlin",
+        "php",
+        "sql",
         "markdown",
         "markdown_inline",
-        "query",
-        "regex",
         "scss",
         "toml",
         "tsx",
         "typescript",
-        "vim",
-        "vimdoc",
         "yaml",
     }
 
@@ -63,28 +60,23 @@ now_if_args(function()
     end
 
     -- Enable tree-sitter after opening a file for a target language
-    local filetypes = {}
+    local ts_filetypes = {}
     for _, lang in ipairs(languages) do
         for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
-            table.insert(filetypes, ft)
+            table.insert(ts_filetypes, ft)
         end
     end
     local function ts_start(ev)
         vim.treesitter.start(ev.buf)
     end
-    _G.Config.new_autocmd("FileType", filetypes, ts_start, "Start tree-sitter")
+    _G.Config.new_autocmd("FileType", ts_filetypes, ts_start, "Start tree-sitter")
 
-    local function enable_treesitter_features()
+    local function enable_ts_features()
         vim.opt_local.foldmethod = "expr"
         vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
         vim.opt_local.indentexpr = "nvim_treesitter#indent()"
     end
-    _G.Config.new_autocmd(
-        "FileType",
-        ts_filetypes,
-        enable_treesitter_features,
-        "Enable tree-sitter foldexpr and indentexpr"
-    )
+    _G.Config.new_autocmd("FileType", ts_filetypes, enable_ts_features, "Enable tree-sitter foldexpr and indentexpr")
 
     -- Textobjects =============================================================
     require("nvim-treesitter-textobjects").setup({

@@ -2,174 +2,83 @@ local add, later = MiniDeps.add, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
 now_if_args(function()
-    add({
-        source = "neovim/nvim-lspconfig",
-        depends = {
-            "mason-org/mason.nvim",
-            "mason-org/mason-lspconfig.nvim",
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
-        },
+    add("neovim/nvim-lspconfig")
+
+    vim.lsp.enable({
+        "astro",
+        "cssls",
+        "eslint",
+        "gopls",
+        "html",
+        "jsonls",
+        "kotlin",
+        "lua_ls",
+        "tailwindcss",
+        "vtsls",
+        "yamlls",
     })
 
-    local servers = {
-        astro = {},
-        cssls = {},
-        cssmodules_ls = {},
-        eslint = {
-            settings = {
-                workingDirectories = { mode = "auto" },
-            },
-            on_attach = function()
-                vim.keymap.set("", "<leader>cx", "<cmd>LspEslintFixAll<cr>", { desc = "LspEslintFixAll" })
+    local function lsp_attach(event)
+        local fzf = require("fzf-lua")
+
+        vim.keymap.set(
+            "n",
+            "gd",
+            -- vim.lsp.buf.definition,
+            function()
+                fzf.lsp_definitions()
             end,
-        },
-        elixirls = {},
-        gopls = {
-            settings = {
-                gopls = {
-                    gofumpt = true,
-                    codelenses = {
-                        gc_details = false,
-                        generate = true,
-                        regenerate_cgo = true,
-                        run_govulncheck = true,
-                        test = true,
-                        tidy = true,
-                        upgrade_dependency = true,
-                        vendor = true,
-                    },
-                    hints = {
-                        assignVariableTypes = true,
-                        compositeLiteralFields = true,
-                        compositeLiteralTypes = true,
-                        constantValues = true,
-                        functionTypeParameters = true,
-                        parameterNames = true,
-                        rangeVariableTypes = true,
-                    },
-                    analyses = {
-                        fieldalignment = false,
-                        nilness = true,
-                        unusedparams = true,
-                        unusedwrite = true,
-                        useany = true,
-                    },
-                    usePlaceholders = true,
-                    completeUnimported = true,
-                    staticcheck = true,
-                    directoryFilters = {
-                        "-.git",
-                        "-.vscode",
-                        "-.idea",
-                        "-.vscode-test",
-                        "-node_modules",
-                    },
-                    semanticTokens = true,
-                },
-            },
-        },
-        graphql = {},
-        html = {},
-        jsonls = {
-            on_new_config = function(new_config)
-                new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+            { buffer = event.buf, desc = "vim.lsp.buf.definition" }
+        )
+
+        vim.keymap.set(
+            "n",
+            "grr",
+            -- vim.lsp.buf.references,
+            function()
+                fzf.lsp_references()
             end,
-            settings = {
-                format = {
-                    json = {
-                        enable = true,
-                    },
-                    validate = { enable = true },
-                },
-            },
-        },
-        lua_ls = {
-            settings = {
-                Lua = {
-                    completion = { callSnippet = "Replace" },
-                    telemetry = { enable = false },
-                    diagnostics = { disable = { "missing-fields" } },
-                    hint = { enable = true },
-                },
-            },
-        },
-        marksman = {},
-        sqls = {},
-        tailwindcss = {},
-        vtsls = {
-            settings = {
-                typescript = {
-                    inlayHints = {
-                        parameterNames = { enabled = "literals" },
-                        parameterTypes = { enabled = true },
-                        variableTypes = { enabled = true },
-                        propertyDeclarationTypes = { enabled = true },
-                        functionLikeReturnTypes = { enabled = true },
-                        enumMemberValues = { enabled = true },
-                    },
-                },
-            },
-        },
-    }
+            { buffer = event.buf, desc = "vim.lsp.buf.references" }
+        )
+    end
+    _G.Config.new_autocmd("LspAttach", "*", lsp_attach, "Start tree-sitter")
+end)
+
+later(function()
+    add("b0o/SchemaStore.nvim")
+end)
+
+later(function()
+    add("mason-org/mason.nvim")
+    add("WhoIsSethDaniel/mason-tool-installer.nvim")
 
     require("mason").setup()
-
-    local ensure_installed = vim.tbl_keys(servers or {})
-    require("mason-lspconfig").setup({
-        ensure_installed = ensure_installed,
-        automatic_enable = true,
-        handlers = {
-            function(server_name)
-                local server = servers[server_name] or {}
-                require("lspconfig")[server_name].setup(server)
-            end,
-        },
-    })
-
     require("mason-tool-installer").setup({
         ensure_installed = {
-            "gofumpt",
-            "goimports",
-            "markdownlint",
+            -- LSPs
+            "astro-language-server",
+            "css-lsp",
+            "eslint-lsp",
+            "gopls",
+            "html-lsp",
+            "json-lsp",
+            "kotlin-language-server",
+            "lua-language-server",
+            "tailwindcss-language-server",
+            "vtsls",
+            "yaml-language-server",
+
+            -- tools
             "prettier",
-            "shfmt",
             "stylua",
+            "ktlint",
         },
-        automatic_enable = true,
-    })
-
-    vim.api.nvim_create_autocmd("LspAttach", {
-        group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
-        callback = function(event)
-            local fzf = require("fzf-lua")
-
-            vim.keymap.set(
-                "n",
-                "gd",
-                -- vim.lsp.buf.definition,
-                function()
-                    fzf.lsp_definitions()
-                end,
-                { buffer = event.buf, desc = "vim.lsp.buf.definition" }
-            )
-
-            vim.keymap.set(
-                "n",
-                "grr",
-                -- vim.lsp.buf.references,
-                function()
-                    fzf.lsp_references()
-                end,
-                { buffer = event.buf, desc = "vim.lsp.buf.references" }
-            )
-        end,
     })
 end)
 
 later(function()
     add("stevearc/conform.nvim")
 
-    local prettier = { "prettierd", "prettier", stop_after_first = true }
     require("conform").setup({
         format_on_save = function(bufnr)
             -- Disable autoformat on certain filetypes
@@ -189,23 +98,22 @@ later(function()
             return { timeout_ms = 3000, lsp_format = "fallback" }
         end,
         formatters_by_ft = {
-            ["astro"] = prettier,
-            ["css"] = prettier,
-            ["go"] = { "goimports", "gofumpt" },
-            ["graphql"] = prettier,
-            ["html"] = prettier,
-            ["javascript"] = prettier,
-            ["javascriptreact"] = prettier,
-            ["json"] = prettier,
-            ["jsonc"] = prettier,
-            ["lua"] = { "stylua" },
-            ["markdown"] = prettier,
-            ["markdown.mdx"] = prettier,
-            ["scss"] = prettier,
-            ["sh"] = { "shfmt" },
-            ["typescript"] = prettier,
-            ["typescriptreact"] = prettier,
-            ["yaml"] = prettier,
+            astro = { "prettier" },
+            css = { "prettier" },
+            go = { "gofmt" },
+            graphql = { "prettier" },
+            html = { "prettier" },
+            javascript = { "prettier" },
+            javascriptreact = { "prettier" },
+            json = { "prettier" },
+            kotlin = { "ktlint" },
+            lua = { "stylua" },
+            markdown = { "prettier" },
+            ["markdown.mdx"] = { "prettier" },
+            scss = { "prettier" },
+            typescript = { "prettier" },
+            typescriptreact = { "prettier" },
+            yaml = { "prettier" },
         },
     })
 
