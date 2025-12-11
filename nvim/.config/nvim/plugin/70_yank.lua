@@ -1,5 +1,3 @@
-local M = {}
-
 -- get full absolute path
 local function get_absolute_path()
     return vim.fn.expand("%:p")
@@ -41,7 +39,7 @@ local function copy_to_clipboard(text)
 end
 
 -- yank absolute path (and visual line range if applicable)
-function M.yank_absolute()
+local function yank_absolute()
     local path = get_absolute_path()
     if vim.fn.mode():match("[vV]") then
         path = path .. ":" .. get_visual_range()
@@ -50,7 +48,7 @@ function M.yank_absolute()
 end
 
 -- yank relative path (and visual line range if applicable)
-function M.yank_relative()
+local function yank_relative()
     local path = get_relative_path()
     if vim.fn.mode():match("[vV]") then
         path = path .. ":" .. get_visual_range()
@@ -58,4 +56,5 @@ function M.yank_relative()
     copy_to_clipboard(path)
 end
 
-return M
+vim.keymap.set({ "n", "v" }, "<leader>yp", yank_absolute, { desc = "Yank absolute path" })
+vim.keymap.set({ "n", "v" }, "<leader>yr", yank_relative, { desc = "Yank relative path" })

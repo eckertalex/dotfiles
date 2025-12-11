@@ -8,10 +8,10 @@ vim.o.scrolloff = 4 -- Lines of context
 vim.o.sidescrolloff = 4 -- Columns of context
 vim.o.winborder = "rounded" -- Use border in floating windows
 
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldlevel = 10 -- Fold nothing by default; set to 0 or 1 to fold
 vim.o.foldcolumn = "1"
+vim.o.foldmethod = "indent" -- Fold based on indent level
+vim.o.foldnestmax = 10 -- Limit number of fold levels
 
 -- Editing ====================================================================
 vim.o.autoindent = true -- Use auto indent
@@ -35,11 +35,20 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.complete = ".,w,b,kspell" -- Use less sources
 vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
+-- Autocommands ===============================================================
+
+-- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
+-- Do on `FileType` to always override these changes from filetype plugins.
+local ensure_fo = function()
+    vim.cmd("setlocal formatoptions-=c formatoptions-=o")
+end
+_G.Config.new_autocmd("FileType", "*", ensure_fo, "Proper 'formatoptions'")
+
 -- Diagnostics ================================================================
 
 -- Neovim has built-in support for showing diagnostic messages. This configures
 -- a more conservative display while still being useful.
-vim.diagnostic.config({
+local diagnostic_opts = {
     -- Show signs on top of any other sign, but only for warnings and errors
     signs = {
         priority = 9999,
@@ -69,11 +78,8 @@ vim.diagnostic.config({
 
     -- Don't update diagnostics when typing
     update_in_insert = false,
-})
+}
 
--- set default filetypes
-vim.filetype.add({
-    extension = {
-        query = "graphql",
-    },
-})
+MiniDeps.later(function()
+    vim.diagnostic.config(diagnostic_opts)
+end)

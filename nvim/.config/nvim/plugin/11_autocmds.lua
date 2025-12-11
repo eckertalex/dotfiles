@@ -29,16 +29,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     desc = "Restore cursor position to last known location when reopening files",
 })
 
--- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
--- Do on `FileType` to always override these changes from filetype plugins.
-vim.api.nvim_create_autocmd("FileType", {
-    group = group,
-    callback = function()
-        vim.cmd("setlocal formatoptions-=c formatoptions-=o")
-    end,
-    desc = "Don't auto-wrap comments or continue comment on 'o' or 'O'",
-})
-
 vim.api.nvim_create_autocmd("FileType", {
     group = group,
     pattern = {

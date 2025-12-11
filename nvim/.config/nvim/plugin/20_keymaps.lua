@@ -1,5 +1,3 @@
-local yank = require("yank")
-
 -- Move lines
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -13,9 +11,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Center on half page scroll
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
-
-vim.keymap.set({ "n", "v" }, "<leader>yp", yank.yank_absolute, { desc = "Yank absolute path" })
-vim.keymap.set({ "n", "v" }, "<leader>yr", yank.yank_relative, { desc = "Yank relative path" })
 
 -- yank/delete into registers
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete _" })
