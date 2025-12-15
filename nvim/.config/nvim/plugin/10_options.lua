@@ -35,6 +35,14 @@ vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.complete = ".,w,b,kspell" -- Use less sources
 vim.o.completeopt = "menuone,noselect,fuzzy,nosort" -- Use custom behavior
 
+-- vim.provider ===============================================================
+
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- Autocommands ===============================================================
 
 -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.

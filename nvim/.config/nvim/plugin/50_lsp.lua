@@ -11,7 +11,7 @@ now_if_args(function()
         "gopls",
         "html",
         "jsonls",
-        "kotlin",
+        "kotlin_lsp",
         "lua_ls",
         "tailwindcss",
         "vtsls",
@@ -46,34 +46,6 @@ end)
 
 later(function()
     add("b0o/SchemaStore.nvim")
-end)
-
-later(function()
-    add("mason-org/mason.nvim")
-    add("WhoIsSethDaniel/mason-tool-installer.nvim")
-
-    require("mason").setup()
-    require("mason-tool-installer").setup({
-        ensure_installed = {
-            -- LSPs
-            "astro-language-server",
-            "css-lsp",
-            "eslint-lsp",
-            "gopls",
-            "html-lsp",
-            "json-lsp",
-            "kotlin-language-server",
-            "lua-language-server",
-            "tailwindcss-language-server",
-            "vtsls",
-            "yaml-language-server",
-
-            -- tools
-            "prettier",
-            "stylua",
-            "ktlint",
-        },
-    })
 end)
 
 later(function()
@@ -155,12 +127,17 @@ later(function()
     add({
         source = "saghen/blink.cmp",
         checkout = "v1.7.0",
+        depends = {
+            "rafamadriz/friendly-snippets",
+        },
     })
 
     require("blink.cmp").setup({
-        keymap = { preset = "default" },
-        appearance = {
-            nerd_font_variant = "mono",
+        keymap = {
+            preset = "default",
+
+            ["<C-l>"] = { "snippet_forward", "fallback" },
+            ["<C-h>"] = { "snippet_backward", "fallback" },
         },
         completion = {
             documentation = {
@@ -168,11 +145,6 @@ later(function()
                 auto_show_delay_ms = 500,
             },
         },
-        sources = {
-            default = { "lsp", "path", "buffer" },
-        },
-        signature = { enabled = true },
-        fuzzy = { implementation = "prefer_rust_with_warning" },
     })
 end)
 

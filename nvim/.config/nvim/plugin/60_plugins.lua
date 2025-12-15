@@ -1,4 +1,5 @@
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local now_if_args = _G.Config.now_if_args
 
 now(function()
     add("rose-pine/neovim")
@@ -82,7 +83,7 @@ later(function()
     map("<leader>sl", fzf.loclist, "Location List")
 end)
 
-later(function()
+now_if_args(function()
     add("stevearc/oil.nvim")
 
     require("oil").setup({

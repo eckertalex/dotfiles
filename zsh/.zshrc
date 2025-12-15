@@ -102,18 +102,10 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 export BAT_THEME="rose-pine"
 
 #######
-# asdf
+# mise
 #######
 
-export ASDF_DATA_DIR="$HOME/.asdf"
-PATH="$ASDF_DATA_DIR/shims:$PATH"
-source $ASDF_DATA_DIR/plugins/golang/set-env.zsh
-
-###########
-# opencode
-###########
-#
-export PATH="$HOME/.opencode/bin:$PATH"
+eval "$($HOME/.local/bin/mise activate zsh)"
 
 ###########
 # compinit

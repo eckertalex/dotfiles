@@ -48,6 +48,7 @@ now_if_args(function()
         "toml",
         "tsx",
         "typescript",
+        "vimdoc",
         "yaml",
     }
 

@@ -1,12 +1,12 @@
 git:
-  overrideGpg: true
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+    overrideGpg: true
+    pagers:
+        - colorArg: always
+          pager: delta --dark --paging=never
 gui:
-  showRandomTip: false
-  nerdFontsVersion: "3"
+    showRandomTip: false
+    nerdFontsVersion: "3"
 notARepository: "skip" # one of: 'prompt' | 'create' | 'skip' | 'quit'
 os:
-  editPreset: nvim
+    editPreset: nvim
 promptToReturnFromSubprocess: false

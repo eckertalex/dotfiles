@@ -1,0 +1,35 @@
+[tools]
+"github:BurntSushi/ripgrep" = "latest"
+"github:JohnnyMorganz/StyLua" = "latest"
+"github:cli/cli" = "latest"
+"github:dandavison/delta" = "latest"
+"github:jesseduffield/lazygit" = "latest"
+"github:jqlang/jq" = "latest"
+"github:junegunn/fzf" = "latest"
+"github:mfontanini/presenterm" = "latest"
+"github:sharkdp/bat" = "latest"
+"github:sharkdp/fd" = "latest"
+"github:sharkdp/hyperfine" = "latest"
+"github:sharkdp/vivid" = "latest"
+"github:sxyazi/yazi" = "latest"
+"ubi:tree-sitter/tree-sitter" = "latest"
+
+# LSPs
+"github:luals/lua-language-server" = "latest"
+"go:golang.org/x/tools/gopls" = "latest"
+"npm:@astrojs/language-server" = "latest"
+"npm:@tailwindcss/language-server" = "latest"
+"npm:@vtsls/language-server" = "latest"
+"npm:vscode-langservers-extracted" = "latest"
+"npm:yaml-language-server" = "latest"
+
+# Tools
+prettier = "latest"
+pnpm = "10.25.0"
+
+# Languages
+go = "1.25.5"
+node = "25.2.1"
+
+[alias]
+pnpm = "github:pnpm/pnpm"

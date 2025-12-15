@@ -191,14 +191,3 @@ end)
 later(function()
     require("mini.indentscope").setup()
 end)
-
-later(function()
-    local snippets = require("mini.snippets")
-    local config_path = vim.fn.stdpath("config")
-    snippets.setup({
-        snippets = {
-            snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
-            snippets.gen_loader.from_lang(),
-        },
-    })
-end)
