@@ -189,19 +189,5 @@ later(function()
 end)
 
 later(function()
-    add("christoomey/vim-tmux-navigator")
-
-    vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Navigate to left tmux pane" })
-    vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Navigate to below tmux pane" })
-    vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Navigate to above tmux pane" })
-    vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Navigate to right tmux pane" })
-    vim.keymap.set("n", "<C-\\>", "<cmd>TmuxNavigatePrevious<cr>", { desc = "Navigate to last tmux pane" })
-end)
-
-later(function()
-    add("mbbill/undotree")
-end)
-
-later(function()
     add("lervag/vimtex")
 end)
