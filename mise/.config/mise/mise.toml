@@ -24,7 +24,7 @@
 "npm:yaml-language-server" = "latest"
 
 # Tools
-prettier = "latest"
+"npm:prettier" = "latest"
 pnpm = "10.25.0"
 
 # Languages
@@ -32,4 +32,4 @@ go = "1.25.5"
 node = "25.2.1"
 
 [alias]
-pnpm = "github:pnpm/pnpm"
+pnpm = "npm:pnpm"
