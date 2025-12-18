@@ -43,6 +43,10 @@ vim.g.loaded_python_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
+-- built-in plugins ===============================================================
+
+vim.cmd.packadd("nvim.undotree")
+
 -- Autocommands ===============================================================
 
 -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
