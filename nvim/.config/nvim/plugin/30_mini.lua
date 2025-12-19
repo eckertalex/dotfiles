@@ -100,6 +100,7 @@ later(function()
             { mode = "x", keys = "<Leader>h", desc = "+Hunk" },
             { mode = "n", keys = "<Leader>s", desc = "+Search" },
             { mode = "x", keys = "<Leader>s", desc = "+Search" },
+            { mode = "n", keys = "<Leader>t", desc = "+Terminal" },
             { mode = "n", keys = "<Leader>x", desc = "+Diagnostics" },
             { mode = "n", keys = "<Leader>y", desc = "+Yank" },
             { mode = "x", keys = "<Leader>y", desc = "+Yank" },

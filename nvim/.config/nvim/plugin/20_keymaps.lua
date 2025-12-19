@@ -27,7 +27,7 @@ vim.keymap.set("n", "<leader>bb", "<Cmd>b#<CR>", { desc = "Alternate" })
 vim.keymap.set("n", "<leader>bs", new_scratch_buffer, { desc = "Scratch" })
 
 -- Clear search with <esc>
-vim.keymap.set({ "n", "i", "x", "c" }, "<esc><esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
+vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
@@ -43,6 +43,15 @@ vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
 -- Easily hit escape in terminal mode.
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
+
+-- Open a terminal at the bottom of the screen with a fixed height.
+vim.keymap.set("n", "<leader>ts", function()
+    vim.cmd.new()
+    vim.cmd.wincmd("J")
+    vim.api.nvim_win_set_height(0, 12)
+    vim.wo.winfixheight = true
+    vim.cmd.term()
+end)
 
 -- tmux-sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/.local/bin/tmux-sessionizer<CR>")
