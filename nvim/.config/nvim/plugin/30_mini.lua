@@ -63,6 +63,10 @@ now(function()
     require("mini.statusline").setup()
 end)
 
+now(function()
+    require("mini.tabline").setup()
+end)
+
 -- Step two ====================================================================
 
 later(function()
