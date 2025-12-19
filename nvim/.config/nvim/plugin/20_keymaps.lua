@@ -44,14 +44,15 @@ vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 -- Easily hit escape in terminal mode.
 vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 
+vim.keymap.set("n", "<leader>tv", "<cmd>vertical terminal<cr>", { desc = "Vertical terminal" })
+
 -- Open a terminal at the bottom of the screen with a fixed height.
-vim.keymap.set("n", "<leader>ts", function()
+vim.keymap.set("n", "<leader>tb", function()
     vim.cmd.new()
-    vim.cmd.wincmd("J")
     vim.api.nvim_win_set_height(0, 12)
     vim.wo.winfixheight = true
     vim.cmd.term()
-end)
+end, { desc = "Bottom terminal" })
 
 -- tmux-sessionizer
 vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/.local/bin/tmux-sessionizer<CR>")
