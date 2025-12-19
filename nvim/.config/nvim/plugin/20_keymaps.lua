@@ -27,7 +27,7 @@ vim.keymap.set("n", "<leader>bb", "<Cmd>b#<CR>", { desc = "Alternate" })
 vim.keymap.set("n", "<leader>bs", new_scratch_buffer, { desc = "Scratch" })
 
 -- Clear search with <esc>
-vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
+vim.keymap.set({ "n", "i", "x", "c" }, "<esc><esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
