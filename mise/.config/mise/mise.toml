@@ -31,5 +31,5 @@ pnpm = "10.25.0"
 go = "1.25.5"
 node = "25.2.1"
 
-[alias]
+[tool_alias]
 pnpm = "npm:pnpm"
