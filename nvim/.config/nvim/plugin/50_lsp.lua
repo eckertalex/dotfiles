@@ -78,7 +78,6 @@ later(function()
             javascript = { "prettier" },
             javascriptreact = { "prettier" },
             json = { "prettier" },
-            kotlin = { "ktlint" },
             lua = { "stylua" },
             markdown = { "prettier" },
             ["markdown.mdx"] = { "prettier" },
