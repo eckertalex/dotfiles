@@ -1,87 +1,81 @@
 ---
 name: Ship
-description: Create a new branch and commit work. Use when starting new work from main/master.
+description: Branch (if needed), commit, and log work.
+argument-hint: "[TICKET-ID]"
 ---
 
-# Ship
-
-Create a new branch (if needed) and commit work with a proper commit message.
-
-**Announce:** "I'm shipping this work."
+Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `ATTPOL-8979`)
 
 ## Process
 
-1. Check `git status` - see what's uncommitted
+1. Check `git status` and `git diff` to understand changes
 2. Check current branch:
     - If on main/master: create a new feature branch
-    - If already on feature branch: warn user they're not on main (they probably want `/commit`)
-3. Review changes with `git diff`
-4. Stage relevant files
-5. Assess scope of changes:
-    - **Simple:** Single focused change, self-explanatory from diff
-    - **Substantial:** Multiple related changes, non-obvious reasoning, or significant impact
-6. Commit with clean message following these rules:
-    - **Summary line:** Imperative mood, start with verb, max 72 chars, no period
-    - **For simple changes:** Single line is fine
-    - **For substantial changes:** Add blank line + detailed body explaining what and why
-    - Body should wrap at 72 characters
-    - Explain the reasoning behind changes, not just what changed
+    - If already on feature branch: commit directly
+3. Stage relevant files
+4. Commit with clean message
+5. Log to `.claude/LOG.md`
 
-## Branch naming
+## Ticket ID
 
-Create descriptive branch names based on the work:
+If a ticket ID is provided via `$ARGUMENTS`, use it in:
 
-- `feature-user-auth`
-- `fix-cache-race-condition`
-- `refactor-error-handling`
+- **Branch name:** `TICKET-ID-description` (e.g. `ATTPOL-8979-add-user-auth`)
+- **Commit message:** `[TICKET-ID] message` (e.g. `[ATTPOL-8979] Add user authentication flow`)
+- **Log entry:** include ticket ID in the heading
 
-Use kebab-case throughout (no slashes) and keep it concise.
+If no ticket ID is provided, omit it from all three.
 
-## Examples
+## Commit messages
 
-**Simple changes (single line):**
+- **Summary line:** Imperative mood, start with verb, max 72 chars, no period
+- **Simple changes:** Single line is fine
+- **Substantial changes:** Add blank line + body explaining what and why, wrapped at 72 chars
+- No Claude attribution, no Co-Authored-By footers
+- No conventional commit prefixes (the ticket ID prefix is not a conventional commit prefix)
 
 ```
 Add user authentication flow
-Fix race condition in cache invalidation
-Remove deprecated API endpoints
 ```
 
-**Substantial changes (with body):**
-
 ```
-Refactor error handling to use Result types
+[ATTPOL-8979] Refactor error handling to use Result types
 
 The previous error handling used exceptions which made control flow
-hard to follow. This changes the API to return Result<T, Error>
-types instead, making error cases explicit and forcing callers to
-handle them. This also eliminates silent failures in the retry logic.
+hard to follow. Result types make error cases explicit and force
+callers to handle them.
 ```
 
+## Branch naming
+
+Kebab-case, no slashes, concise:
+
+- `ATTPOL-8979-user-auth`
+- `feature-user-auth`
+- `fix-cache-race-condition`
+
+## Logging
+
+After committing, prepend an entry to `.claude/LOG.md` in the project repo.
+
+Create the file if it doesn't exist:
+
+```markdown
+# Development Log
+
+---
 ```
-Add caching layer to reduce database load
 
-Implements Redis-based caching for user profile queries which were
-causing performance issues under load. Cache invalidation happens on
-profile updates via pub/sub. This reduces DB queries by ~80% in
-production traffic patterns.
+Prepend new entries immediately after the `---` separator (newest first):
+
+```markdown
+## YYYY-MM-DD - [TICKET-ID] [Feature/Bug Name]
+
+[2-3 sentences: what was done and why. Key decisions or problems worth remembering.]
+
+**Commits:** [commit-hash]
+
+---
 ```
 
-**Bad commits:**
-
-```
-Added user authentication flow    # Past tense
-Fixes bug                          # Wrong mood
-refactor: error handling           # No conventional commit prefixes
-Update code.                       # Period at end
-```
-
-## Important
-
-- Do not attribute Claude in commit message
-- Do not add Co-Authored-By or Generated with Claude footers
-- Keep it simple and descriptive
-- Never force-push without explicit request
-- Never commit directly to main/master without creating a branch first
-- Never commit secrets or credentials
-- Never skip pre-commit hooks
+Omit `[TICKET-ID]` from the heading if none was provided.
