@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Install or update Neovim nightly from GitHub releases.
+# Only supports macOS arm64. Installs to ~/.local/share/nvim-bin
+# and symlinks the binary to ~/.local/bin/nvim.
+# Keeps an install log at ~/.local/share/nvim-bin/install.log.
+
+set -e
+
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+
+if [[ "$OS" != "Darwin" || "$ARCH" != "arm64" ]]; then
+  echo "Error: only macOS arm64 is supported (detected $OS $ARCH)" >&2
+  exit 1
+fi
+
+TARBALL="nvim-macos-arm64.tar.gz"
+DOWNLOAD_URL="https://github.com/neovim/neovim/releases/download/nightly/$TARBALL"
+INSTALL_DIR="$HOME/.local/share/nvim-bin"
+BIN_DIR="$HOME/.local/bin"
+TAR_FILE="/tmp/$TARBALL"
+
+# Show current version if installed
+if [[ -x "$INSTALL_DIR/bin/nvim" ]]; then
+  echo "Current: $("$INSTALL_DIR/bin/nvim" --version | head -1)"
+else
+  echo "No existing Neovim installation found"
+fi
+
+echo "Downloading nightly from GitHub..."
+curl -fsSL "$DOWNLOAD_URL" -o "$TAR_FILE"
+
+# macOS quarantine flag prevents unsigned binaries from running
+xattr -c "$TAR_FILE"
+
+echo "Installing to $INSTALL_DIR..."
+# Preserve install log across reinstalls
+INSTALL_LOG="$INSTALL_DIR/install.log"
+[[ -f "$INSTALL_LOG" ]] && cp "$INSTALL_LOG" /tmp/nvim-install.log
+rm -rf "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
+[[ -f /tmp/nvim-install.log ]] && mv /tmp/nvim-install.log "$INSTALL_LOG"
+tar xzf "$TAR_FILE" -C "$INSTALL_DIR" --strip-components=1
+
+mkdir -p "$BIN_DIR"
+ln -sf "$INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
+
+rm -f "$TAR_FILE"
+
+VERSION="$("$INSTALL_DIR/bin/nvim" --version | head -1)"
+echo "$(date +%Y-%m-%d) $VERSION" >> "$INSTALL_DIR/install.log"
+
+echo "Installed: $VERSION"
