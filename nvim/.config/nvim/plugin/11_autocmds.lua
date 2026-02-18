@@ -1,7 +1,5 @@
-local group = vim.api.nvim_create_augroup("BasicAutocommands", {})
-
 vim.api.nvim_create_autocmd("VimResized", {
-    group = group,
+    group = Config.custom_augroup,
     callback = function()
         local current_tab = vim.fn.tabpagenr()
         vim.cmd("tabdo wincmd =")
@@ -10,29 +8,19 @@ vim.api.nvim_create_autocmd("VimResized", {
     desc = "Resize splits when window is resized",
 })
 
--- go to last loc when opening a buffer
-vim.api.nvim_create_autocmd("BufReadPost", {
-    group = group,
-    callback = function(event)
-        local exclude = { "gitcommit" }
-        local buf = event.buf
-        if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
-            return
-        end
-        vim.b[buf].lazyvim_last_loc = true
-        local mark = vim.api.nvim_buf_get_mark(buf, '"')
-        local lcount = vim.api.nvim_buf_line_count(buf)
-        if mark[1] > 0 and mark[1] <= lcount then
-            pcall(vim.api.nvim_win_set_cursor, 0, mark)
-        end
+-- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
+-- Do on `FileType` to always override these changes from filetype plugins.
+vim.api.nvim_create_autocmd("FileType", {
+    group = Config.custom_augroup,
+    callback = function()
+        vim.cmd("setlocal formatoptions-=c formatoptions-=o")
     end,
-    desc = "Restore cursor position to last known location when reopening files",
+    desc = "Proper 'formatoptions'",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-    group = group,
+    group = Config.custom_augroup,
     pattern = {
-        "PlenaryTestPopup",
         "netrw",
         "help",
         "lspinfo",
@@ -53,7 +41,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-    group = group,
+    group = Config.custom_augroup,
     pattern = { "text", "plaintex", "gitcommit", "markdown" },
     callback = function()
         vim.opt_local.wrap = true
@@ -63,18 +51,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-    group = group,
-    pattern = { "haskell", "cabal" },
-    callback = function()
-        vim.opt_local.expandtab = true
-        vim.opt_local.shiftwidth = 2
-        vim.opt_local.tabstop = 2
-    end,
-    desc = "Use spaces instead of tabs for Haskell and Cabal files",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    group = group,
+    group = Config.custom_augroup,
     pattern = { "json", "jsonc", "json5", "markdown" },
     callback = function()
         vim.opt_local.conceallevel = 0

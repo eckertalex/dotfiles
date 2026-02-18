@@ -1,21 +1,13 @@
-local add = MiniDeps.add
-local now_if_args = _G.Config.now_if_args
+Config.now_if_args(function()
+    Config.on_packchanged("nvim-treesitter", { "update" }, function()
+        vim.cmd("TSUpdate")
+    end, ":TSUpdate")
 
-now_if_args(function()
-    add({
-        source = "nvim-treesitter/nvim-treesitter",
-        checkout = "main",
-        hooks = {
-            post_checkout = function()
-                vim.cmd("TSUpdate")
-            end,
-        },
+    vim.pack.add({
+        "https://github.com/nvim-treesitter/nvim-treesitter",
+        "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+        "https://github.com/nvim-treesitter/nvim-treesitter-context",
     })
-    add({
-        source = "nvim-treesitter/nvim-treesitter-textobjects",
-        checkout = "main",
-    })
-    add({ source = "nvim-treesitter/nvim-treesitter-context" })
 
     -- Treesitter ==============================================================
     local languages = {
@@ -67,17 +59,25 @@ now_if_args(function()
             table.insert(ts_filetypes, ft)
         end
     end
-    local function ts_start(ev)
-        vim.treesitter.start(ev.buf)
-    end
-    _G.Config.new_autocmd("FileType", ts_filetypes, ts_start, "Start tree-sitter")
+    vim.api.nvim_create_autocmd("FileType", {
+        group = Config.custom_augroup,
+        pattern = ts_filetypes,
+        callback = function(event)
+            vim.treesitter.start(event.buf)
+        end,
+        desc = "Start tree-sitter",
+    })
 
-    local function enable_ts_features()
-        vim.opt_local.foldmethod = "expr"
-        vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-        vim.opt_local.indentexpr = "nvim_treesitter#indent()"
-    end
-    _G.Config.new_autocmd("FileType", ts_filetypes, enable_ts_features, "Enable tree-sitter foldexpr and indentexpr")
+    vim.api.nvim_create_autocmd("FileType", {
+        group = Config.custom_augroup,
+        pattern = ts_filetypes,
+        callback = function()
+            vim.opt_local.foldmethod = "expr"
+            vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+            vim.opt_local.indentexpr = "nvim_treesitter#indent()"
+        end,
+        desc = "Enable tree-sitter foldexpr and indentexpr",
+    })
 
     -- Textobjects =============================================================
     require("nvim-treesitter-textobjects").setup({

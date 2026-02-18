@@ -47,15 +47,6 @@ vim.g.loaded_ruby_provider = 0
 
 vim.cmd.packadd("nvim.undotree")
 
--- Autocommands ===============================================================
-
--- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
--- Do on `FileType` to always override these changes from filetype plugins.
-local ensure_fo = function()
-    vim.cmd("setlocal formatoptions-=c formatoptions-=o")
-end
-_G.Config.new_autocmd("FileType", "*", ensure_fo, "Proper 'formatoptions'")
-
 -- Diagnostics ================================================================
 
 -- Neovim has built-in support for showing diagnostic messages. This configures
@@ -92,6 +83,6 @@ local diagnostic_opts = {
     update_in_insert = false,
 }
 
-MiniDeps.later(function()
+Config.later(function()
     vim.diagnostic.config(diagnostic_opts)
 end)

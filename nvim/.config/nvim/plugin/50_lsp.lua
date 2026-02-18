@@ -1,8 +1,5 @@
-local add, later = MiniDeps.add, MiniDeps.later
-local now_if_args = _G.Config.now_if_args
-
-now_if_args(function()
-    add("neovim/nvim-lspconfig")
+Config.now_if_args(function()
+    vim.pack.add({ "https://github.com/neovim/nvim-lspconfig" })
 
     vim.lsp.enable({
         "astro",
@@ -17,39 +14,14 @@ now_if_args(function()
         "vtsls",
         "yamlls",
     })
-
-    local function lsp_attach(event)
-        local fzf = require("fzf-lua")
-
-        vim.keymap.set(
-            "n",
-            "gd",
-            -- vim.lsp.buf.definition,
-            function()
-                fzf.lsp_definitions()
-            end,
-            { buffer = event.buf, desc = "vim.lsp.buf.definition" }
-        )
-
-        vim.keymap.set(
-            "n",
-            "grr",
-            -- vim.lsp.buf.references,
-            function()
-                fzf.lsp_references()
-            end,
-            { buffer = event.buf, desc = "vim.lsp.buf.references" }
-        )
-    end
-    _G.Config.new_autocmd("LspAttach", "*", lsp_attach, "Start tree-sitter")
 end)
 
-later(function()
-    add("b0o/SchemaStore.nvim")
+Config.later(function()
+    vim.pack.add({ "https://github.com/b0o/SchemaStore.nvim" })
 end)
 
-later(function()
-    add("stevearc/conform.nvim")
+Config.later(function()
+    vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 
     require("conform").setup({
         format_on_save = function(bufnr)
@@ -122,13 +94,13 @@ later(function()
     end, { range = true })
 end)
 
-later(function()
-    add({
-        source = "saghen/blink.cmp",
-        checkout = "v1.7.0",
-        depends = {
-            "rafamadriz/friendly-snippets",
+Config.now_if_args(function()
+    vim.pack.add({
+        {
+            src = "https://github.com/saghen/blink.cmp",
+            version = "v1.9.1",
         },
+        "https://github.com/rafamadriz/friendly-snippets",
     })
 
     require("blink.cmp").setup({

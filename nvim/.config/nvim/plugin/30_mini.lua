@@ -1,9 +1,4 @@
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local now_if_args = _G.Config.now_if_args
-
--- Step one ====================================================================
-
-now(function()
+Config.now(function()
     require("mini.basics").setup({
         options = {
             extra_ui = true,
@@ -18,18 +13,11 @@ now(function()
     })
 end)
 
-now(function()
+Config.now(function()
     require("mini.icons").setup()
 end)
 
-now_if_args(function()
-    require("mini.misc").setup()
-
-    MiniMisc.setup_auto_root()
-    MiniMisc.setup_restore_cursor()
-end)
-
-now(function()
+Config.now(function()
     local win_config = function()
         local has_statusline = vim.o.laststatus > 0
         local pad = vim.o.cmdheight + (has_statusline and 1 or 0)
@@ -40,9 +28,11 @@ now(function()
             config = win_config,
         },
     })
+
+    vim.keymap.set("n", "<leader>sn", "<cmd>lua MiniNotify.show_history()<cr>", { desc = "Notification history" })
 end)
 
-now(function()
+Config.now(function()
     local starter = require("mini.starter")
     starter.setup({
         query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
@@ -59,33 +49,40 @@ now(function()
     })
 end)
 
-now(function()
+Config.now(function()
     require("mini.statusline").setup()
 end)
 
-now(function()
+Config.now(function()
     require("mini.tabline").setup()
 end)
 
--- Step two ====================================================================
+Config.now_if_args(function()
+    require("mini.misc").setup()
 
-later(function()
+    MiniMisc.setup_auto_root()
+    MiniMisc.setup_restore_cursor()
+end)
+
+Config.later(function()
     require("mini.bracketed").setup({
-        -- use ]c [c for diff jumping
-        comment = { suffix = "" },
         -- use keymap from mini.indentscope
         indent = { suffix = "" },
     })
 end)
 
-later(function()
+Config.later(function()
+    require("mini.diff").setup()
+end)
+
+Config.later(function()
     require("mini.bufremove").setup()
 
     vim.keymap.set("n", "<leader>bd", "<cmd>lua MiniBufremove.delete()<cr>", { desc = "Delete" })
     vim.keymap.set("n", "<leader>bD", "<cmd>lua MiniBufremove.delete(0, true)<cr>", { desc = "Delete!" })
 end)
 
-later(function()
+Config.later(function()
     local miniclue = require("mini.clue")
 
     miniclue.setup({
@@ -96,8 +93,6 @@ later(function()
             { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
             { mode = "n", keys = "<Leader>f", desc = "+Find" },
             { mode = "n", keys = "<Leader>g", desc = "+Git" },
-            { mode = "n", keys = "<Leader>h", desc = "+Hunk" },
-            { mode = "x", keys = "<Leader>h", desc = "+Hunk" },
             { mode = "n", keys = "<Leader>s", desc = "+Search" },
             { mode = "x", keys = "<Leader>s", desc = "+Search" },
             { mode = "n", keys = "<Leader>t", desc = "+Terminal" },
@@ -138,8 +133,8 @@ later(function()
     })
 end)
 
-later(function()
-    add("JoosepAlviste/nvim-ts-context-commentstring")
+Config.later(function()
+    vim.pack.add({ "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" })
     require("mini.comment").setup({
         options = {
             custom_commentstring = function()
@@ -149,11 +144,11 @@ later(function()
     })
 end)
 
-later(function()
+Config.later(function()
     require("mini.cursorword").setup({})
 end)
 
-later(function()
+Config.later(function()
     local hipatterns = require("mini.hipatterns")
 
     local function make_pattern(word)
@@ -193,6 +188,6 @@ later(function()
     })
 end)
 
-later(function()
+Config.later(function()
     require("mini.indentscope").setup()
 end)

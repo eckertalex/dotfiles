@@ -1,19 +1,13 @@
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local now_if_args = _G.Config.now_if_args
-
-now(function()
-    add("rose-pine/neovim")
+Config.now(function()
+    vim.pack.add({ { src = "https://github.com/rose-pine/neovim", name = "rose-pine" } })
 
     vim.cmd.colorscheme("rose-pine")
 end)
 
-later(function()
-    add({
-        source = "ibhagwan/fzf-lua",
-        depends = {
-            "nvim-mini/mini.icons",
-            "elanmed/fzf-lua-frecency.nvim",
-        },
+Config.later(function()
+    vim.pack.add({
+        "https://github.com/ibhagwan/fzf-lua",
+        "https://github.com/elanmed/fzf-lua-frecency.nvim",
     })
 
     local fzf = require("fzf-lua")
@@ -81,10 +75,38 @@ later(function()
     map("<leader>sD", fzf.diagnostics_document, "Diagnostics (Buffer)")
     map("<leader>sq", fzf.quickfix, "Quickfix List")
     map("<leader>sl", fzf.loclist, "Location List")
+
+    local function lsp_attach(event)
+        vim.keymap.set(
+            "n",
+            "gd",
+            -- vim.lsp.buf.definition,
+            function()
+                fzf.lsp_definitions()
+            end,
+            { buffer = event.buf, desc = "vim.lsp.buf.definition" }
+        )
+
+        vim.keymap.set(
+            "n",
+            "grr",
+            -- vim.lsp.buf.references,
+            function()
+                fzf.lsp_references()
+            end,
+            { buffer = event.buf, desc = "vim.lsp.buf.references" }
+        )
+    end
+
+    vim.api.nvim_create_autocmd("LspAttach", {
+        group = Config.custom_augroup,
+        callback = lsp_attach,
+        desc = "Attach custom LSP keymaps (FZF definitions and references)",
+    })
 end)
 
-now_if_args(function()
-    add("stevearc/oil.nvim")
+Config.now_if_args(function()
+    vim.pack.add({ "https://github.com/stevearc/oil.nvim" })
 
     require("oil").setup({
         view_options = {
@@ -95,8 +117,8 @@ now_if_args(function()
     vim.keymap.set("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory" })
 end)
 
-later(function()
-    add("stevearc/quicker.nvim")
+Config.later(function()
+    vim.pack.add({ "https://github.com/stevearc/quicker.nvim" })
 
     local quicker = require("quicker")
     quicker.setup({
@@ -108,86 +130,15 @@ later(function()
     })
 end)
 
-later(function()
-    add({
-        source = "tpope/vim-fugitive",
-        depends = { "tpope/vim-rhubarb" },
+Config.later(function()
+    vim.pack.add({
+        "https://github.com/tpope/vim-fugitive",
+        "https://github.com/tpope/vim-rhubarb",
     })
 
     vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
 end)
 
-later(function()
-    add("lewis6991/gitsigns.nvim")
-
-    local gitsigns = require("gitsigns")
-
-    local function on_attach(bufnr)
-        local function map(mode, l, r, opts)
-            opts = opts or {}
-            opts.buffer = bufnr
-            vim.keymap.set(mode, l, r, opts)
-        end
-
-        local function next_hunk()
-            if vim.wo.diff then
-                vim.cmd.normal({ args = { "]c" }, bang = true })
-            else
-                require("gitsigns").nav_hunk({ direction = "next" })
-            end
-        end
-
-        local function prev_hunk()
-            if vim.wo.diff then
-                vim.cmd.normal({ args = { "[c" }, bang = true })
-            else
-                require("gitsigns").nav_hunk({ direction = "prev" })
-            end
-        end
-
-        map({ "n", "v" }, "]c", next_hunk, { desc = "Next hunk" })
-        map({ "n", "v" }, "[c", prev_hunk, { desc = "Previous hunk" })
-
-        map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage hunk" })
-        map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset hunk" })
-
-        map("v", "<leader>hs", function()
-            gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-        end, { desc = "Stage selected hunk" })
-        map("v", "<leader>hr", function()
-            gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-        end, { desc = "Reset selected hunk" })
-
-        map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage buffer" })
-        map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset buffer" })
-        map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview hunk" })
-        map("n", "<leader>hi", gitsigns.preview_hunk_inline, { desc = "Preview hunk inline" })
-
-        map("n", "<leader>hb", function()
-            gitsigns.blame_line({ full = true })
-        end, { desc = "Blame line" })
-
-        map("n", "<leader>hd", gitsigns.diffthis, { desc = "Diff this" })
-        map("n", "<leader>hD", function()
-            gitsigns.diffthis({ base = "~" })
-        end, { desc = "Diff this ~" })
-
-        map("n", "<leader>hq", gitsigns.setqflist, { desc = "Populate qflist with hunks" })
-        map("n", "<leader>hQ", function()
-            gitsigns.setqflist({ target = "all" })
-        end, { desc = "Populate qflist with all hunks" })
-
-        map("n", "\\g", gitsigns.toggle_current_line_blame, { desc = "Toggle git line blame" })
-        map("n", "\\W", gitsigns.toggle_word_diff, { desc = "Toggle git word diff highlight" })
-
-        map({ "o", "x" }, "gh", gitsigns.select_hunk, { desc = "Select hunk text object" })
-    end
-
-    gitsigns.setup({
-        on_attach = on_attach,
-    })
-end)
-
-later(function()
-    add("lervag/vimtex")
+Config.later(function()
+    vim.pack.add({ "https://github.com/lervag/vimtex" })
 end)

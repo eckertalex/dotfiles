@@ -31,7 +31,6 @@ If no ticket ID is provided, omit it from all three.
 - **Summary line:** Imperative mood, start with verb, max 72 chars, no period
 - **Simple changes:** Single line is fine
 - **Substantial changes:** Add blank line + body explaining what and why, wrapped at 72 chars
-- No Claude attribution, no Co-Authored-By footers
 - No conventional commit prefixes (the ticket ID prefix is not a conventional commit prefix)
 
 ```
