@@ -49,12 +49,12 @@ Config.later(function()
     map("<leader>fg", fzf.git_files, "Find Git Files")
 
     -- git
-    map("<leader>gc", fzf.git_branches, "Git Branches")
-    map("<leader>gl", fzf.git_commits, "Git Log")
-    map("<leader>gf", fzf.git_bcommits, "Git Log (File)")
-    map("<leader>gs", fzf.git_status, "Git Status")
-    map("<leader>gS", fzf.git_stash, "Git Stash")
-    map("<leader>gd", fzf.git_diff, "Git Diff")
+    map("<leader>gc", fzf.git_branches, "Branches")
+    map("<leader>gl", fzf.git_commits, "Log")
+    map("<leader>gf", fzf.git_bcommits, "Log file")
+    map("<leader>gs", fzf.git_status, "Status")
+    map("<leader>gB", fzf.git_blame, "Blame file (fzf)")
+    map("<leader>gS", fzf.git_stash, "Stash")
 
     -- grep
     map("<leader>sb", fzf.lines, "Buffer Lines")

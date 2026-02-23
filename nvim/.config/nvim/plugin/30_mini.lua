@@ -73,6 +73,8 @@ end)
 
 Config.later(function()
     require("mini.diff").setup()
+
+    vim.keymap.set("n", "<leader>gd", "<cmd>lua MiniDiff.toggle_overlay()<cr>", { desc = "Diff file" })
 end)
 
 Config.later(function()
