@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
-# Script: gswcc (Git Switch Create Commit)
-# Description: Creates a new git branch from a commit message, adds all changes,
-#             commits them, and pushes to remote
+# Create a branch from a commit message, commit, and push.
 # Usage: gswcc "your commit message"
 
-# Exit on any error
-set -e
+set -euo pipefail
 
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
 	cat <<EOF
@@ -21,12 +18,12 @@ EOF
 fi
 
 if [[ -z "$1" ]]; then
-	echo "Error: Please provide a commit message"
+	echo "Error: Please provide a commit message" >&2
 	exit 1
 fi
 
 if [[ $# -gt 1 ]]; then
-	echo "Error: $(basename "$0") only takes one argument"
+	echo "Error: $(basename "$0") only takes one argument" >&2
 	exit 1
 fi
 

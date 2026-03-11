@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+
 # Install or update Neovim nightly from GitHub releases.
 # Only supports macOS arm64. Installs to ~/.local/share/nvim-bin
 # and symlinks the binary to ~/.local/bin/nvim.
 # Keeps an install log at ~/.local/share/nvim-bin/install.log.
 
-set -e
+set -euo pipefail
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"

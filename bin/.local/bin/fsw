@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# Script: fsw (Git switch with fzf)
-# Description: Creates a new git branch from a commit message, adds all changes,
-# Usage: fsw
+# Switch git branches with fzf.
 
-# Exit on any error
-set -e
+set -euo pipefail
 
+if ! git rev-parse --git-dir &>/dev/null; then
+    echo "Error: not a git repository" >&2
+    exit 1
+fi
 git branch | fzf --prompt="Switch to branch ⟫ " --height=~20% --layout=reverse --no-sort --border | xargs -r git switch

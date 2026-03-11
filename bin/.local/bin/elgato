@@ -1,26 +1,17 @@
 #!/usr/bin/env bash
 
-# Controls Elgato Keylights.
-#
+# Toggle Elgato Keylights on or off.
 # Usage: elgato <on|off>
-#
-# Will switch all known keylights on or off.
-# Reads a variable ELGATO_LIGHTS with the addresses as comma-separated list
-# To find out your addresses you can resolve the mDNS type _elg._tcp
-# for example via: `avahi-browse -t _elg._tcp --resolve` under Linux
-
-if [[ "$1" == "" ]]; then
-	>&2 echo "Usage: ${0##*/} <on|off>"
-	exit 2
-fi
 
 set -euo pipefail
 
-# TODO setup to your environment file or set ELGATO_LIGHTS
-#
-# source /some/path/.env
-# OR
-# ELGATO_LIGHTS=192.168.1.111:9123,192.168.1.112:9123,...
+if [[ "$1" == "" ]]; then
+	echo "Usage: $(basename "$0") <on|off>" >&2
+	exit 2
+fi
+
+# To discover addresses, resolve mDNS type _elg._tcp, e.g.:
+#   avahi-browse -t _elg._tcp --resolve
 # left: 192.168.2.164
 # right: 192.168.2.165
 ELGATO_LIGHTS=192.168.2.164:9123,192.168.2.165:9123
