@@ -1,93 +1,243 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
-dark_themes=(
-	"ashen"
-	"catppuccin-frappe"
-	"catppuccin-macchiato"
-	"catppuccin-mocha"
-	"tokyonight-moon"
-	"tokyonight-night"
-	"tokyonight-storm"
-    "rose-pine"
-    "rose-pine-moon"
-)
+# Unified theme switcher for dotfiles.
+#
+# Usage:
+#   themes              — print current theme and mode
+#   themes toggle       — flip dark↔light
+#   themes dark         — apply stored dark theme
+#   themes light        — apply stored light theme
+#   themes use <name>   — apply specific theme
+#
+# Config: ~/.config/themes/config (KEY=VALUE: MODE, DARK_THEME, LIGHT_THEME)
+#
+# File contracts:
+#   ghostty config:  s/^theme = .*/theme = $ghostty_theme/
+#   .gitconfig:      s/syntax-theme = "[^"]*"/syntax-theme = "$theme"/
+#   .gitconfig:      s/\(light\|dark\) = true/$mode = true/
+#   bat config:      s/--theme="[^"]*"/--theme="$theme"/
+#   .zshrc:          s|/fzf/[a-z-]*\.sh|/fzf/$theme.sh|
+#   .zshrc:          s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|
 
-light_themes=(
-	"catppuccin-latte"
-	"tokyonight-day"
-    "rose-pine-dawn"
-)
+set -euo pipefail
 
-supported_themes=(${dark_themes[@]} ${light_themes[@]})
-supported_themes=($(printf "%s\n" "${supported_themes[@]}" | sort))
+CONFIG="$HOME/.config/themes/config"
+DOTFILES="$HOME/.dotfiles"
 
-if [[ $# -eq 1 ]]; then
-    if (($supported_themes[(Ie)${1}])); then
-        selected=$1
-    else
-        echo "$1 is not a supported theme"
+IS_MACOS=false
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    IS_MACOS=true
+    if ! command -v gsed &>/dev/null; then
+        echo "Error: gsed is not installed (install coreutils)" >&2
         exit 1
     fi
+    SED=gsed
 else
-    selected=$(printf '%s\n' "${supported_themes[@]}" | fzf --prompt="Theme ⟫ " --height=~50% --layout=reverse --border)
+    SED=sed
 fi
 
-if [[ -z $selected ]]; then
-    exit 0
-fi
+DARK_THEMES=(
+    catppuccin-frappe
+    catppuccin-macchiato
+    catppuccin-mocha
+    rose-pine
+    rose-pine-moon
+)
 
-if type gsed &> /dev/null; then
-    alias sed="gsed"
-fi
+LIGHT_THEMES=(
+    catppuccin-latte
+    rose-pine-dawn
+)
 
-if (($light_themes[(Ie)${selected}])); then
-    mode="light"
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
-    elif [ -n "${WSL_DISTRO_NAME}" ]; then
-        echo "Please switch to dark mode in windows settings"
-    else
-        echo "Please switch to dark mode in linux settings"
+ALL_THEMES=("${DARK_THEMES[@]}" "${LIGHT_THEMES[@]}")
+
+declare -A GHOSTTY_NAMES=(
+    [catppuccin-frappe]="Catppuccin Frappé"
+    [catppuccin-macchiato]="Catppuccin Macchiato"
+    [catppuccin-mocha]="Catppuccin Mocha"
+    [catppuccin-latte]="Catppuccin Latte"
+    [rose-pine]="Rose Pine"
+    [rose-pine-moon]="Rose Pine Moon"
+    [rose-pine-dawn]="Rose Pine Dawn"
+)
+
+ghostty_name() {
+    local name="${GHOSTTY_NAMES[$1]:-}"
+    if [[ -z "$name" ]]; then
+        echo "Error: no Ghostty mapping for '$1'" >&2
+        exit 1
     fi
-else
-    mode="dark"
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to true"
-    elif [ -n "${WSL_DISTRO_NAME}" ]; then
-        echo "Please switch to dark mode in windows settings"
+    echo "$name"
+}
+
+mode_for_theme() {
+    local theme="$1"
+    for t in "${LIGHT_THEMES[@]}"; do
+        if [[ "$t" == "$theme" ]]; then
+            echo "light"
+            return
+        fi
+    done
+    echo "dark"
+}
+
+print_status() {
+    local bold=$'\033[1m' reset=$'\033[0m'
+    local dark_label="$DARK_THEME" light_label="$LIGHT_THEME"
+
+    if [[ "$MODE" == "dark" ]]; then
+        dark_label="${bold}${DARK_THEME} (current)${reset}"
     else
-        echo "Please switch to dark mode in linux settings"
+        light_label="${bold}${LIGHT_THEME} (current)${reset}"
     fi
+    printf "  dark:  %s\n  light: %s\n" "$dark_label" "$light_label"
+
+    if [[ "${1:-}" == "--all" ]]; then
+        local current
+        if [[ "$MODE" == "dark" ]]; then current="$DARK_THEME"; else current="$LIGHT_THEME"; fi
+        echo ""
+        echo "Available themes:"
+        for t in "${ALL_THEMES[@]}"; do
+            if [[ "$t" == "$current" ]]; then
+                printf "  ${bold}%s${reset}\n" "$t"
+            else
+                printf "  %s\n" "$t"
+            fi
+        done
+    fi
+}
+
+is_valid_theme() {
+    local theme="$1"
+    for t in "${ALL_THEMES[@]}"; do
+        if [[ "$t" == "$theme" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+apply_and_save() {
+    local theme="$1"
+    local mode
+    mode=$(mode_for_theme "$theme")
+    local ghostty_theme
+    ghostty_theme=$(ghostty_name "$theme")
+
+    # ghostty
+    $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/ghostty/.config/ghostty/config"
+
+    # git delta
+    $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/git/.gitconfig"
+    $SED -i "s/\(light\|dark\) = true/$mode = true/" "$DOTFILES/git/.gitconfig"
+
+    # bat
+    $SED -i "s/--theme=\"[^\"]*\"/--theme=\"$theme\"/" "$DOTFILES/bat/.config/bat/config"
+
+    # fzf
+    $SED -i "s|/fzf/[a-z-]*\.sh|/fzf/$theme.sh|g" "$DOTFILES/zsh/.zshrc"
+
+    # lscolors
+    $SED -i "s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/zsh/.zshrc"
+
+    # config
+    $SED -i "s/^MODE=.*/MODE=$mode/" "$CONFIG"
+    if [[ "$mode" == "dark" ]]; then
+        $SED -i "s/^DARK_THEME=.*/DARK_THEME=$theme/" "$CONFIG"
+    else
+        $SED -i "s/^LIGHT_THEME=.*/LIGHT_THEME=$theme/" "$CONFIG"
+    fi
+
+    # macOS appearance
+    if [[ "$IS_MACOS" == true ]]; then
+        if [[ "$mode" == "light" ]]; then
+            osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to false'
+        else
+            osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to true'
+        fi
+    else
+        echo "Note: set your system appearance to $mode mode manually"
+    fi
+
+    echo "Applied $theme ($mode)"
+}
+
+if [[ ! -f "$CONFIG" ]]; then
+    echo "Error: config not found at $CONFIG" >&2
+    echo "Run: stow themes (from ~/.dotfiles)" >&2
+    exit 1
 fi
 
-# change git
-sed -i "s/\(syntax-theme = \"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/git/.gitconfig
-if [[ "$mode" == "light" ]]; then
-    sed -i "s/\(light = \)[^\"]*/\1true/" $HOME/.dotfiles/git/.gitconfig
-else
-    sed -i "s/\(light = \)[^\"]*/\1false/" $HOME/.dotfiles/git/.gitconfig
-fi
+load_config() {
+    MODE="" DARK_THEME="" LIGHT_THEME=""
+    while IFS='=' read -r key value; do
+        case "$key" in
+            MODE)        MODE="$value" ;;
+            DARK_THEME)  DARK_THEME="$value" ;;
+            LIGHT_THEME) LIGHT_THEME="$value" ;;
+        esac
+    done < "$CONFIG"
 
-# change bat
-sed -i "s/\(export BAT_THEME=\"\)[^\"]*\(\"\)/\1$selected\2/" $HOME/.dotfiles/zsh/.zshrc
+    local errors=()
+    if [[ -z "$MODE" ]]; then
+        errors+=("MODE is missing")
+    elif [[ "$MODE" != "dark" && "$MODE" != "light" ]]; then
+        errors+=("MODE must be 'dark' or 'light' (got '$MODE')")
+    fi
+    if [[ -z "$DARK_THEME" ]]; then
+        errors+=("DARK_THEME is missing")
+    elif ! is_valid_theme "$DARK_THEME"; then
+        errors+=("DARK_THEME '$DARK_THEME' is not a supported theme")
+    fi
+    if [[ -z "$LIGHT_THEME" ]]; then
+        errors+=("LIGHT_THEME is missing")
+    elif ! is_valid_theme "$LIGHT_THEME"; then
+        errors+=("LIGHT_THEME '$LIGHT_THEME' is not a supported theme")
+    fi
+    if [[ ${#errors[@]} -gt 0 ]]; then
+        echo "Error in $CONFIG:" >&2
+        printf "  - %s\n" "${errors[@]}" >&2
+        exit 1
+    fi
+}
 
-# change fzf
-sed -i "s|\(\[ -s \"\$HOME/.config/fzf/\)\([^ ]*\)\(.sh\" ] && source \"\$HOME/.config/fzf/\)\([^ ]*\)\(.sh\"\)|\1$selected\3$selected\5|g" "$HOME/.dotfiles/zsh/.zshrc"
+load_config
 
-# change lscolors
-sed -i "s|\(\[ -s \"\$HOME/.config/lscolors/\)\([^ ]*\)\(.sh\" ] && source \"\$HOME/.config/lscolors/\)\([^ ]*\)\(.sh\"\)|\1$selected\3$selected\5|g" "$HOME/.dotfiles/zsh/.zshrc"
-
-# change ghostty
-sed -i "/theme/c\theme = $selected" $HOME/.dotfiles/ghostty/.config/ghostty/config
-
-# change Windows Wezterm
-if [ -n "${WSL_DISTRO_NAME}" ]; then
-    win_user_path=$(wslpath $(cmd.exe /C "echo %USERPROFILE%" 2>/dev/null | tr -d '\r'))
-    sed -i "s/\(color_scheme = \"\)[^\"]*\(\"\)/\1$selected\2/" $win_user_path/.wezterm.lua
-fi
-
-# change neovim
-sed -i "s/\(vim.cmd.colorscheme(\"\)[^\"]*\(\"\))/\1$selected\2)/" $HOME/.dotfiles/nvim/.config/nvim/init.lua
-
-# vim: ts=4 sw=4
-
+case "${1:-}" in
+    toggle)
+        if [[ "$MODE" == "dark" ]]; then
+            apply_and_save "$LIGHT_THEME"
+        else
+            apply_and_save "$DARK_THEME"
+        fi
+        ;;
+    dark)
+        apply_and_save "$DARK_THEME"
+        ;;
+    light)
+        apply_and_save "$LIGHT_THEME"
+        ;;
+    use)
+        if [[ -z "${2:-}" ]]; then
+            echo "Usage: themes use <name>" >&2
+            echo "" >&2
+            print_status --all >&2
+            exit 1
+        fi
+        if ! is_valid_theme "$2"; then
+            echo "Error: unknown theme '$2'" >&2
+            echo "" >&2
+            print_status --all >&2
+            exit 1
+        fi
+        apply_and_save "$2"
+        ;;
+    "")
+        print_status
+        ;;
+    *)
+        echo "Error: unknown command '$1'" >&2
+        echo "Usage: themes [toggle|dark|light|use <name>]" >&2
+        exit 1
+        ;;
+esac
