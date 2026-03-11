@@ -97,9 +97,8 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # THEMING
 ##########
 
-[[ -r "$XDG_CONFIG_HOME/lscolors/rose-pine.sh" ]] && source "$XDG_CONFIG_HOME/lscolors/rose-pine.sh"
-[[ -r "$XDG_CONFIG_HOME/fzf/rose-pine.sh" ]] && source "$XDG_CONFIG_HOME/fzf/rose-pine.sh"
-export BAT_THEME="rose-pine"
+[[ -r "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh" ]] && source "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh"
+[[ -r "$XDG_CONFIG_HOME/fzf/rose-pine-dawn.sh" ]] && source "$XDG_CONFIG_HOME/fzf/rose-pine-dawn.sh"
 
 #######
 # mise

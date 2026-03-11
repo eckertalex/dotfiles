@@ -2,6 +2,7 @@
 
 - Be direct. Call out bad ideas. Push back when you disagree.
 - Just do it. Only pause for architectural decisions or when you genuinely don't understand.
+- For multi-step refactors or new architecture: propose the plan in 2-3 bullets before executing.
 
 ## Code quality
 

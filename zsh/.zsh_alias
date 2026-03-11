@@ -28,8 +28,8 @@ alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 ##########
 
 if (( $+commands[lazygit] )); then
-    alias lazygit="lazygit -use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
-    alias lzg="lazygit -use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
+    alias lazygit="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
+    alias lzg="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
 fi
 
 ########

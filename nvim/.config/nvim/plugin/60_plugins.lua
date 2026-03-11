@@ -12,6 +12,7 @@ Config.later(function()
 
     local fzf = require("fzf-lua")
     fzf.setup({
+        fzf_colors = true,
         winopts = {
             ---@diagnostic disable-next-line: missing-fields
             preview = {
@@ -141,4 +142,8 @@ end)
 
 Config.later(function()
     vim.pack.add({ "https://github.com/lervag/vimtex" })
+end)
+
+Config.later(function()
+    vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
 end)
