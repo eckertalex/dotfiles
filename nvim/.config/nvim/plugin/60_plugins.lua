@@ -1,7 +1,10 @@
 Config.now(function()
-    vim.pack.add({ { src = "https://github.com/rose-pine/neovim", name = "rose-pine" } })
+    vim.pack.add({
+        { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
+        { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
+    })
 
-    vim.cmd.colorscheme("rose-pine")
+    vim.cmd.colorscheme("rose-pine-dawn")
 end)
 
 Config.later(function()
