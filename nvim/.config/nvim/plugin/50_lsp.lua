@@ -16,7 +16,7 @@ Config.now_if_args(function()
     })
 end)
 
-Config.later(function()
+Config.now_if_args(function()
     vim.pack.add({ "https://github.com/b0o/SchemaStore.nvim" })
 end)
 
