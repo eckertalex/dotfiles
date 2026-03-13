@@ -1,5 +1,5 @@
 ---
-name: Commit
+name: commit
 description: Stage and commit changes with a clean message.
 argument-hint: "[TICKET-ID]"
 ---

@@ -1,5 +1,5 @@
 ---
-name: Ship
+name: ship
 description: Branch (if needed), commit, and log work.
 argument-hint: "[TICKET-ID]"
 ---
