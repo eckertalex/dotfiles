@@ -26,15 +26,6 @@ These will break things if violated:
 
 - Name plan files descriptively: `short-description.md`, optionally prefixed with a ticket ID if provided (e.g., `TICKET-1234-design-system-card.md`). No random generated names.
 
-## Session logs
-
-- At the end of a session where meaningful work was done, append a summary to `~/code/work/claude/logs/<project>.md` (e.g., `personio-web.md`, `dotfiles.md`). Use the basename of the repo as the project name.
-- Format: date header, 2-3 sentence summary of what was done, relevant commit hashes.
-- This log is for the user, not for Claude. Do not read it unless asked.
-
-## PRs & Commits
-
-- When writing PR descriptions, be precise about the actual implementation. Do not embellish or describe things that aren't in the code. Keep descriptions concise and accurate.
 
 ## Testing
 

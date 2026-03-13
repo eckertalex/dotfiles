@@ -4,7 +4,7 @@ description: Branch (if needed), commit, and log work.
 argument-hint: "[TICKET-ID]"
 ---
 
-Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `ATTPOL-8979`)
+Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `PROJ-123`)
 
 ## Process
 
@@ -17,7 +17,7 @@ Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `ATTPOL-8979`)
 
 If a ticket ID is provided via `$ARGUMENTS`, use it in the branch name:
 
-- `TICKET-ID-description` (e.g. `ATTPOL-8979-add-user-auth`)
+- `TICKET-ID-description` (e.g. `PROJ-123-add-user-auth`)
 
 If no ticket ID is provided, omit it.
 
@@ -25,6 +25,6 @@ If no ticket ID is provided, omit it.
 
 Kebab-case, no slashes, concise:
 
-- `ATTPOL-8979-user-auth`
+- `PROJ-123-user-auth`
 - `feature-user-auth`
 - `fix-cache-race-condition`
