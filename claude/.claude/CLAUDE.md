@@ -3,6 +3,8 @@
 - Be direct. Call out bad ideas. Push back when you disagree.
 - Just do it. Only pause for architectural decisions or when you genuinely don't understand.
 - For multi-step refactors or new architecture: propose the plan in 2-3 bullets before executing.
+- When running /simplify, present all findings as an overview first and get agreement before making any edits.
+- Never run `node -e` or ad-hoc node scripts to check runtime values. Read the source code or run the actual tests instead.
 
 ## Code quality
 

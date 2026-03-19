@@ -1,30 +1,12 @@
 ---
 name: ship
-description: Branch (if needed), commit, and log work.
-argument-hint: "[TICKET-ID]"
+description: Branch, commit, and open a PR.
+argument-hint: "[TICKET-ID] [description]"
 ---
 
-Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `PROJ-123`)
+Arguments: `$ARGUMENTS` (optional ticket ID and description, e.g. `PROJ-123 add user auth`)
 
 ## Process
 
-1. Check current branch:
-    - If on main/master: create a new feature branch
-    - If already on feature branch: commit directly
-2. Run `/commit $ARGUMENTS`
-
-## Ticket ID
-
-If a ticket ID is provided via `$ARGUMENTS`, use it in the branch name:
-
-- `TICKET-ID-description` (e.g. `PROJ-123-add-user-auth`)
-
-If no ticket ID is provided, omit it.
-
-## Branch naming
-
-Kebab-case, no slashes, concise:
-
-- `PROJ-123-user-auth`
-- `feature-user-auth`
-- `fix-cache-race-condition`
+1. Run `/branch $ARGUMENTS`
+2. Run `/pr`

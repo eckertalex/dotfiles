@@ -8,10 +8,7 @@ Config.now(function()
 end)
 
 Config.later(function()
-    vim.pack.add({
-        "https://github.com/ibhagwan/fzf-lua",
-        "https://github.com/elanmed/fzf-lua-frecency.nvim",
-    })
+    vim.pack.add({ "https://github.com/ibhagwan/fzf-lua" })
 
     local fzf = require("fzf-lua")
     fzf.setup({
@@ -34,23 +31,26 @@ Config.later(function()
 
     fzf.register_ui_select()
 
-    local fzf_frecency = require("fzf-lua-frecency")
-
     local map = function(lhs, rhs, desc, mode)
         vim.keymap.set(mode or "n", lhs, rhs, { desc = desc })
     end
 
     map("<leader>,", fzf.buffers, "Buffers")
-    map("<leader><leader>", function()
-        fzf_frecency.frecency({ cwd_only = true, all_files = true })
-    end, "Project Frecency")
-    map("<leader>fr", function()
-        fzf_frecency.frecency({ cwd_only = false, all_files = false })
-    end, "Global Frecency")
 
-    -- find
-    map("<leader>ff", fzf.files, "Find Files")
-    map("<leader>fg", fzf.git_files, "Find Git Files")
+    map("<leader><leader>", function()
+        fzf.combine({ pickers = "buffers;oldfiles;git_files", cwd_only = true })
+    end, "Find (buffers/recent/git) cwd")
+    map("<leader>fr", function()
+        fzf.combine({ pickers = "buffers;oldfiles;git_files", cwd_only = false })
+    end, "Find (buffers/recent/git) global")
+
+    map("<leader>ff", fzf.files, "Find all files")
+    map("<leader>fg", fzf.git_files, "Find git files")
+
+    map("<leader>fo", function()
+        fzf.oldfiles({ cwd_only = true })
+    end, "Recent files (cwd)")
+    map("<leader>fO", fzf.oldfiles, "Recent files (global)")
 
     -- git
     map("<leader>gc", fzf.git_branches, "Branches")
@@ -61,24 +61,24 @@ Config.later(function()
     map("<leader>gS", fzf.git_stash, "Stash")
 
     -- grep
-    map("<leader>sb", fzf.lines, "Buffer Lines")
-    map("<leader>sB", fzf.grep_curbuf, "Grep Open Buffers")
-    map("<leader>sg", fzf.live_grep_native, "Grep Project")
-    map("<leader>sw", fzf.grep_cword, "Grep Word")
-    map("<leader>sw", fzf.grep_visual, "Grep Selection", "x")
+    map("<leader>sb", fzf.lines, "Buffer lines")
+    map("<leader>sB", fzf.grep_curbuf, "Grep open buffers")
+    map("<leader>sg", fzf.live_grep_native, "Grep project")
+    map("<leader>sw", fzf.grep_cword, "Grep word")
+    map("<leader>sw", fzf.grep_visual, "Grep selection", "x")
 
     -- search / misc
-    map("<leader>sh", fzf.help_tags, "Search Help")
-    map("<leader>sc", fzf.command_history, "Command History")
-    map("<leader>s/", fzf.search_history, "Search History")
+    map("<leader>sh", fzf.help_tags, "Search help")
+    map("<leader>sc", fzf.command_history, "Command history")
+    map("<leader>s/", fzf.search_history, "Search history")
     map("<leader>sC", fzf.commands, "Commands")
     map('<leader>s"', fzf.registers, "Registers")
     map("<leader>sm", fzf.marks, "Marks")
     map("<leader>sr", fzf.resume, "Resume")
     map("<leader>sd", fzf.diagnostics_workspace, "Diagnostics (Workspace)")
     map("<leader>sD", fzf.diagnostics_document, "Diagnostics (Buffer)")
-    map("<leader>sq", fzf.quickfix, "Quickfix List")
-    map("<leader>sl", fzf.loclist, "Location List")
+    map("<leader>sq", fzf.quickfix, "Quickfix list")
+    map("<leader>sl", fzf.loclist, "Location list")
 
     local function lsp_attach(event)
         vim.keymap.set(
