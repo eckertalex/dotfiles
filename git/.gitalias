@@ -39,6 +39,10 @@
 	std = stash drop
 	rst = restore
 	r = reset
+	wt = worktree
+	wta = worktree add
+	wtls = worktree list
+	wtr = worktree remove
 	; undo last commit and keep files
 	uncommit = reset HEAD~1
 	; discard last commit and files
