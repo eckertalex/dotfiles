@@ -57,10 +57,6 @@
       "rev": "063cc44da1eef8681bbd653b29d3bc961780886a",
       "src": "https://github.com/stevearc/quicker.nvim"
     },
-    "render-markdown.nvim": {
-      "rev": "e3c18ddd27a853f85a6f513a864cf4f2982b9f26",
-      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
-    },
     "rose-pine": {
       "rev": "cf2a288696b03d0934da713d66c6d71557b5c997",
       "src": "https://github.com/rose-pine/neovim"

@@ -147,7 +147,3 @@ end)
 Config.later(function()
     vim.pack.add({ "https://github.com/lervag/vimtex" })
 end)
-
-Config.later(function()
-    vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
-end)
