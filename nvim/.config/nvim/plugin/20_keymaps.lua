@@ -26,6 +26,9 @@ end
 vim.keymap.set("n", "<leader>bb", "<Cmd>b#<CR>", { desc = "Alternate" })
 vim.keymap.set("n", "<leader>bs", new_scratch_buffer, { desc = "Scratch" })
 
+-- notes
+vim.keymap.set("n", "<leader>n", require("notes").open, { desc = "Notes" })
+
 -- Clear search with <esc>
 vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
 
