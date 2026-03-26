@@ -1,25 +1,26 @@
 {
-  "attribution": {
-    "commit": "",
-    "pr": ""
-  },
-  "permissions": {
-    "allow": [
-      "Read(~/code/work/claude/logs/*)",
-      "Write(~/code/work/claude/logs/*)"
-    ],
-    "deny": [
-      "Read(~/.ssh/)",
-      "Read(~/.aws/)",
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Edit(./.env)",
-      "Edit(./.env.*)"
-    ]
-  },
-  "model": "opus[1m]",
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  }
+    "attribution": {
+        "commit": "",
+        "pr": ""
+    },
+    "autoMemoryEnabled": false,
+    "permissions": {
+        "allow": [
+            "Read(~/code/work/claude/logs/*)",
+            "Write(~/code/work/claude/logs/*)"
+        ],
+        "deny": [
+            "Read(~/.ssh/)",
+            "Read(~/.aws/)",
+            "Read(./.env)",
+            "Read(./.env.*)",
+            "Edit(./.env)",
+            "Edit(./.env.*)"
+        ]
+    },
+    "model": "opus[1m]",
+    "statusLine": {
+        "type": "command",
+        "command": "~/.claude/statusline.sh"
+    }
 }

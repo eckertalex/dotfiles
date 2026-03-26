@@ -8,8 +8,8 @@ Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `PROJ-123`)
 
 ## Process
 
-1. Determine the project name from the basename of the repo (e.g., `dotfiles`, `my-project`)
-2. Append an entry to `~/code/work/claude/logs/<project>.md`
+1. Determine the project name from the **git repo root basename** (e.g., `dotfiles`, `my-project`). Use the top-level repo name, not a subdirectory name.
+2. **Prepend** the entry to `~/code/work/claude/logs/<project>.md`, right after the file header (title + description + `---`).
 
 Create the file if it doesn't exist:
 
@@ -19,7 +19,7 @@ Create the file if it doesn't exist:
 
 ## Entry format
 
-Append new entries at the end:
+**Always prepend** new entries at the top (after the header), so the file is in reverse chronological order:
 
 ```markdown
 ## YYYY-MM-DD - [TICKET-ID] Summary

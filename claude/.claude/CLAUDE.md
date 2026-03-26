@@ -8,11 +8,12 @@
 
 ## Code quality
 
-- YAGNI.
 - Prefer simple, maintainable solutions over clever ones.
 - Make the smallest reasonable changes to achieve the outcome.
 - Never name things 'improved', 'new', 'enhanced', 'v2'. Code naming should be evergreen.
 - Find the root cause. Don't fix symptoms or add workarounds.
+- Never use non-null assertions (`!`). Prefer safe defaults or guards.
+- Use object arguments (named parameters) for functions with more than 2 parameters.
 
 ## Critical rules
 
@@ -22,12 +23,20 @@ These will break things if violated:
 - Never implement backward compatibility without explicit approval.
 - Never skip, evade, or disable pre-commit hooks.
 - Never use `git add -A` unless you've just checked `git status`.
-- **Never run git commands in parallel.** Always run them sequentially (chain with `&&` or make separate sequential tool calls). Parallel git operations cause `.git/index.lock` conflicts. This includes the common pattern of running `git status`, `git diff`, and `git log` at the same time — don't do it.
+- Never run git commands in parallel. Always run them sequentially (chain with `&&` or make separate sequential tool calls). Parallel git operations cause `.git/index.lock` conflicts. This includes the common pattern of running `git status`, `git diff`, and `git log` at the same time. Don't do it.
+- No slashes in branch names. Use `fix-something` not `fix/something`.
 
 ## Plans
 
 - Name plan files descriptively: `short-description.md`, optionally prefixed with a ticket ID if provided (e.g., `TICKET-1234-design-system-card.md`). No random generated names.
 
+## Git
+
+- Don't put implementation details in commit messages. Focus on the what and why, not the how.
+
+## Writing style
+
+- Don't use em dashes in comments and prose
 
 ## Testing
 
@@ -35,4 +44,4 @@ These will break things if violated:
 - Never write tests that test mocked behavior.
 - Never implement mocks in end-to-end tests. Use real data and real APIs.
 - Test output must be pristine. If errors are expected, capture and validate them.
-- Never modify source code to fix coverage. Write tests instead. If a branch is unreachable, ask.
+- Don't modify production code just to make tests pass. Explore testing approaches first.
