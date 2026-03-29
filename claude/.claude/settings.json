@@ -5,10 +5,7 @@
     },
     "autoMemoryEnabled": false,
     "permissions": {
-        "allow": [
-            "Read(~/code/work/claude/logs/*)",
-            "Write(~/code/work/claude/logs/*)"
-        ],
+        "allow": ["Read(~/code/work/*)", "Write(~/code/work/*)"],
         "deny": [
             "Read(~/.ssh/)",
             "Read(~/.aws/)",

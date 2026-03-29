@@ -11,7 +11,6 @@ Arguments: `$ARGUMENTS` (optional ticket ID, e.g. `PROJ-123`)
 1. Check `git status` and `git diff` to understand changes
 2. Stage relevant files
 3. Commit with clean message
-4. Run `/log $ARGUMENTS`
 
 ## Ticket ID
 
@@ -39,4 +38,3 @@ The previous error handling used exceptions which made control flow
 hard to follow. Result types make error cases explicit and force
 callers to handle them.
 ```
-
