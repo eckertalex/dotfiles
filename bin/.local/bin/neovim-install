@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
-# Install or update Neovim nightly from GitHub releases.
+# Install or update Neovim from GitHub releases.
 # Only supports macOS arm64. Installs to ~/.local/share/nvim-bin
 # and symlinks the binary to ~/.local/bin/nvim.
 # Keeps an install log at ~/.local/share/nvim-bin/install.log.
+#
+# Usage:
+#   neovim-install           # installs stable (default)
+#   neovim-install nightly   # installs nightly
+#   neovim-install v0.10.3   # installs a specific version
 
 set -euo pipefail
 
@@ -15,8 +20,22 @@ if [[ "$OS" != "Darwin" || "$ARCH" != "arm64" ]]; then
   exit 1
 fi
 
+CHANNEL="${1:-stable}"
+
+case "$CHANNEL" in
+  nightly|stable) ;;
+  v[0-9]*) ;;
+  *)
+    echo "Usage: neovim-install [nightly|stable|v<version>]" >&2
+    echo "  neovim-install            # stable (default)" >&2
+    echo "  neovim-install nightly    # nightly" >&2
+    echo "  neovim-install v0.10.3    # specific version" >&2
+    exit 1
+    ;;
+esac
+
 TARBALL="nvim-macos-arm64.tar.gz"
-DOWNLOAD_URL="https://github.com/neovim/neovim/releases/download/nightly/$TARBALL"
+DOWNLOAD_URL="https://github.com/neovim/neovim/releases/download/$CHANNEL/$TARBALL"
 INSTALL_DIR="$HOME/.local/share/nvim-bin"
 BIN_DIR="$HOME/.local/bin"
 TAR_FILE="/tmp/$TARBALL"
@@ -28,7 +47,7 @@ else
   echo "No existing Neovim installation found"
 fi
 
-echo "Downloading nightly from GitHub..."
+echo "Downloading $CHANNEL from GitHub..."
 curl -fsSL "$DOWNLOAD_URL" -o "$TAR_FILE"
 
 # macOS quarantine flag prevents unsigned binaries from running
@@ -49,6 +68,6 @@ ln -sf "$INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
 rm -f "$TAR_FILE"
 
 VERSION="$("$INSTALL_DIR/bin/nvim" --version | head -1)"
-echo "$(date +%Y-%m-%d) $VERSION" >> "$INSTALL_DIR/install.log"
+echo "$(date +%Y-%m-%d) $VERSION ($CHANNEL)" >> "$INSTALL_DIR/install.log"
 
 echo "Installed: $VERSION"
