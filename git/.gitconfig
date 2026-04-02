@@ -26,6 +26,8 @@
 	path = ~/.gitconfig.local
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/.gitconfig.private
+[includeIf "gitdir:~/.dotwork/"]
+	path = ~/.gitconfig.private
 [include]
 	path = ~/.gitalias
 [init]
