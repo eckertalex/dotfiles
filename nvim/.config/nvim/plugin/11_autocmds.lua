@@ -1,3 +1,19 @@
+vim.api.nvim_create_autocmd("LspProgress", {
+    group = Config.custom_augroup,
+    callback = function(event)
+        local value = event.data.params.value
+        vim.api.nvim_echo({ { value.message or "done" } }, false, {
+            id = "lsp" .. event.data.client_id,
+            kind = "progress",
+            source = "vim.lsp",
+            title = value.title,
+            status = value.kind ~= "end" and "running" or "success",
+            percent = value.percentage,
+        })
+    end,
+    desc = "Show LSP progress",
+})
+
 vim.api.nvim_create_autocmd("VimResized", {
     group = Config.custom_augroup,
     callback = function()
