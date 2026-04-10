@@ -1,5 +1,6 @@
 -- General ====================================================================
 vim.g.mapleader = " " -- Use `<Space>` as <Leader> key
+vim.g.maplocalleader = "," -- Use comma as <LocalLeader> key
 
 -- UI =========================================================================
 vim.o.colorcolumn = "+1" -- Draw column on the right of maximum width

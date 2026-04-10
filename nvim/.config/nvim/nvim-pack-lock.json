@@ -25,6 +25,10 @@
       "rev": "bde73a6886b607246095aa59f396de5e0d036890",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
+    "grug-far.nvim": {
+      "rev": "37d0eafc6a2dcf8641aa19fc2a8db5e391b7f16b",
+      "src": "https://github.com/MagicDuck/grug-far.nvim"
+    },
     "mini.nvim": {
       "rev": "439cdcd6992bc9012efd7d8ed7a7b7a0f1fac32a",
       "src": "https://github.com/nvim-mini/mini.nvim"
