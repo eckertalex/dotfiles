@@ -4,11 +4,6 @@
       "rev": "25a82a141dc0caf3b9b82002a35caf3c9feab741",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
-    "blink.cmp": {
-      "rev": "4b18c32adef2898f95cdef6192cbd5796c1a332d",
-      "src": "https://github.com/saghen/blink.cmp",
-      "version": "'v1.9.1'"
-    },
     "catppuccin": {
       "rev": "a7788416689dbefea659d9e9415c87926b0ba5d8",
       "src": "https://github.com/catppuccin/nvim"

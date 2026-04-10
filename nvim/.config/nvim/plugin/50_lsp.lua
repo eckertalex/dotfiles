@@ -94,31 +94,6 @@ Config.later(function()
     end, { range = true })
 end)
 
-Config.now_if_args(function()
-    vim.pack.add({
-        {
-            src = "https://github.com/saghen/blink.cmp",
-            version = "v1.9.1",
-        },
-        "https://github.com/rafamadriz/friendly-snippets",
-    })
-
-    require("blink.cmp").setup({
-        keymap = {
-            preset = "default",
-
-            ["<C-l>"] = { "snippet_forward", "fallback" },
-            ["<C-h>"] = { "snippet_backward", "fallback" },
-        },
-        completion = {
-            documentation = {
-                auto_show = true,
-                auto_show_delay_ms = 500,
-            },
-        },
-    })
-end)
-
 -- set default filetypes
 vim.filetype.add({
     extension = {
