@@ -160,7 +160,7 @@ Config.later(function()
     })
 end)
 
-Config.later(function()
+Config.now_if_args(function()
     vim.pack.add({
         "https://github.com/tpope/vim-fugitive",
         "https://github.com/tpope/vim-rhubarb",

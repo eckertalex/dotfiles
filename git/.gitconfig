@@ -11,11 +11,6 @@
 	fsmonitor = true
 	pager = delta
 	untrackedCache = true
-[diff]
-	algorithm = histogram
-	colorMoved = plain
-	mnemonicPrefix = true
-	renames = true
 [fetch]
 	prune = true
 	pruneTags = true
@@ -34,14 +29,20 @@
 	defaultBranch = main
 [interactive]
 	diffFilter = delta --color-only
+[diff]
+    tool = nvimdiff
+	algorithm = histogram
+	colorMoved = default
+	mnemonicPrefix = true
+	renames = true
 [merge]
+    tool = nvimdiff
 	ff = only
 	conflictstyle = zdiff3
-	tool = fugitive
 [mergetool]
 	keepBackup = false
-[mergetool "fugitive"]
-	cmd = 'nvim -f -c "Gvdiffsplit!" "$MERGED"'
+[mergetool "nvimdiff"]
+    cmd = nvim -f -c 'Gvdiffsplit!' $MERGED
 [pull]
 	rebase = true
 [push]

@@ -21,28 +21,7 @@ Config.now(function()
 end)
 
 Config.now(function()
-    local starter = require("mini.starter")
-    starter.setup({
-        query_updaters = "abcdefghijklmnopqrstuvwxyz0123456789_.",
-        evaluate_single = true,
-        items = {
-            starter.sections.builtin_actions(),
-            starter.sections.recent_files(9, true, false),
-        },
-        content_hooks = {
-            starter.gen_hook.adding_bullet(),
-            starter.gen_hook.indexing("all", { "Builtin actions" }),
-            starter.gen_hook.aligning("center", "center"),
-        },
-    })
-end)
-
-Config.now(function()
     require("mini.statusline").setup()
-end)
-
-Config.now(function()
-    require("mini.tabline").setup()
 end)
 
 Config.now_if_args(function()
@@ -216,6 +195,8 @@ Config.later(function()
             delay = 0,
         },
         clues = {
+            { mode = "n", keys = "<Leader>a", desc = "+AI/Claude" },
+            { mode = "x", keys = "<Leader>a", desc = "+AI/Claude" },
             { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
             { mode = "n", keys = "<Leader>f", desc = "+Find" },
             { mode = "n", keys = "<Leader>g", desc = "+Git" },

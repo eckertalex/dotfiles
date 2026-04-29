@@ -52,6 +52,10 @@ vim.cmd.packadd("nvim.undotree")
 
 require("vim._core.ui2").enable({})
 
+-- ui2 ========================================================================
+
+vim.lsp.codelens.enable(true)
+
 -- Diagnostics ================================================================
 
 -- Neovim has built-in support for showing diagnostic messages. This configures
