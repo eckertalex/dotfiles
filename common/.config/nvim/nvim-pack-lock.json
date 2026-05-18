@@ -1,16 +1,12 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "a1fb3d4eb1c2ad42c5b3187ca24c57da5d42ab83",
+      "rev": "c5d25c4f5624a25f71865d29223603802dfc7d2f",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "catppuccin": {
       "rev": "426dbebe06b5c69fd846ceb17b42e12f890aedf1",
       "src": "https://github.com/catppuccin/nvim"
-    },
-    "claudecode.nvim": {
-      "rev": "102d835c964069c9c5e37abaf05ae4f9c3ee6f00",
-      "src": "https://github.com/coder/claudecode.nvim"
     },
     "conform.nvim": {
       "rev": "18aeab3d63d350dcf44d64c462cc489a3412af40",
@@ -21,7 +17,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "ca139b8fec043057038c69ce2b34cf4b8b83746e",
+      "rev": "3ff77862f6c62f7b850668435ae43aa026de8758",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "grug-far.nvim": {
@@ -29,11 +25,11 @@
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "mini.nvim": {
-      "rev": "18797ed18f347d0d0da27fec28a67979b1207f70",
+      "rev": "6a8aab4b07c6caa1d0643c1c9dccd5b2d5f5e094",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "f9349d4d99e7d66403ae8bf4fbd357b154dca7a7",
+      "rev": "3de240997fc3208eb29df5e5c17ba4665961bd84",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
