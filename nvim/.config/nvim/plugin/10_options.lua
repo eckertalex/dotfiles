@@ -44,6 +44,15 @@ vim.g.loaded_python_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
+-- filetype ===================================================================
+
+vim.filetype.add({
+    extension = {
+        query = "graphql",
+        mutation = "graphql",
+    },
+})
+
 -- built-in plugins ===========================================================
 
 vim.cmd.packadd("nvim.undotree")
