@@ -12,13 +12,13 @@
 # Config: ~/.config/themes/config (KEY=VALUE: MODE, DARK_THEME, LIGHT_THEME)
 #
 # File contracts:
-#   ghostty config:  s/^theme = .*/theme = $ghostty_theme/
-#   .gitconfig:      s/syntax-theme = "[^"]*"/syntax-theme = "$theme"/
-#   .gitconfig:      s/\(light\|dark\) = true/$mode = true/
-#   bat config:      s/--theme="[^"]*"/--theme="$theme"/
-#   .zshrc:          s|/fzf/[a-z-]*\.sh|/fzf/$theme.sh|
-#   .zshrc:          s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|
-#   60_plugins.lua:  s/colorscheme("[^"]*")/colorscheme("$theme")/
+#   ghostty:           s/^theme = .*/theme = $ghostty_theme/                in mac/.config/ghostty/mac.conf
+#   .gitconfig:        s/syntax-theme = "[^"]*"/syntax-theme = "$theme"/    in common/.gitconfig
+#   .gitconfig:        s/\(light\|dark\) = true/$mode = true/               in common/.gitconfig
+#   bat config:        s/--theme="[^"]*"/--theme="$theme"/                  in common/.config/bat/config
+#   .zshrc:            s|/fzf/[a-z0-9-]*\.sh|/fzf/$theme.sh|                in common/.zshrc
+#   .zshrc:            s|/lscolors/[a-z0-9-]*\.sh|/lscolors/$theme.sh|      in common/.zshrc
+#   nvim plugins.lua:  s/colorscheme("[^"]*")/colorscheme("$theme")/        in common/.config/nvim/plugin/plugins.lua
 
 set -euo pipefail
 
@@ -126,23 +126,24 @@ apply_and_save() {
     ghostty_theme=$(ghostty_name "$theme")
 
     # ghostty
-    $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/ghostty/.config/ghostty/config"
+    $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/mac/.config/ghostty/mac.conf"
 
     # git delta
-    $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/git/.gitconfig"
-    $SED -i "s/\(light\|dark\) = true/$mode = true/" "$DOTFILES/git/.gitconfig"
+    $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/common/.gitconfig"
+    $SED -i "s/\(light\|dark\) = true/$mode = true/" "$DOTFILES/common/.gitconfig"
 
     # bat
-    $SED -i "s/--theme=\"[^\"]*\"/--theme=\"$theme\"/" "$DOTFILES/bat/.config/bat/config"
+    $SED -i "s/--theme=\"[^\"]*\"/--theme=\"$theme\"/" "$DOTFILES/common/.config/bat/config"
 
-    # fzf
-    $SED -i "s|/fzf/[a-z-]*\.sh|/fzf/$theme.sh|g" "$DOTFILES/zsh/.zshrc"
+    # zsh
+    $SED -i "s|/fzf/[a-z0-9-]*\.sh|/fzf/$theme.sh|g" "$DOTFILES/common/.zshrc"
+    $SED -i "s|/lscolors/[a-z0-9-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/common/.zshrc"
 
     # lscolors
     $SED -i "s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/zsh/.zshrc"
 
     # neovim
-    $SED -i "s/colorscheme(\"[^\"]*\")/colorscheme(\"$theme\")/" "$DOTFILES/nvim/.config/nvim/plugin/60_plugins.lua"
+    $SED -i "s/colorscheme(\"[^\"]*\")/colorscheme(\"$theme\")/" "$DOTFILES/common/.config/nvim/plugin/plugins.lua"
 
     # config
     $SED -i "s/^MODE=.*/MODE=$mode/" "$CONFIG"
