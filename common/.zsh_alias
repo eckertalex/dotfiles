@@ -82,9 +82,17 @@ alias tree="tree -Fa"
 
 alias g=git
 
-for al in `git --list-cmds=alias`; do
-    alias g$al="git $al"
-done
+() {
+    local cache="$XDG_CACHE_HOME/zsh-git-aliases"
+    if [[ ! -r "$cache" || "$HOME/.gitconfig" -nt "$cache" ]]; then
+        mkdir -p "${cache:h}"
+        local al
+        for al in $(git --list-cmds=alias 2>/dev/null); do
+            print -- "alias g$al=\"git $al\""
+        done > "$cache"
+    fi
+    source "$cache"
+}
 
 #######
 # PNPM

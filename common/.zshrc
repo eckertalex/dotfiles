@@ -75,14 +75,17 @@ FPATH="$Z_DATA_DIR/completions:$FPATH"
 # Homebrew
 ###########
 
-export HOMEBREW_NO_ANALYTICS=1
-if [[ $(uname) == "Darwin" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-if (( $+commands[brew] )); then
-	PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
-	FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions:$FPATH"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    export HOMEBREW_NO_ANALYTICS=1
+    # output from running: /opt/homebrew/bin/brew shellenv
+    export HOMEBREW_PREFIX="/opt/homebrew";
+    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+    export HOMEBREW_REPOSITORY="/opt/homebrew";
+    fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
+    export FPATH;
+    eval "$(/usr/bin/env PATH_HELPER_ROOT="/opt/homebrew" /usr/libexec/path_helper -s)"
+    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
+    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 fi
 
 ######
