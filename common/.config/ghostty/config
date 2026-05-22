@@ -1,3 +1,4 @@
 theme = Rose Pine Dawn
 
 config-file = ?mac.conf
+config-file = ?linux.conf

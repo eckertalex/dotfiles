@@ -1,6 +1,6 @@
 [tools]
 # Tools
-pnpm = "10.33.0"
+pnpm = "11.1.2"
 "npm:prettier" = "latest"
 "github:JohnnyMorganz/StyLua" = "latest"
 
@@ -15,7 +15,7 @@ pnpm = "10.33.0"
 
 # Languages
 go = "1.26.2"
-node = "25.9.0"
+node = "26.1.0"
 usage = "latest"
 
 [tool_alias]

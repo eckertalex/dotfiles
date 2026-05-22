@@ -10,6 +10,10 @@ case "$(uname -s)" in
         echo "Stowing mac..."
         stow -R mac
         ;;
+    Linux)
+        echo "Stowing linux..."
+        stow -R linux
+        ;;
     *)
         echo "Unsupported OS: $(uname -s)" >&2
         exit 1
