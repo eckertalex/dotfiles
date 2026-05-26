@@ -42,7 +42,6 @@ map("<leader>fg", fzf.git_files, "Find git files")
 map("<leader>fo", function()
     fzf.oldfiles({ cwd_only = true })
 end, "Recent files (cwd)")
-map("<leader>fO", fzf.oldfiles, "Recent files (global)")
 
 -- git
 map("<leader>gc", fzf.git_branches, "Branches")
@@ -61,11 +60,6 @@ map("<leader>sw", fzf.grep_visual, "Grep selection", "x")
 
 -- search / misc
 map("<leader>sh", fzf.help_tags, "Search help")
-map("<leader>sc", fzf.command_history, "Command history")
-map("<leader>s/", fzf.search_history, "Search history")
-map("<leader>sC", fzf.commands, "Commands")
-map('<leader>s"', fzf.registers, "Registers")
-map("<leader>sm", fzf.marks, "Marks")
 map("<leader>sr", fzf.resume, "Resume")
 map("<leader>sd", fzf.diagnostics_workspace, "Diagnostics (Workspace)")
 map("<leader>sD", fzf.diagnostics_document, "Diagnostics (Buffer)")
