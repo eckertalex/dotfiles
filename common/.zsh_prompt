@@ -1,0 +1,98 @@
+#!/bin/zsh
+#
+# .zsh_prompt - Native zsh prompt (replaces powerlevel10k).
+#
+# Layout:   ~/path branch ❯   (duration on the right if a command took >5s)
+# Git:      branch + in-progress action only, via vcs_info (no work-tree scan,
+#           so it stays fast even in large repos).
+# Symbol:   ❯ insert mode, ❮ command mode (shape = vi-mode).
+#           green on success, red on failure (color = exit status).
+# Colors:   bold + normal ANSI slots (0-7) by index, so they follow the active theme.
+
+setopt PROMPT_SUBST
+zmodload zsh/datetime
+autoload -Uz vcs_info add-zsh-hook
+
+############
+# git (vcs)
+############
+
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' check-for-changes false
+# Color only; bold is carried in from PROMPT (cannot use %b here, it means branch).
+zstyle ':vcs_info:git:*' formats       ' %F{5}%b%f'
+zstyle ':vcs_info:git:*' actionformats ' %F{5}%b|%a%f'
+
+##################
+# command duration
+##################
+
+_prompt_cmd_start=0
+
+_format_duration() {
+	local total=$1 h m s out=''
+	h=$(( total / 3600 ))
+	m=$(( (total % 3600) / 60 ))
+	s=$(( total % 60 ))
+	(( h > 0 )) && out+="${h}h"
+	(( m > 0 )) && out+="${m}m"
+	out+="${s}s"
+	print -r -- "$out"
+}
+
+_prompt_preexec() {
+	_prompt_cmd_start=$EPOCHSECONDS
+}
+
+##################
+# vi-mode symbol
+##################
+
+_prompt_symbol='❯'
+
+_prompt_set_symbol() {
+	case $KEYMAP in
+		vicmd) _prompt_symbol='❮' ;;
+		*)     _prompt_symbol='❯' ;;
+	esac
+}
+
+########
+# precmd
+########
+
+_prompt_precmd() {
+	# Must be the very first statement so it sees the real exit status.
+	local exit_status=$?
+
+	if (( exit_status == 0 )); then
+		_prompt_color='%F{2}'
+	else
+		_prompt_color='%F{1}'
+	fi
+
+	# Command duration, only when >5s and an actual command ran.
+	_prompt_duration_display=''
+	if (( _prompt_cmd_start )); then
+		local elapsed=$(( EPOCHSECONDS - _prompt_cmd_start ))
+		(( elapsed > 5 )) && _prompt_duration_display="%B%F{3}$(_format_duration $elapsed)%f%b"
+		_prompt_cmd_start=0
+	fi
+
+	vcs_info
+}
+
+add-zsh-hook preexec _prompt_preexec
+add-zsh-hook precmd _prompt_precmd
+# Run _prompt_precmd first among precmd hooks so it captures $? before any
+# other hook (e.g. the cursor-shape reset) clobbers it.
+precmd_functions=(_prompt_precmd ${precmd_functions:#_prompt_precmd})
+
+########
+# prompt
+########
+
+PROMPT='%B%F{4}%~%f${vcs_info_msg_0_} ${_prompt_color}${_prompt_symbol}%f%b '
+RPROMPT='${_prompt_duration_display}'
+
+# vim: set ts=4 sw=4

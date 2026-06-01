@@ -3,14 +3,6 @@
 # .zshrc - Run on interactive Zsh session.
 #
 
-################
-# powerlevel10k
-################
-
-if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-	source "$XDG_CACHE_HOME/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 ####################
 # plugin management
 ####################
@@ -34,10 +26,6 @@ fi
 if [[ ! -d "$Z_PLUGIN_DIR/zsh-autosuggestions" ]]; then
 	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$Z_PLUGIN_DIR/zsh-autosuggestions"
 	zcompile-many $Z_PLUGIN_DIR/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
-fi
-if [[ ! -d "$Z_PLUGIN_DIR/powerlevel10k" ]]; then
-	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$Z_PLUGIN_DIR/powerlevel10k"
-	make -C "$Z_PLUGIN_DIR/powerlevel10k" pkg
 fi
 
 ##########
@@ -150,6 +138,10 @@ function zle-keymap-select {
 			[[ $1 = 'beam' ]]; then
 					echo -ne '\e[6 q'
 	fi
+	_prompt_set_symbol
+	# Redraw the prompt symbol on mode switch, but only when running as a zle
+	# widget (not when called from precmd, where zle is not active).
+	[[ -n $WIDGET ]] && zle reset-prompt
 }
 zle -N zle-keymap-select
 precmd_functions+=(zle-keymap-select)
@@ -157,6 +149,7 @@ precmd_functions+=(zle-keymap-select)
 zle-line-init() {
 zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
 echo -ne "\e[6 q"
+_prompt_set_symbol
 }
 zle -N zle-line-init
 
@@ -178,10 +171,9 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
 source "$Z_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$Z_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$Z_PLUGIN_DIR/powerlevel10k/powerlevel10k.zsh-theme"
 
 source "$HOME/.zsh_alias"
 [[ -r "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
-source "$HOME/.p10k.zsh"
+source "$HOME/.zsh_prompt"
 
 # vim: set ts=4 sw=4

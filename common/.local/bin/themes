@@ -126,7 +126,7 @@ apply_and_save() {
     ghostty_theme=$(ghostty_name "$theme")
 
     # ghostty
-    $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/mac/.config/ghostty/mac.conf"
+    $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/common/.config/ghostty/config"
 
     # git delta
     $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/common/.gitconfig"
@@ -140,7 +140,7 @@ apply_and_save() {
     $SED -i "s|/lscolors/[a-z0-9-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/common/.zshrc"
 
     # lscolors
-    $SED -i "s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/zsh/.zshrc"
+    $SED -i "s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/common/.zshrc"
 
     # neovim
     $SED -i "s/colorscheme(\"[^\"]*\")/colorscheme(\"$theme\")/" "$DOTFILES/common/.config/nvim/plugin/plugins.lua"
