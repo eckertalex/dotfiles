@@ -1,20 +1,12 @@
 [alias]
-	s = status --short
-	ss = status
+	s = status
 	a = add
-	ap = add --patch
 	aa = add --all
 	bl = blame -w
-	; blame file but track moves, copies, renames, etc
-	deepblame = blame -w -C -C -C
 	c = commit
 	cm = commit --message
-	ca = commit --all
-	cam = commit --all --message
 	cf = commit --amend
-	caf = commit --all --amend
 	cnf = commit --amend --no-edit
-	canf = commit --all --amend --no-edit
 	b = branch
 	bd = branch -d
 	bdf = branch -D
@@ -32,41 +24,23 @@
 	rbc = rebase --continue
 	rba = rebase --abort
 	st = stash
-	sts = stash list
+	stl = stash list
 	sta = stash --include-untracked
-	staa = stash apply
+	stap = stash apply
 	stp = stash pop
 	std = stash drop
 	rst = restore
 	r = reset
-	wt = worktree
-	wta = worktree add
-	wtls = worktree list
-	wtr = worktree remove
-	; undo last commit and keep files
-	uncommit = reset HEAD~1
-	; discard last commit and files
-	discard = reset --hard HEAD~1
-	pristine = reset --hard && git clean -dffx
-	l = log --date=iso --abbrev-commit
-	ll = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=iso --abbrev-commit
-	lll = "!git ll --numstat"
-    la = "!git l --author=\"$(git config user.email)\""
-    lla = "!git ll --author=\"$(git config user.email)\""
-    llla = "!git lll --author=\"$(git config user.email)\""
-	; show the history of a file
-	filelog = log -u
-	; show modified files in last commit
-	dl = "!git l -1"
+	; remove last commit, keep changes staged
+	uncommit = reset --soft HEAD~1
+	; one-line log
+	l = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=iso --abbrev-commit
+	; detailed log
+	ll = log --date=iso --abbrev-commit
+	; one-line log, my commits only
+	lme = "!git l --author=\"$(git config user.email)\""
 	d = diff
-	; show diff of last commit
-	dlc = diff --cached HEAD^
-	; Show content (full diff) of a commit given a revision:
-	dr  = "!f() { git diff "$1"^.."$1"; }; f"
-	lc  = "!f() { git ll "$1"^.."$1"; }; f"
-	whorank =  shortlog --summary --numbered --no-merges
-	; Find a file path
-	fp = "!git ls-files | grep -i"
+	whorank = shortlog --summary --numbered --no-merges
 	; list aliases
 	alias = "!git config -l | grep alias | cut -c 7-"
 

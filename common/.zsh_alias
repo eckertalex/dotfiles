@@ -59,22 +59,17 @@ fi
 ####
 
 if (( $+commands[gls] )); then
-	alias ls="gls -F --color"
-	alias l="gls -lFA --color"
-	alias ll="gls -lF --color"
-	alias la="gls -FA --color"
+	alias ls="gls -vAF --color --group-directories-first"
 else
-	alias ls="ls -F --color"
-	alias l="ls -lFA --color"
-	alias ll="ls -lF --color"
-	alias la="ls -FA --color"
+	alias ls="ls -vAF --color --group-directories-first"
 fi
+alias ll="ls -lh"
 
 ######
 # tree
 ######
 
-alias tree="tree -Fa"
+alias tree="tree -Fav -I '.git' --dirsfirst"
 
 #####
 # git
@@ -95,49 +90,5 @@ alias g=git
 	fi
 	source "$cache"
 }
-
-######
-# pnpm
-######
-
-# General
-alias p="pnpm"
-alias pdx="pnpm dlx"
-alias pex="pnpm exec"
-
-# Dependencies
-alias pa="pnpm add"
-alias pad="pnpm add --save-dev"
-alias prm="pnpm remove"
-alias pu="pnpm update"
-alias puil="pnpm update --interactive --latest"
-alias pls="pnpm list"
-alias pin="pnpm install"
-alias pout="pnpm outdated"
-
-# Global dependencies
-alias pga="pnpm add --global"
-alias pgrm="pnpm remove --global"
-alias pgu="pnpm update --global"
-alias pgls="pnpm list --global"
-
-# Link
-alias pln="pnpm link"
-alias pgln="pnpm link --global"
-alias plnrm="pnpm unlink"
-
-# Scripts
-alias pr="pnpm run"
-alias pb="pnpm run build"
-alias pd="pnpm run dev"
-alias pst="pnpm run start"
-alias psv="pnpm run serve"
-alias ppre="pnpm run preview"
-alias pdocs="pnpm run docs"
-alias pt="pnpm run test"
-alias ptc="pnpm run test --coverage"
-alias plt="pnpm run lint"
-alias pf="pnpm run format"
-alias pty="pnpm run typecheck"
 
 # vim: set ts=4 sw=4

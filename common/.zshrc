@@ -95,7 +95,9 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # mise
 ######
 
-eval "$(mise activate zsh)"
+if (( $+commands[mise] )); then
+	eval "$(mise activate zsh)"
+fi
 
 ##########
 # compinit
