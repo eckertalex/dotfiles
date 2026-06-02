@@ -3,9 +3,9 @@
 # .zshrc - Run on interactive Zsh session.
 #
 
-####################
+###################
 # plugin management
-####################
+###################
 
 function zcompile-many() {
 	local f
@@ -14,7 +14,7 @@ function zcompile-many() {
 	done
 }
 
-# INFO: I don't want to use ZDOTDIR because it can break when moving to othe systems.
+# INFO: I don't want to use ZDOTDIR because it can break when moving to other systems.
 # I still want to keep plugins, completions, and zcompdump out of the home directory.
 Z_DATA_DIR="$XDG_DATA_HOME/zsh"
 
@@ -28,25 +28,25 @@ if [[ ! -d "$Z_PLUGIN_DIR/zsh-autosuggestions" ]]; then
 	zcompile-many $Z_PLUGIN_DIR/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
 fi
 
-##########
-# Options
-##########
+#########
+# options
+#########
 
 setopt GLOBDOTS
 setopt INC_APPEND_HISTORY     # Immediately append to history file.
 setopt EXTENDED_HISTORY       # Record timestamp in history.
 setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicate entries first when trimming history.
-setopt HIST_IGNORE_DUPS       # Dont record an entry that was just recorded again.
+setopt HIST_IGNORE_DUPS       # Don't record an entry that was just recorded again.
 setopt HIST_IGNORE_ALL_DUPS   # Delete old recorded entry if new entry is a duplicate.
 setopt HIST_FIND_NO_DUPS      # Do not display a line previously found.
-setopt HIST_IGNORE_SPACE      # Dont record an entry starting with a space.
-setopt HIST_SAVE_NO_DUPS      # Dont write duplicate entries in the history file.
+setopt HIST_IGNORE_SPACE      # Don't record an entry starting with a space.
+setopt HIST_SAVE_NO_DUPS      # Don't write duplicate entries in the history file.
 setopt SHARE_HISTORY          # Share history between all sessions.
 unsetopt HIST_VERIFY          # Execute commands using history (e.g.: using !$) immediately
 
-########################
-# Environment variables
-########################
+#######################
+# environment variables
+#######################
 
 HISTFILE="$Z_DATA_DIR/zsh_history"
 HISTSIZE=50000
@@ -59,56 +59,62 @@ export -UT INFOPATH infopath
 PATH="$HOME/.local/bin:$PATH"
 FPATH="$Z_DATA_DIR/completions:$FPATH"
 
-###########
-# Homebrew
-###########
+##########
+# homebrew
+##########
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
-    export HOMEBREW_NO_ANALYTICS=1
-    # output from running: /opt/homebrew/bin/brew shellenv
-    export HOMEBREW_PREFIX="/opt/homebrew";
-    export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-    export HOMEBREW_REPOSITORY="/opt/homebrew";
-    fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
-    export FPATH;
-    eval "$(/usr/bin/env PATH_HELPER_ROOT="/opt/homebrew" /usr/libexec/path_helper -s)"
-    [ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
-    export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+	export HOMEBREW_NO_ANALYTICS=1
+	# output from running: /opt/homebrew/bin/brew shellenv
+	export HOMEBREW_PREFIX="/opt/homebrew";
+	export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+	export HOMEBREW_REPOSITORY="/opt/homebrew";
+	fpath[1,0]="/opt/homebrew/share/zsh/site-functions";
+	export FPATH;
+	eval "$(/usr/bin/env PATH_HELPER_ROOT="/opt/homebrew" /usr/libexec/path_helper -s)"
+	[ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}";
+	export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 fi
 
-######
-# FZF
-######
+#####
+# fzf
+#####
 
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
-##########
-# THEMING
-##########
+#########
+# theming
+#########
 
 [[ -r "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh" ]] && source "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh"
 [[ -r "$XDG_CONFIG_HOME/fzf/rose-pine-dawn.sh" ]] && source "$XDG_CONFIG_HOME/fzf/rose-pine-dawn.sh"
 
-#######
+######
 # mise
-#######
+######
 
 eval "$(mise activate zsh)"
 
-###########
+##########
 # compinit
-###########
+##########
 
 # Enable the "new" completion system (compsys).
-autoload -Uz compinit && compinit -d "$Z_DATA_DIR/zcompdump"
+# Full init (audit + rebuild) at most once a day; fast path (-C) otherwise.
+autoload -Uz compinit
+if [[ -n "$Z_DATA_DIR/zcompdump"(#qNmh+24) ]]; then
+	compinit -d "$Z_DATA_DIR/zcompdump"
+else
+	compinit -C -d "$Z_DATA_DIR/zcompdump"
+fi
 [[ "$Z_DATA_DIR/zcompdump.zwc" -nt "$Z_DATA_DIR/zcompdump" ]] || zcompile-many "$Z_DATA_DIR/zcompdump"
 unfunction zcompile-many
 
-######
+#####
 # vim
-######
+#####
 
 # vi mode
 bindkey -v
@@ -129,14 +135,10 @@ bindkey '^e' edit-command-line
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
-	if [[ ${KEYMAP} == vicmd ]] ||
-		[[ $1 = 'block' ]]; then
-			echo -ne '\e[2 q'
-		elif [[ ${KEYMAP} == main ]] ||
-			[[ ${KEYMAP} == viins ]] ||
-			[[ ${KEYMAP} = '' ]] ||
-			[[ $1 = 'beam' ]]; then
-					echo -ne '\e[6 q'
+	if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+		echo -ne '\e[2 q'
+	elif [[ ${KEYMAP} == main ]] || [[ ${KEYMAP} == viins ]] || [[ ${KEYMAP} = '' ]] || [[ $1 = 'beam' ]]; then
+		echo -ne '\e[6 q'
 	fi
 	_prompt_set_symbol
 	# Redraw the prompt symbol on mode switch, but only when running as a zle
@@ -147,25 +149,25 @@ zle -N zle-keymap-select
 precmd_functions+=(zle-keymap-select)
 
 zle-line-init() {
-zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-echo -ne "\e[6 q"
-_prompt_set_symbol
+	zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+	echo -ne "\e[6 q"
+	_prompt_set_symbol
 }
 zle -N zle-line-init
 
 echo -ne '\e[6 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[6 q' ;} # Use beam shape cursor for each new prompt.
 
-##################
+#################
 # custom keybinds
-##################
+#################
 
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
 
-##########
+#########
 # plugins
-##########
+#########
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 

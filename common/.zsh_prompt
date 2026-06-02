@@ -13,9 +13,9 @@ setopt PROMPT_SUBST
 zmodload zsh/datetime
 autoload -Uz vcs_info add-zsh-hook
 
-############
+###########
 # git (vcs)
-############
+###########
 
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' check-for-changes false
@@ -44,9 +44,9 @@ _prompt_preexec() {
 	_prompt_cmd_start=$EPOCHSECONDS
 }
 
-##################
+################
 # vi-mode symbol
-##################
+################
 
 _prompt_symbol='❯'
 

@@ -1,16 +1,16 @@
 #!/bin/zsh
 #
-# .zalias - Zsh aliases
+# .zsh_alias - Zsh aliases
 #
 
-########
+#######
 # Basic
-########
+#######
 
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
-alias shellclean="rm -rf ~/.local/share/zsh/zcompdump* ~/.cache/p10k* ~/.cache/gitstatus ~/.local/share/zsh/plugins"
+alias shellclean="rm -rf ~/.local/share/zsh/zcompdump* ~/.local/share/zsh/plugins"
 
 alias ..="cd .."
 alias ...="cd ../.."
@@ -23,18 +23,18 @@ alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
 alias print-path='echo $PATH | tr ":" "\n"'
 alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
-##########
+#########
 # lazygit
-##########
+#########
 
 if (( $+commands[lazygit] )); then
-    alias lazygit="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
-    alias lzg="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
+	alias lazygit="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
+	alias lzg="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
 fi
 
-########
+#######
 # utils
-########
+#######
 
 alias cp="cp -vi"
 alias mv="mv -vi"
@@ -42,61 +42,63 @@ alias rm="rm -vI"
 alias mkdir="mkdir -pv"
 alias grep="grep --color=auto"
 if (( $+commands[gsed] )); then
-    alias sed="gsed"
+	alias sed="gsed"
 fi
 
-#####
+##########
 # Homebrew
-#####
+##########
 
 if (( $+commands[brew] )); then
-    alias brewup="brew update && brew bundle --global && brew upgrade && brew cleanup"
-    alias brewinfo="brew leaves | xargs brew desc --eval-all"
+	alias brewup="brew update && brew bundle --global && brew upgrade && brew cleanup"
+	alias brewinfo="brew leaves | xargs brew desc --eval-all"
 fi
 
-#####
+####
 # ls
-#####
+####
 
 if (( $+commands[gls] )); then
-    alias ls="gls -F --color"
-    alias l="gls -lFA --color"
-    alias ll="gls -lF --color"
-    alias la='gls -FA --color'
+	alias ls="gls -F --color"
+	alias l="gls -lFA --color"
+	alias ll="gls -lF --color"
+	alias la="gls -FA --color"
 else
-    alias ls="ls -F --color"
-    alias l="ls -lFA --color"
-    alias ll="ls -lF --color"
-    alias la='ls -FA --color'
+	alias ls="ls -F --color"
+	alias l="ls -lFA --color"
+	alias ll="ls -lF --color"
+	alias la="ls -FA --color"
 fi
 
-#######
+######
 # tree
-#######
+######
 
 alias tree="tree -Fa"
 
-######
+#####
 # git
-######
+#####
 
 alias g=git
 
+# Mirror every `git` alias as a `g`-prefixed shell alias, cached and only
+# rebuilt when ~/.gitconfig changes.
 () {
-    local cache="$XDG_CACHE_HOME/zsh-git-aliases"
-    if [[ ! -r "$cache" || "$HOME/.gitconfig" -nt "$cache" ]]; then
-        mkdir -p "${cache:h}"
-        local al
-        for al in $(git --list-cmds=alias 2>/dev/null); do
-            print -- "alias g$al=\"git $al\""
-        done > "$cache"
-    fi
-    source "$cache"
+	local cache="$XDG_CACHE_HOME/zsh-git-aliases"
+	if [[ ! -r "$cache" || "$HOME/.gitconfig" -nt "$cache" ]]; then
+		mkdir -p "${cache:h}"
+		local al
+		for al in $(git --list-cmds=alias 2>/dev/null); do
+			print -- "alias g$al=\"git $al\""
+		done > "$cache"
+	fi
+	source "$cache"
 }
 
-#######
-# PNPM
-#######
+######
+# pnpm
+######
 
 # General
 alias p="pnpm"
@@ -113,7 +115,7 @@ alias pls="pnpm list"
 alias pin="pnpm install"
 alias pout="pnpm outdated"
 
-# Global Dependencies
+# Global dependencies
 alias pga="pnpm add --global"
 alias pgrm="pnpm remove --global"
 alias pgu="pnpm update --global"
@@ -138,3 +140,4 @@ alias plt="pnpm run lint"
 alias pf="pnpm run format"
 alias pty="pnpm run typecheck"
 
+# vim: set ts=4 sw=4
