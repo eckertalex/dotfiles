@@ -1,26 +1,13 @@
-.vscode
-.project
-.settings
-.classpath
-.idea
-*.iml
-out
-*.out
-*.iws
-*.ipr
-.gradletasknamecache
-.jenv.sh
-.sdkmanrc
+# macOS
 .DS_Store
-*.pyc
-.git/
+._*
+.Spotlight-V100
+.Trashes
+
+# Claude Code (per-machine local settings)
 **/.claude/settings.local.json
-/bower_components/
-/node_modules/
-db/*.sqlite3
-*~
-/log
-/tmp
-/vendor
-log/*.log
-tmp/**/*
+
+# Compiler output that is never worth committing
+*.o
+a.out
+*.dSYM/
