@@ -3,11 +3,10 @@
 [column]
 	ui = auto
 [commit]
-	template = ~/.gitmessage
+	template = ~/.config/git/message
 	verbose = true
 [core]
 	editor = nvim
-	excludesfile = ~/.gitignore
 	fsmonitor = true
 	pager = delta
 	untrackedCache = true
@@ -18,13 +17,12 @@
 [help]
 	autocorrect = prompt
 [include]
-	path = ~/.gitconfig.local
+	path = ~/.config/git/alias
+	path = ~/.config/git/local
 [includeIf "gitdir:~/.dotfiles/"]
-	path = ~/.gitconfig.private
+	path = ~/.config/git/private
 [includeIf "gitdir:~/.dotwork/"]
-	path = ~/.gitconfig.private
-[include]
-	path = ~/.gitalias
+	path = ~/.config/git/private
 [init]
 	defaultBranch = main
 [interactive]

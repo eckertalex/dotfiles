@@ -78,10 +78,11 @@ alias tree="tree -Fav -I '.git' --dirsfirst"
 alias g=git
 
 # Mirror every `git` alias as a `g`-prefixed shell alias, cached and only
-# rebuilt when ~/.gitconfig changes.
+# rebuilt when the git alias file changes.
 () {
 	local cache="$XDG_CACHE_HOME/zsh-git-aliases"
-	if [[ ! -r "$cache" || "$HOME/.gitconfig" -nt "$cache" ]]; then
+	local gitalias="${XDG_CONFIG_HOME:-$HOME/.config}/git/alias"
+	if [[ ! -r "$cache" || "$gitalias" -nt "$cache" ]]; then
 		mkdir -p "${cache:h}"
 		local al
 		for al in $(git --list-cmds=alias 2>/dev/null); do

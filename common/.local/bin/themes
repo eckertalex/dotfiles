@@ -13,8 +13,8 @@
 #
 # File contracts:
 #   ghostty:           s/^theme = .*/theme = $ghostty_theme/                in mac/.config/ghostty/mac.conf
-#   .gitconfig:        s/syntax-theme = "[^"]*"/syntax-theme = "$theme"/    in common/.gitconfig
-#   .gitconfig:        s/\(light\|dark\) = true/$mode = true/               in common/.gitconfig
+#   git config:        s/syntax-theme = "[^"]*"/syntax-theme = "$theme"/    in common/.config/git/config
+#   git config:        s/\(light\|dark\) = true/$mode = true/               in common/.config/git/config
 #   bat config:        s/--theme="[^"]*"/--theme="$theme"/                  in common/.config/bat/config
 #   .zshrc:            s|/fzf/[a-z0-9-]*\.sh|/fzf/$theme.sh|                in common/.zshrc
 #   .zshrc:            s|/lscolors/[a-z0-9-]*\.sh|/lscolors/$theme.sh|      in common/.zshrc
@@ -129,8 +129,8 @@ apply_and_save() {
     $SED -i "s/^theme = .*/theme = $ghostty_theme/" "$DOTFILES/common/.config/ghostty/config"
 
     # git delta
-    $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/common/.gitconfig"
-    $SED -i "s/\(light\|dark\) = true/$mode = true/" "$DOTFILES/common/.gitconfig"
+    $SED -i "s/syntax-theme = \"[^\"]*\"/syntax-theme = \"$theme\"/" "$DOTFILES/common/.config/git/config"
+    $SED -i "s/\(light\|dark\) = true/$mode = true/" "$DOTFILES/common/.config/git/config"
 
     # bat
     $SED -i "s/--theme=\"[^\"]*\"/--theme=\"$theme\"/" "$DOTFILES/common/.config/bat/config"

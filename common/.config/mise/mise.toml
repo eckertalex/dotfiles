@@ -14,7 +14,7 @@ pnpm = "11.1.2"
 "npm:yaml-language-server" = "latest"
 
 # Languages
-go = "1.26.3"
+go = "1.26.4"
 node = "26.1.0"
 usage = "latest"
 
