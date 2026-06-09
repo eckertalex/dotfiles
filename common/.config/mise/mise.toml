@@ -1,22 +1,21 @@
 [tools]
 # Tools
-pnpm = "11.1.2"
-"npm:prettier" = "latest"
-"github:JohnnyMorganz/StyLua" = "latest"
+pnpm = "11.5.2"
+"npm:prettier" = "3.8.4"
+"github:JohnnyMorganz/StyLua" = "2.5.2"
 
 # LSPs
-"github:luals/lua-language-server" = "latest"
-"go:golang.org/x/tools/gopls" = "latest"
-"npm:@astrojs/language-server" = "latest"
-"npm:@tailwindcss/language-server" = "latest"
-"npm:@vtsls/language-server" = "latest"
-"npm:vscode-langservers-extracted" = "latest"
-"npm:yaml-language-server" = "latest"
+"github:luals/lua-language-server" = "3.18.2"
+"go:golang.org/x/tools/gopls" = "0.22.0"
+"npm:@tailwindcss/language-server" = "0.14.29"
+"npm:@vtsls/language-server" = "0.3.0"
+"npm:vscode-langservers-extracted" = "4.10.0"
+"npm:yaml-language-server" = "1.23.0"
 
 # Languages
 go = "1.26.4"
-node = "26.1.0"
-usage = "latest"
+node = "26.3.0"
+usage = "3.4.0"
 
 [tool_alias]
 pnpm = "npm:pnpm"

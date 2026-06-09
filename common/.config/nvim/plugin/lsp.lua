@@ -6,7 +6,6 @@ vim.pack.add({
 })
 
 vim.lsp.enable({
-    "astro",
     "cssls",
     "eslint",
     "gopls",
@@ -53,7 +52,6 @@ require("conform").setup({
         return { timeout_ms = 3000, lsp_format = "fallback" }
     end,
     formatters_by_ft = {
-        astro = { "prettier" },
         css = { "prettier" },
         go = { "gofmt" },
         graphql = { "prettier" },
