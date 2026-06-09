@@ -176,8 +176,6 @@ miniclue.setup({
         delay = 0,
     },
     clues = {
-        { mode = "n", keys = "<Leader>a", desc = "+AI/Claude" },
-        { mode = "x", keys = "<Leader>a", desc = "+AI/Claude" },
         { mode = "n", keys = "<Leader>b", desc = "+Buffer" },
         { mode = "n", keys = "<Leader>f", desc = "+Find" },
         { mode = "n", keys = "<Leader>g", desc = "+Git" },
