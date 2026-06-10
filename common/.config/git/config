@@ -21,8 +21,6 @@
 	path = ~/.config/git/local
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/.config/git/private
-[includeIf "gitdir:~/.dotwork/"]
-	path = ~/.config/git/private
 [init]
 	defaultBranch = main
 [interactive]

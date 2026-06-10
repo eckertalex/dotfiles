@@ -3,6 +3,7 @@
 pnpm = "11.5.2"
 "npm:prettier" = "3.8.4"
 "github:JohnnyMorganz/StyLua" = "2.5.2"
+"npm:wrangler" = "4.99.0"
 
 # LSPs
 "github:luals/lua-language-server" = "3.18.2"
