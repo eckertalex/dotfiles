@@ -11,7 +11,6 @@ vim.lsp.enable({
     "gopls",
     "html",
     "jsonls",
-    "kotlin_lsp",
     "lua_ls",
     "tailwindcss",
     "vtsls",
