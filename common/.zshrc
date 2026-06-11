@@ -1,23 +1,16 @@
 # plugin management
 function zcompile-many() {
-	local f
-	for f; do
-		zcompile -R -- "$f".zwc "$f";
-	done
+  local f
+  for f; do zcompile -R -- "$f".zwc "$f"; done
 }
 
-# INFO: I don't want to use ZDOTDIR because it can break when moving to other systems.
-# I still want to keep plugins, completions, and zcompdump out of the home directory.
-Z_DATA_DIR="$XDG_DATA_HOME/zsh"
-
-Z_PLUGIN_DIR="$Z_DATA_DIR/plugins"
-if [[ ! -d "$Z_PLUGIN_DIR/zsh-syntax-highlighting" ]]; then
-	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$Z_PLUGIN_DIR/zsh-syntax-highlighting"
-	zcompile-many $Z_PLUGIN_DIR/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
+if [[ ! -e "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting" ]]; then
+	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting"
+	zcompile-many $XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
 fi
-if [[ ! -d "$Z_PLUGIN_DIR/zsh-autosuggestions" ]]; then
-	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$Z_PLUGIN_DIR/zsh-autosuggestions"
-	zcompile-many $Z_PLUGIN_DIR/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+if [[ ! -e "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions" ]]; then
+	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions"
+	zcompile-many $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
 fi
 
 # options
@@ -31,12 +24,12 @@ setopt HIST_REDUCE_BLANKS      # Remove superfluous blanks from history entries.
 unsetopt HIST_VERIFY           # Execute history expansions immediately.
 
 # history
-HISTFILE="$Z_DATA_DIR/zsh_history"
+HISTFILE="$XDG_DATA_HOME/zsh/zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
 
 # Register the custom completions dir before compinit reads fpath.
-fpath=("$Z_DATA_DIR/completions" $fpath)
+fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
 
 # theming
 source "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh"
@@ -48,15 +41,8 @@ if (( $+commands[mise] )); then
 fi
 
 # compinit
-# Enable the "new" completion system (compsys).
-# Full init (audit + rebuild) at most once a day; fast path (-C) otherwise.
-autoload -Uz compinit
-if [[ -n "$Z_DATA_DIR/zcompdump"(#qNmh+24) ]]; then
-	compinit -d "$Z_DATA_DIR/zcompdump"
-else
-	compinit -C -d "$Z_DATA_DIR/zcompdump"
-fi
-[[ "$Z_DATA_DIR/zcompdump.zwc" -nt "$Z_DATA_DIR/zcompdump" ]] || zcompile-many "$Z_DATA_DIR/zcompdump"
+autoload -Uz compinit && compinit
+[[ "$XDG_DATA_HOME/zsh/zcompdump.zwc" -nt "$XDG_DATA_HOME/zsh/zcompdump" ]] || zcompile-many "$XDG_DATA_HOME/zsh/zcompdump"
 unfunction zcompile-many
 
 # fzf
@@ -68,10 +54,10 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 bindkey -s '^f' "tmux-sessionizer\n"
 
 # plugins
-source "$Z_PLUGIN_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-source "$Z_PLUGIN_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 source "$HOME/.zsh_alias"
 [[ -r "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
