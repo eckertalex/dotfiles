@@ -1,7 +1,3 @@
-#!/bin/zsh
-#
-# .zsh_prompt - Native zsh prompt (replaces powerlevel10k).
-#
 # Layout:   ~/path branch ❯   (duration on the right if a command took >5s)
 # Git:      branch + in-progress action only, via vcs_info (no work-tree scan,
 #           so it stays fast even in large repos).
@@ -13,20 +9,14 @@ setopt PROMPT_SUBST
 zmodload zsh/datetime
 autoload -Uz vcs_info add-zsh-hook
 
-###########
 # git (vcs)
-###########
-
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:git:*' check-for-changes false
 # Color only; bold is carried in from PROMPT (cannot use %b here, it means branch).
 zstyle ':vcs_info:git:*' formats       ' %F{5}%b%f'
 zstyle ':vcs_info:git:*' actionformats ' %F{5}%b|%a%f'
 
-##################
 # command duration
-##################
-
 _prompt_cmd_start=0
 
 _format_duration() {
@@ -44,10 +34,7 @@ _prompt_preexec() {
 	_prompt_cmd_start=$EPOCHSECONDS
 }
 
-################
 # vi-mode symbol
-################
-
 _prompt_symbol='❯'
 
 _prompt_set_symbol() {
@@ -57,10 +44,7 @@ _prompt_set_symbol() {
 	esac
 }
 
-########
 # precmd
-########
-
 _prompt_precmd() {
 	# Must be the very first statement so it sees the real exit status.
 	local exit_status=$?
@@ -88,10 +72,7 @@ add-zsh-hook precmd _prompt_precmd
 # other hook (e.g. the cursor-shape reset) clobbers it.
 precmd_functions=(_prompt_precmd ${precmd_functions:#_prompt_precmd})
 
-########
 # prompt
-########
-
 PROMPT='%B%F{4}%~%f${vcs_info_msg_0_} ${_prompt_color}${_prompt_symbol}%f%b '
 RPROMPT='${_prompt_duration_display}'
 

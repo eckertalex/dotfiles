@@ -1,12 +1,4 @@
-#!/bin/zsh
-#
-# .zsh_alias - Zsh aliases
-#
-
-#######
 # Basic
-#######
-
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
@@ -23,19 +15,13 @@ alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
 alias print-path='echo $PATH | tr ":" "\n"'
 alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
-#########
 # lazygit
-#########
-
 if (( $+commands[lazygit] )); then
 	alias lazygit="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
 	alias lzg="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
 fi
 
-#######
 # utils
-#######
-
 alias cp="cp -vi"
 alias mv="mv -vi"
 alias rm="rm -vI"
@@ -45,19 +31,13 @@ if (( $+commands[gsed] )); then
 	alias sed="gsed"
 fi
 
-##########
 # Homebrew
-##########
-
 if (( $+commands[brew] )); then
 	alias brewup="brew update && brew bundle --global && brew upgrade && brew cleanup"
 	alias brewinfo="brew leaves | xargs brew desc --eval-all"
 fi
 
-####
 # ls
-####
-
 if (( $+commands[gls] )); then
 	alias ls="gls -vAF --color --group-directories-first"
 else
@@ -65,16 +45,10 @@ else
 fi
 alias ll="ls -lh"
 
-######
 # tree
-######
-
 alias tree="tree -Fav -I '.git' --dirsfirst"
 
-#####
 # git
-#####
-
 alias g=git
 
 # Mirror every `git` alias as a `g`-prefixed shell alias, cached and only
