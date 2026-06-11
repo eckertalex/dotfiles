@@ -1,8 +1,8 @@
 # prepend user-local binaries
-path=("$HOME/.local/bin" $path)
+path=("$HOME/.local/bin"(N-/) $path)
 
 # homebrew
-if [[ -d /opt/homebrew ]]; then
+if [[ -n /opt/homebrew(N-/) ]]; then
     export HOMEBREW_NO_ANALYTICS=1
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi

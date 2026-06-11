@@ -4,13 +4,13 @@ function zcompile-many() {
   for f; do zcompile -R -- "$f".zwc "$f"; done
 }
 
-if [[ ! -e "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting" ]]; then
+if [[ -z "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting"(N) ]]; then
 	git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting"
-	zcompile-many $XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}
+	zcompile-many "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting/{zsh-syntax-highlighting.zsh,highlighters/*/*.zsh}"
 fi
-if [[ ! -e "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions" ]]; then
+if [[ -z "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions"(N) ]]; then
 	git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions"
-	zcompile-many $XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}
+	zcompile-many "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/{zsh-autosuggestions.zsh,src/**/*.zsh}"
 fi
 
 # options
@@ -29,7 +29,7 @@ HISTSIZE=10000
 SAVEHIST=10000
 
 # Register the custom completions dir before compinit reads fpath.
-fpath=("$XDG_DATA_HOME/zsh/completions" $fpath)
+fpath=("$XDG_DATA_HOME/zsh/completions"(N-/) $fpath)
 
 # theming
 source "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh"
@@ -46,8 +46,8 @@ autoload -Uz compinit && compinit
 unfunction zcompile-many
 
 # fzf
-[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
-[[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+[[ -n "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"(N-.) ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
+[[ -n "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"(N-.) ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
 # Ctrl-f
@@ -60,7 +60,7 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 source "$HOME/.zsh_alias"
-[[ -r "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
+[[ -n "$HOME/.zsh_local"(N-.) ]] && source "$HOME/.zsh_local"
 source "$HOME/.zsh_vi"
 source "$HOME/.zsh_prompt"
 
