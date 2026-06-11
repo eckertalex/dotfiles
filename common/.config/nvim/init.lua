@@ -282,30 +282,5 @@ vim.api.nvim_create_autocmd("FileType", {
     desc = "Set conceallevel to 0 for JSON and Markdown files",
 })
 
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-    group = augroup,
-    desc = "Load template file",
-    callback = function(args)
-        if vim.api.nvim_buf_line_count(args.buf) > 1 then
-            return
-        end
-
-        local fname = vim.fs.basename(args.file)
-        local ext = vim.fn.fnamemodify(args.file, ":e")
-        local ft = vim.bo[args.buf].filetype
-
-        for _, candidate in ipairs({ fname, ext, ft }) do
-            local tmpl_path =
-                vim.fs.joinpath(vim.fn.stdpath("config"), "templates", string.format("%s.tmpl", candidate))
-            local f = io.open(tmpl_path, "r")
-            if f then
-                vim.snippet.expand(f:read("*a"))
-                f:close()
-                return
-            end
-        end
-    end,
-})
-
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=4 sw=4
