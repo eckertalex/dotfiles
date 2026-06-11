@@ -12,7 +12,6 @@ vim.lsp.enable({
     "html",
     "jsonls",
     "lua_ls",
-    "tailwindcss",
     "vtsls",
     "yamlls",
 })
