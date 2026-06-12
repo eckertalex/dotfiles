@@ -1,4 +1,5 @@
 # Basic
+# don't use these for serious stuff, prefer zsh/zprof or romkatv/zsh-bench
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
@@ -55,14 +56,15 @@ alias g=git
 # rebuilt when the git alias file changes.
 () {
 	local cache="$XDG_CACHE_HOME/zsh-git-aliases"
-	local gitalias="${XDG_CONFIG_HOME:-$HOME/.config}/git/alias"
+	local gitalias="$XDG_CONFIG_HOME/git/alias"
+
 	if [[ ! -r "$cache" || "$gitalias" -nt "$cache" ]]; then
-		mkdir -p "${cache:h}"
 		local al
 		for al in $(git --list-cmds=alias 2>/dev/null); do
 			print -- "alias g$al=\"git $al\""
 		done > "$cache"
 	fi
+
 	source "$cache"
 }
 
