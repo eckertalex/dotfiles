@@ -23,7 +23,6 @@ vim.pack.add({
 local languages = {
     "astro",
     "bash",
-    "c",
     "css",
     "diff",
     "dockerfile",
@@ -40,18 +39,15 @@ local languages = {
     "java",
     "javascript",
     "json5",
-    "lua",
     "kotlin",
     "php",
     "sql",
-    "markdown",
-    "markdown_inline",
     "scss",
     "toml",
     "tsx",
     "typescript",
-    "vimdoc",
     "yaml",
+    "zsh",
 }
 
 local function isnt_installed(lang)
