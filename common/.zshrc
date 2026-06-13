@@ -60,7 +60,7 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 source "$HOME/.zsh_alias"
-[[ -r "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 source "$HOME/.zsh_vi"
 source "$HOME/.zsh_prompt"
 
