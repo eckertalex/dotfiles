@@ -7,7 +7,6 @@ require("mini.basics").setup({
         extra_ui = true,
     },
     mappings = {
-        windows = true,
         move_with_alt = true,
     },
     autocommands = {

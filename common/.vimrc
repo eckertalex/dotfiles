@@ -1,61 +1,92 @@
-" Disable compatibility mode
-set nocompatible
-
-" Leader Key
 let mapleader = " "
-let maplocalleader = " "
+let maplocalleader = ","
 
-" Interface Settings
-set number               " Show line numbers
-set relativenumber       " Show relative line numbers
-set mouse=a              " Enable mouse in all modes
-set nowrap               " Disable line wrapping
-set cursorline           " Highlight current line
-set signcolumn=yes       " Always show sign column
-set laststatus=2         " Always show status line
-set wildmenu             " Enhanced command-line completion
-set ruler                " Show cursor position
-set scrolloff=10         " Context lines when scrolling
-set sidescrolloff=8      " Context columns when side-scrolling
-"set statusline=%=%m\ %f  " Simple status line format
+set nocompatible
+set backspace=indent,eol,start
+set complete-=i
+set smarttab
+set nrformats-=octal
+set timeout
+set timeoutlen=100
+set incsearch
 
-" Editing Behavior
-set backspace=indent,eol,start       " Backspace through everything
-set smarttab                         " Smart tab behavior
-set shiftwidth=4                     " Indent width
-set tabstop=4                        " Tab display width
-set list                             " Show invisible characters
-set listchars=tab:»\ ,trail:·,nbsp:␣
+syntax on
+filetype plugin indent on
 
-" Search Settings
-set ignorecase            " Case-insensitive search
-set smartcase             " Case-sensitive if uppercase used
-set incsearch             " Incremental search
+" Use CTRL-L to clear the highlighting of 'hlsearch' (off by default) and call
+" :diffupdate.
+nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
-" File Handling
-filetype plugin indent on " Enable filetype detection
-syntax on                 " Enable syntax highlighting
-set autoread              " Reload files changed outside Vim
-set undofile              " Persistent undo
-set undodir=~/.vim/undodir
+set laststatus=2
+set ruler
+set wildmenu
 
-" Performance & History
-set history=1000          " Command history size
-set updatetime=200        " Update time for swap and CursorHold
-set timeoutlen=300        " Timeout for key sequences
+set scrolloff=1
+set sidescroll=1
+set sidescrolloff=2
 
-" Window Splitting
-set splitbelow            " New windows below current
-set splitright            " New windows right of current
+set display+=lastline
+set display+=truncate
 
-" Completion & Command
-set pumheight=10          " Max popup menu height
-set virtualedit=block     " Free cursor in visual block mode
-set winminwidth=5         " Minimum window width
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
 
-" Additional Tweaks
-set conceallevel=3        " Conceal markup in some modes
-set formatoptions+=j      " Smart join of comment lines
+set formatoptions+=j
+
+setglobal tags-=./tags tags-=./tags; tags^=./tags;
+
+set autoread
+
+set history=1000
+
+set tabpagemax=50
+
+set viminfo^=!
+
 set sessionoptions-=options
 set viewoptions-=options
-set clipboard=unnamed,unnamedplus
+
+set hlsearch
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set iskeyword=@,48-57,_,192-255,-
+
+" Keymaps
+" Move selection up/down
+xnoremap J :m '>+1<CR>gv=gv
+xnoremap K :m '<-2<CR>gv=gv
+" Join keeping cursor position
+nnoremap J mzJ`z
+" Center on next/prev search match
+nnoremap n nzzzv
+nnoremap N Nzzzv
+" Center on half-page scroll
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+" Delete into black-hole register
+nnoremap <leader>d "_d
+xnoremap <leader>d "_d
+" Replace word under cursor
+nnoremap <leader>r :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+" Keep selection when indenting
+xnoremap < <gv
+xnoremap > >gv
+" Open netrw in the current file's directory
+nnoremap - :Explore<CR>
+" Close current buffer
+nnoremap <leader>bd :bdelete<CR>
+" Cycle buffers
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprevious<CR>
+" Yank file path to the clipboard: absolute / relative to cwd
+nnoremap <leader>yp :let @+=expand('%:p')<CR>
+nnoremap <leader>yr :let @+=expand('%:.')<CR>
+
+" Autocmds
+" Soft-wrap prose files
+augroup vimrc_prose
+  autocmd!
+  autocmd FileType text,plaintex,gitcommit,markdown setlocal wrap
+augroup END

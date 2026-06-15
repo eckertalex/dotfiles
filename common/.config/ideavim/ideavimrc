@@ -1,0 +1,135 @@
+source ~/.vimrc
+
+" Use IntelliJ's smart join for `J` (fixes comment leaders, string concat, etc).
+set ideajoin
+" Stay in normal/visual mode during an IDE rename instead of dropping to insert.
+set idearefactormode=keep
+" Keep the IdeaVim status-bar icon visible.
+set ideastatusicon=enabled
+" Make put/paste respect IntelliJ's smart paste behavior.
+set clipboard+=ideaput
+" Show available keybindings in a popup after a prefix key.
+" REQUIRES the 'Which-Key' marketplace plugin installed; this only enables it.
+set which-key
+" Don't time out on multi-key sequences, so the which-key popup waits for the
+" next key instead of cancelling after 'timeoutlen'.
+set notimeout
+" Which-Key popup tuning
+let g:WhichKey_DefaultDelay = 0            " show the popup immediately
+let g:WhichKey_FontSize = 16               " larger than the editor font
+let g:WhichKey_SortCaseSensitive = "false" " case-insensitive sorting
+
+" Enables IdeaVim's built-in emulation of a Vim plugin.
+" commentary: `gcc` toggles a line comment, `gc` is a comment operator (gcip).
+set commentary
+" highlightedyank: briefly flash the yanked region.
+set highlightedyank
+
+" IntelliJ action keymaps
+" Find any file by name
+nnoremap <leader>ff :action GotoFile<CR>
+" Reveal the current file in the Project tool window
+nnoremap - :action SelectInProjectView<CR>
+" Project-wide grep
+nnoremap <leader>sg :action FindInPath<CR>
+" References / usages
+nnoremap grr :action FindUsages<CR>
+" Go to definition
+nnoremap gd :action GotoDeclaration<CR>
+" Format buffer / selection (overrides Vim's gq format motion)
+nnoremap gq :action ReformatCode<CR>
+xnoremap gq :action ReformatCode<CR>
+" Code actions / intentions / quick fixes (Alt+Enter)
+nnoremap gra :action ShowIntentionActions<CR>
+xnoremap gra :action ShowIntentionActions<CR>
+" Hover documentation (F1)
+nnoremap K :action QuickJavaDoc<CR>
+" Rename symbol (Shift+F6)
+nnoremap grn :action RenameElement<CR>
+" Go to implementation (Cmd+Alt+B)
+nnoremap gri :action GotoImplementation<CR>
+" Go to type definition (Ctrl+Shift+B)
+nnoremap grt :action GotoTypeDeclaration<CR>
+" Document symbols / file structure (Cmd+F12)
+nnoremap gO :action FileStructurePopup<CR>
+" Recent files, incl. recently closed
+nnoremap <leader><leader> :action RecentFiles<CR>
+nnoremap <leader>, :action RecentFiles<CR>
+" Next/previous diagnostic (error or warning)
+nnoremap ]d :action GotoNextError<CR>
+nnoremap [d :action GotoPreviousError<CR>
+" Next/previous git-changed line
+nnoremap ]h :action VcsShowNextChangeMarker<CR>
+nnoremap [h :action VcsShowPrevChangeMarker<CR>
+" Cycle through only the open editor tabs, prev/next
+nnoremap [b :action PreviousTab<CR>
+nnoremap ]b :action NextTab<CR>
+" View the diagnostic message under the cursor (Cmd+F1)
+nnoremap <C-w>d :action ShowErrorDescription<CR>
+" Close the current editor tab
+nnoremap <leader>bd :action CloseContent<CR>
+" Tests. RunClass is caret-aware: runs the single test method under the caret,
+" or all tests in the class/file when the caret is outside any method.
+nnoremap <leader>tt :action RunClass<CR>
+" Rerun the last run
+nnoremap <leader>tr :action Rerun<CR>
+" Toggle git blame annotations in the gutter
+nnoremap <leader>gb :action Annotate<CR>
+" Yank absolute file path
+nnoremap <leader>yp :action CopyAbsolutePath<CR>
+xnoremap <leader>yp :action CopyAbsolutePath<CR>
+" Yank path relative to the git/repository root
+nnoremap <leader>yr :action CopyPathFromRepositoryRootProvider<CR>
+xnoremap <leader>yr :action CopyPathFromRepositoryRootProvider<CR>
+" Yank a reference: path with line number
+nnoremap <leader>yl :action CopyReference<CR>
+xnoremap <leader>yl :action CopyReference<CR>
+" Open the current file/line on GitHub in the browser
+nnoremap <leader>go :action Github.Open.In.Browser<CR>
+xnoremap <leader>go :action Github.Open.In.Browser<CR>
+
+" which-key descriptions
+" Format: let g:WhichKeyDesc_<uniquename> = "<lhs> <description>"
+
+" Prefix groups
+let g:WhichKeyDesc_find = "<leader>f +find"
+let g:WhichKeyDesc_search = "<leader>s +search"
+let g:WhichKeyDesc_buffer = "<leader>b +buffer"
+let g:WhichKeyDesc_test = "<leader>t +test"
+let g:WhichKeyDesc_git = "<leader>g +git"
+let g:WhichKeyDesc_yank = "<leader>y +yank path"
+let g:WhichKeyDesc_goto = "gr +lsp"
+
+" <leader> maps
+let g:WhichKeyDesc_delete_blackhole = "<leader>d delete to black-hole"
+let g:WhichKeyDesc_replace_word = "<leader>r replace word under cursor"
+let g:WhichKeyDesc_find_file = "<leader>ff find file"
+let g:WhichKeyDesc_recent_files = "<leader><leader> recent files"
+let g:WhichKeyDesc_recent_files_comma = "<leader>, recent files"
+let g:WhichKeyDesc_search_grep = "<leader>sg grep in project"
+let g:WhichKeyDesc_buffer_delete = "<leader>bd close buffer"
+let g:WhichKeyDesc_test_run = "<leader>tt run test/class at caret"
+let g:WhichKeyDesc_test_rerun = "<leader>tr rerun last"
+let g:WhichKeyDesc_git_blame = "<leader>gb toggle git blame"
+let g:WhichKeyDesc_git_open = "<leader>go open on GitHub"
+let g:WhichKeyDesc_yank_absolute = "<leader>yp absolute path"
+let g:WhichKeyDesc_yank_relative = "<leader>yr repo-root relative path"
+let g:WhichKeyDesc_yank_line = "<leader>yl path with line number"
+
+" g maps
+let g:WhichKeyDesc_goto_definition = "gd definition"
+let g:WhichKeyDesc_goto_references = "grr references"
+let g:WhichKeyDesc_goto_codeaction = "gra code action"
+let g:WhichKeyDesc_goto_rename = "grn rename"
+let g:WhichKeyDesc_goto_implementation = "gri implementation"
+let g:WhichKeyDesc_goto_typedef = "grt type definition"
+let g:WhichKeyDesc_goto_symbols = "gO document symbols"
+let g:WhichKeyDesc_format = "gq format"
+
+" ] / [ maps
+let g:WhichKeyDesc_next_diagnostic = "]d next diagnostic"
+let g:WhichKeyDesc_prev_diagnostic = "[d prev diagnostic"
+let g:WhichKeyDesc_next_hunk = "]h next git change"
+let g:WhichKeyDesc_prev_hunk = "[h prev git change"
+let g:WhichKeyDesc_next_buffer = "]b next open file"
+let g:WhichKeyDesc_prev_buffer = "[b prev open file"

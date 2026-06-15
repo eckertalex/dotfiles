@@ -132,9 +132,6 @@ vim.keymap.set("n", "<leader>bs", new_scratch_buffer, { desc = "Scratch" })
 -- notes
 vim.keymap.set("n", "<leader>n", require("notes").open, { desc = "Notes" })
 
--- Clear search with <esc>
-vim.keymap.set("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear hlsearch" })
-
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
