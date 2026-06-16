@@ -1,4 +1,12 @@
 theme = Rose Pine Dawn
 
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:down
+keybind = super+k=goto_split:up
+keybind = super+l=goto_split:right
+
+keybind = super+/=write_screen_file:paste,plain
+keybind = super+shift+/=write_scrollback_file:paste,plain
+
 config-file = ?mac.conf
 config-file = ?linux.conf
