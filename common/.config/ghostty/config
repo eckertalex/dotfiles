@@ -5,6 +5,8 @@ keybind = super+j=goto_split:down
 keybind = super+k=goto_split:up
 keybind = super+l=goto_split:right
 
+keybind = global:cmd+;=toggle_quick_terminal
+
 keybind = super+/=write_screen_file:paste,plain
 keybind = super+shift+/=write_scrollback_file:paste,plain
 
