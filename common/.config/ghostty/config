@@ -1,4 +1,4 @@
-theme = Rose Pine Dawn
+theme = Rose Pine
 
 keybind = super+h=goto_split:left
 keybind = super+j=goto_split:down

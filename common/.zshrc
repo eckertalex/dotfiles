@@ -37,8 +37,8 @@ autoload -Uz compinit && compinit -d "$XDG_DATA_HOME/zsh/zcompdump"
 unfunction zcompile-many
 
 # theming
-source "$XDG_CONFIG_HOME/lscolors/rose-pine-dawn.sh"
-source "$XDG_CONFIG_HOME/fzf/rose-pine-dawn.sh"
+source "$XDG_CONFIG_HOME/lscolors/rose-pine.sh"
+source "$XDG_CONFIG_HOME/fzf/rose-pine.sh"
 
 # mise
 if (( $+commands[mise] )); then

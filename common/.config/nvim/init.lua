@@ -99,7 +99,7 @@ vim.pack.add({
     { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
     { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 })
-vim.cmd.colorscheme("rose-pine-dawn")
+vim.cmd.colorscheme("rose-pine")
 
 -- Move lines
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

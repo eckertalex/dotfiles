@@ -55,10 +55,10 @@
 [tag]
 	sort = version:refname
 [delta]
-	light = true
+	dark = true
 	hyperlinks = true
 	line-numbers = true
 	navigate = true
-	syntax-theme = "rose-pine-dawn"
+	syntax-theme = "rose-pine"
 
 # vim: set ts=4 sw=4 filetype=gitconfig

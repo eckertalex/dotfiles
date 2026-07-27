@@ -1,9 +1,9 @@
 [tools]
 # Tools
-pnpm = "11.15.1"
-"npm:prettier" = "3.9.5"
+pnpm = "11.17.0"
+"npm:prettier" = "3.9.6"
 "github:JohnnyMorganz/StyLua" = "2.5.2"
-"npm:wrangler" = "4.112.0"
+"npm:wrangler" = "4.114.0"
 
 # LSPs
 "github:luals/lua-language-server" = "3.18.2"
@@ -15,7 +15,7 @@ pnpm = "11.15.1"
 # Languages
 go = "1.26.5"
 node = "26.5.0"
-usage = "3.5.5"
+usage = "4.0.0"
 
 [tool_alias]
 pnpm = "npm:pnpm"

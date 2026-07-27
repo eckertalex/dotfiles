@@ -18,7 +18,7 @@
 #   bat config:        s/--theme="[^"]*"/--theme="$theme"/                  in common/.config/bat/config
 #   .zshrc:            s|/fzf/[a-z0-9-]*\.sh|/fzf/$theme.sh|                in common/.zshrc
 #   .zshrc:            s|/lscolors/[a-z0-9-]*\.sh|/lscolors/$theme.sh|      in common/.zshrc
-#   nvim plugins.lua:  s/colorscheme("[^"]*")/colorscheme("$theme")/        in common/.config/nvim/plugin/plugins.lua
+#   nvim init.lua:     s/colorscheme("[^"]*")/colorscheme("$theme")/        in common/.config/nvim/init.lua
 
 set -euo pipefail
 
@@ -143,7 +143,7 @@ apply_and_save() {
     $SED -i "s|/lscolors/[a-z-]*\.sh|/lscolors/$theme.sh|g" "$DOTFILES/common/.zshrc"
 
     # neovim
-    $SED -i "s/colorscheme(\"[^\"]*\")/colorscheme(\"$theme\")/" "$DOTFILES/common/.config/nvim/plugin/plugins.lua"
+    $SED -i "s/colorscheme(\"[^\"]*\")/colorscheme(\"$theme\")/" "$DOTFILES/common/.config/nvim/init.lua"
 
     # config
     $SED -i "s/^MODE=.*/MODE=$mode/" "$CONFIG"
