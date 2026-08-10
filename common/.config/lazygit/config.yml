@@ -1,11 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 
 git:
-    pagers:
-        - pager: delta --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  diffRenderers:
+    - command: delta --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 gui:
-    showRandomTip: false
-    nerdFontsVersion: "3"
+  showRandomTip: false
+  nerdFontsVersion: "3"
 os:
-    editPreset: nvim-remote
+  editPreset: nvim-remote
 promptToReturnFromSubprocess: false

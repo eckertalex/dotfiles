@@ -54,6 +54,8 @@ vim.pack.add({
 
 vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
 
+vim.pack.add({ "https://github.com/justinmk/guh.nvim" })
+
 vim.pack.add({ "https://github.com/lervag/vimtex" })
 
 vim.pack.add({ "https://github.com/MagicDuck/grug-far.nvim" })
