@@ -41,6 +41,7 @@ local languages = {
     "json5",
     "kotlin",
     "php",
+    "python",
     "sql",
     "scss",
     "toml",

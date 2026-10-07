@@ -63,3 +63,5 @@ vim.pack.add({ "https://github.com/MagicDuck/grug-far.nvim" })
 vim.keymap.set({ "n", "x" }, "<leader>si", function()
     require("grug-far").open({ visualSelectionUsage = "auto-detect" })
 end, { desc = "grug-far: Search within range" })
+
+vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })
