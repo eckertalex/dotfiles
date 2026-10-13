@@ -109,9 +109,9 @@ require("conform").setup({
     },
 })
 
-vim.keymap.set("n", "gq", function()
-    require("conform").format({ async = true })
-end, { desc = "Format buffer" })
+-- Route the built-in `gq` operator through conform. Takes precedence over the
+-- LSP default, which only sets 'formatexpr' when it is empty
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 vim.api.nvim_create_user_command("FormatDisable", function(args)
     if args.bang then

@@ -42,6 +42,8 @@ vim.o.foldnestmax = 10
 
 -- Editing ====================================================================
 vim.o.expandtab = true
+-- Drop the default "-uu" so ~/.config/ripgrep/rc (hidden files, no .git) and .gitignore apply
+vim.o.grepprg = "rg --vimgrep --smart-case"
 vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.formatoptions = "rqnl1j"
 vim.o.ignorecase = true
@@ -134,9 +136,10 @@ vim.keymap.set("t", "<esc><esc>", "<c-\\><c-n>")
 
 vim.keymap.set("n", "<leader>tv", "<cmd>vertical terminal<cr>", { desc = "Vertical terminal" })
 
--- Open a terminal at the bottom of the screen with a fixed height.
+-- Open a terminal at the bottom of the screen with a fixed height. Split the
+-- current buffer (not `:new`) so the terminal starts in its directory (:bcd)
 vim.keymap.set("n", "<leader>tb", function()
-    vim.cmd("botright 12new")
+    vim.cmd("botright 12split")
     vim.wo.winfixheight = true
     vim.cmd.term()
 end, { desc = "Bottom terminal" })
@@ -194,18 +197,19 @@ vim.api.nvim_create_autocmd("ModeChanged", {
     desc = "Relative line numbers in linewise and blockwise Visual mode",
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
+-- Buffer-local, so the global cwd (saved by sessions) stays where Nvim started
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
     group = augroup,
     callback = function(event)
         if vim.bo[event.buf].buftype ~= "" then
             return
         end
         local root = vim.fs.root(event.buf, ".git")
-        if root and root ~= vim.fn.getcwd() then
-            vim.fn.chdir(root)
+        if root then
+            vim.cmd.bcd(root)
         end
     end,
-    desc = "Change directory to the git root of the current file",
+    desc = "Set the buffer's directory to its git root",
 })
 
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {

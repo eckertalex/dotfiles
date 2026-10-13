@@ -11,3 +11,6 @@
 *.o
 a.out
 *.dSYM/
+
+# Neovim sessions (:mksession)
+Session.vim
