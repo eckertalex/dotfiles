@@ -19,4 +19,7 @@ export VISUAL=nvim
 export PAGER=less
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
+# ripgrep only reads a config file when this is set
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/rc"
+
 # vim: set ts=4 sw=4
