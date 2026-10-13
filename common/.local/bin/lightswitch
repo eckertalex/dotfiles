@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Only the OS appearance is changed here. Ghostty picks its light or dark
+# theme from it, and everything else (Neovim, bat, delta, fzf, ls) uses the
+# terminal's colors, so nothing else needs to be touched.
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: lightswitch [-h|--help]"
+    echo
+    echo "Toggle the system appearance between light and dark (macOS, GNOME)."
+}
+
+case "${1:-}" in
+    "") ;;
+    -h | --help)
+        usage
+        exit 0
+        ;;
+    *)
+        usage >&2
+        exit 1
+        ;;
+esac
+
+case "$(uname -s)" in
+    Darwin)
+        osascript -e 'tell app "System Events" to tell appearance preferences to set dark mode to not dark mode'
+        ;;
+    Linux)
+        key="org.gnome.desktop.interface color-scheme"
+        if [[ "$(gsettings get $key)" == "'prefer-dark'" ]]; then
+            gsettings set $key default
+        else
+            gsettings set $key prefer-dark
+        fi
+        ;;
+esac
