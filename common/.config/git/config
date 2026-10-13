@@ -55,6 +55,7 @@
 	default = simple
 	autoSetupRemote = true
 	followTags = true
+	useForceIfIncludes = true
 [rebase]
 	autoSquash = true
 	autoStash = true
