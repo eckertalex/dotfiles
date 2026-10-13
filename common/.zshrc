@@ -36,10 +36,6 @@ autoload -Uz compinit && compinit -d "$XDG_DATA_HOME/zsh/zcompdump"
 [[ "$XDG_DATA_HOME/zsh/zcompdump.zwc" -nt "$XDG_DATA_HOME/zsh/zcompdump" ]] || zcompile-many "$XDG_DATA_HOME/zsh/zcompdump"
 unfunction zcompile-many
 
-# theming
-source "$XDG_CONFIG_HOME/lscolors/rose-pine.sh"
-source "$XDG_CONFIG_HOME/fzf/rose-pine.sh"
-
 # mise
 if (( $+commands[mise] )); then
 	eval "$(mise activate zsh)"
@@ -49,6 +45,8 @@ fi
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
+# Use the terminal's colors, so fzf follows its light/dark theme
+export FZF_DEFAULT_OPTS="--color=base16"
 
 # Ctrl-f
 bindkey -s '^f' "tmux-sessionizer\n"
