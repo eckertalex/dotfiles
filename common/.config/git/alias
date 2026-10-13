@@ -2,6 +2,7 @@
 	s = status
 	a = add
 	aa = add --all
+	c = commit
 	cm = commit --message
 	cnf = commit --amend --no-edit
 	; remove last commit, keep changes staged
