@@ -26,19 +26,29 @@
 [interactive]
 	diffFilter = delta --color-only
 [diff]
-    tool = nvimdiff
+	tool = nvimdiff
 	algorithm = histogram
 	colorMoved = default
+	colorMovedWS = allow-indentation-change
 	mnemonicPrefix = true
 	renames = true
+[log]
+	abbrevCommit = true
+	date = iso
+[difftool]
+	prompt = false
+	trustExitCode = true
 [merge]
-    tool = nvimdiff
+	tool = fugitive
 	ff = only
 	conflictstyle = zdiff3
 [mergetool]
 	keepBackup = false
-[mergetool "nvimdiff"]
-    cmd = nvim -f -c 'Gvdiffsplit!' $MERGED
+	prompt = false
+; 3-way split: ours | result | theirs. :wqa marks resolved, :cq leaves it conflicted
+[mergetool "fugitive"]
+	cmd = nvim -c 'Gvdiffsplit!' \"$MERGED\"
+	trustExitCode = true
 [pull]
 	rebase = true
 [push]
@@ -48,6 +58,7 @@
 [rebase]
 	autoSquash = true
 	autoStash = true
+	missingCommitsCheck = error
 	updateRefs = true
 [rerere]
 	autoupdate = true

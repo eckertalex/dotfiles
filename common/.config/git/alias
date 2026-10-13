@@ -2,43 +2,23 @@
 	s = status
 	a = add
 	aa = add --all
-	bl = blame -w
-	c = commit
 	cm = commit --message
-	cf = commit --amend
 	cnf = commit --amend --no-edit
-	b = branch
+	; remove last commit, keep changes staged
+	uncommit = reset --soft HEAD~1
 	bd = branch -d
 	bdf = branch -D
-	co = checkout
 	sw = switch
 	swc = switch -c
 	swm = "!git switch $(git-main-branch)"
-	p = push
 	pf = push --force-with-lease
-	pl = pull
-	pla = pull --autostash
 	rb = rebase
-	rbi = rebase -i
-	rbm = "!git rebase $(git-main-branch)"
-	rbc = rebase --continue
-	rba = rebase --abort
-	st = stash
-	stl = stash list
-	sta = stash --include-untracked
-	stap = stash apply
-	stp = stash pop
-	std = stash drop
-	rst = restore
-	r = reset
-	; remove last commit, keep changes staged
-	uncommit = reset --soft HEAD~1
+	; update the local main branch from origin and rebase the current branch onto it
+	sync = "!f() { m=$(git-main-branch); if [ \"$(git branch --show-current)\" = \"$m\" ]; then git pull; else git fetch origin \"$m:$m\" && git rebase \"$m\"; fi; }; f"
 	; one-line log
-	l = log --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=iso --abbrev-commit
+	l = log -5 --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
 	; detailed log
-	ll = log --date=iso --abbrev-commit
-	; one-line log, my commits only
-	lme = "!git l --author=\"$(git config user.email)\""
+	ll = log -5
 	d = diff
 	whorank = shortlog --summary --numbered --no-merges
 	; list aliases
