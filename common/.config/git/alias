@@ -13,8 +13,6 @@
 	swm = "!git switch $(git-main-branch)"
 	pf = push --force-with-lease
 	rb = rebase
-	; update the local main branch from origin and rebase the current branch onto it
-	sync = "!f() { m=$(git-main-branch); if [ \"$(git branch --show-current)\" = \"$m\" ]; then git pull; else git fetch origin \"$m:$m\" && git rebase \"$m\"; fi; }; f"
 	; one-line log
 	l = log -5 --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
 	; detailed log

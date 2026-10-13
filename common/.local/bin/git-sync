@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Fast-forward the main branch from origin and rebase the current branch onto it.
+
+set -euo pipefail
+main=$(git-main-branch)
+
+if [[ "$(git branch --show-current)" == "$main" ]]; then
+	exec git pull
+fi
+
+git fetch origin "$main:$main"
+exec git rebase "$main"
