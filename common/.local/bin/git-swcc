@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-# Create a branch from a commit message, commit, and push.
-# Usage: gswcc "your commit message"
+# Create a branch from a commit message, commit staged changes, and push.
+# Usage: git swcc "your commit message"
 
 set -euo pipefail
 
-if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 	cat <<EOF
-Usage: $(basename "$0") "commit message"
-Creates a git branch from the commit message, stages all changes,
-commits them with the provided message, and pushes to remote.
+Usage: git swcc "commit message"
+Creates a git branch from the commit message, commits the staged
+changes with that message, and pushes to remote.
 
 Options:
   -h, --help    Show this help message
@@ -17,7 +17,7 @@ EOF
 	exit 0
 fi
 
-if [[ -z "$1" ]]; then
+if [[ -z "${1:-}" ]]; then
 	echo "Error: Please provide a commit message" >&2
 	exit 1
 fi
