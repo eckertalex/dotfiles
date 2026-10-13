@@ -40,9 +40,9 @@ fi
 
 # ls
 if (( $+commands[gls] )); then
-	alias ls="gls -vAF --color --group-directories-first"
+	alias ls="gls -vAF --color=auto --group-directories-first"
 else
-	alias ls="ls -vAF --color --group-directories-first"
+	alias ls="ls -vAF --color=auto --group-directories-first"
 fi
 alias ll="ls -lh"
 
