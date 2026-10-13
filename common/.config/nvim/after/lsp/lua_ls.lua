@@ -1,20 +1,11 @@
+-- Personal preferences for every Lua project. Project-specific setup (like
+-- Neovim's runtime for this config) lives in each project's .luarc.json.
+---@type vim.lsp.Config
 return {
     settings = {
         Lua = {
             completion = {
                 callSnippet = "Replace",
-            },
-            runtime = {
-                version = "LuaJIT",
-                path = vim.split(package.path, ";"),
-            },
-            workspace = {
-                -- Don't analyze code from submodules
-                ignoreSubmodules = true,
-                -- Add Neovim's methods for easier code writing
-                library = {
-                    vim.env.VIMRUNTIME,
-                },
             },
             hint = {
                 enable = true,

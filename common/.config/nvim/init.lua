@@ -1,36 +1,39 @@
---[[
-=====================================================================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||       NEOVIM       ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
---]]
-
 local augroup = require("utils").augroup
+
+-- Load filetype plugins now instead of after init.lua, so FileType autocmds
+-- below run after them and can override what they set
+vim.cmd("filetype plugin indent on")
 
 -- General ====================================================================
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+vim.o.undofile = true
+vim.o.writebackup = false
+
 -- UI =========================================================================
+vim.o.breakindent = true
 vim.o.colorcolumn = "+1"
+vim.o.cursorline = true
 vim.o.cursorlineopt = "screenline,number"
+vim.o.linebreak = true
+vim.o.number = true
 vim.o.scrolloff = 4
 vim.o.sidescrolloff = 4
+vim.o.signcolumn = "yes"
+vim.o.splitbelow = true
+vim.o.splitkeep = "screen"
+vim.o.splitright = true
 vim.o.winborder = "rounded"
+vim.o.wrap = false
+
+vim.opt.fillchars:append("eob: ")
+vim.o.list = true
+vim.o.listchars = "tab:> ,extends:…,precedes:…,nbsp:␣"
+vim.o.pumblend = 10
+vim.o.pumheight = 10
+vim.o.winblend = 10
+vim.opt.shortmess:append("Wc")
 
 vim.o.foldlevel = 10
 vim.o.foldcolumn = "1"
@@ -38,28 +41,28 @@ vim.o.foldmethod = "indent"
 vim.o.foldnestmax = 10
 
 -- Editing ====================================================================
-vim.o.autoindent = true
 vim.o.expandtab = true
+vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.formatoptions = "rqnl1j"
+vim.o.ignorecase = true
 vim.o.inccommand = "split"
+vim.o.infercase = true
 vim.o.shiftwidth = 4
+vim.o.smartcase = true
 vim.o.spelloptions = "camel"
 vim.o.tabstop = 4
 vim.o.timeoutlen = 300
 vim.o.updatetime = 200
+vim.o.virtualedit = "block"
 
-vim.o.iskeyword = "@,48-57,_,192-255,-"
-
-vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
-
--- Built-in completion
-vim.o.complete = ".,w,b,kspell"
-vim.o.completeopt = "menuone,noselect,fuzzy,nosort"
+-- Built-in completion. "o" pulls LSP items through 'omnifunc' (see plugin/lsp.lua)
+vim.o.autocomplete = true
+vim.o.complete = "o,.,w,b,kspell"
+vim.o.completeopt = "menuone,noselect,popup,fuzzy"
 
 -- vim.provider ===============================================================
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
-vim.g.loaded_python_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
@@ -67,45 +70,46 @@ vim.g.loaded_ruby_provider = 0
 vim.cmd.packadd("nvim.undotree")
 
 -- ui2 ========================================================================
-require("vim._core.ui2").enable({})
+require("vim._core.ui2").enable()
 
 -- Diagnostics ================================================================
 vim.diagnostic.config({
     signs = {
         priority = 9999,
-        severity = {
-            min = vim.diagnostic.severity.WARN,
-            max = vim.diagnostic.severity.ERROR,
-        },
+        severity = { min = vim.diagnostic.severity.WARN },
     },
-    underline = {
-        severity = {
-            min = vim.diagnostic.severity.HINT,
-            max = vim.diagnostic.severity.ERROR,
-        },
-    },
-    virtual_lines = false,
     virtual_text = {
         current_line = true,
-        severity = {
-            min = vim.diagnostic.severity.ERROR,
-            max = vim.diagnostic.severity.ERROR,
-        },
+        severity = vim.diagnostic.severity.ERROR,
     },
-    update_in_insert = false,
 })
 
+-- Colorscheme ================================================================
 vim.pack.add({
     { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
-    { src = "https://github.com/catppuccin/nvim", name = "catppuccin" },
 })
 vim.cmd.colorscheme("rose-pine")
 
--- Move lines
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+-- Keymaps ====================================================================
+-- Move by visible lines when there is no count
+vim.keymap.set({ "n", "x" }, "j", [[v:count == 0 ? 'gj' : 'j']], { expr = true })
+vim.keymap.set({ "n", "x" }, "k", [[v:count == 0 ? 'gk' : 'k']], { expr = true })
 
-vim.keymap.set("n", "J", "mzJ`z")
+-- System clipboard
+vim.keymap.set({ "n", "x" }, "gy", '"+y', { desc = "Copy to system clipboard" })
+vim.keymap.set("n", "gp", '"+p', { desc = "Paste from system clipboard" })
+vim.keymap.set("x", "gp", '"+P', { desc = "Paste from system clipboard" })
+
+-- Move lines
+vim.keymap.set("x", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("x", "K", ":m '<-2<CR>gv=gv")
+
+-- Join lines without moving the cursor
+vim.keymap.set("n", "J", function()
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    vim.cmd("normal! " .. vim.v.count1 .. "J")
+    vim.api.nvim_win_set_cursor(0, cursor)
+end)
 
 -- center search
 vim.keymap.set("n", "n", "nzzzv")
@@ -115,31 +119,12 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
--- yank/delete into registers
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete _" })
-
--- replace word
-vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word" })
-
--- buffers
-local function new_scratch_buffer()
-    vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
-end
-
-vim.keymap.set("n", "<leader>bb", "<Cmd>b#<CR>", { desc = "Alternate" })
-vim.keymap.set("n", "<leader>bs", new_scratch_buffer, { desc = "Scratch" })
-
 -- notes
-vim.keymap.set("n", "<leader>n", require("notes").open, { desc = "Notes" })
+vim.keymap.set("n", "<leader>n", "<cmd>drop ~/code/work/notes.md<cr>", { desc = "Notes" })
 
 -- better indenting
-vim.keymap.set("v", "<", "<gv")
-vim.keymap.set("v", ">", ">gv")
-
-vim.keymap.set("n", "<leader>xr", vim.diagnostic.reset, { desc = "Reset Diagnostic" })
-
--- highlights under cursor
-vim.keymap.set("n", "<leader>xi", vim.show_pos, { desc = "Inspect Pos" })
+vim.keymap.set("x", "<", "<gv")
+vim.keymap.set("x", ">", ">gv")
 
 vim.keymap.set("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 vim.keymap.set("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
@@ -151,73 +136,30 @@ vim.keymap.set("n", "<leader>tv", "<cmd>vertical terminal<cr>", { desc = "Vertic
 
 -- Open a terminal at the bottom of the screen with a fixed height.
 vim.keymap.set("n", "<leader>tb", function()
-    vim.cmd.new()
-    vim.api.nvim_win_set_height(0, 12)
+    vim.cmd("botright 12new")
     vim.wo.winfixheight = true
     vim.cmd.term()
 end, { desc = "Bottom terminal" })
 
--- get full absolute path
-local function get_absolute_path()
-    return vim.fn.expand("%:p")
-end
-
--- get path relative to Git root (fallback to cwd)
-local function get_relative_path()
-    local file = vim.fn.expand("%:p")
-    local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
-
-    local relpath
-    if vim.v.shell_error == 0 and git_root and vim.fn.isdirectory(git_root) == 1 then
-        relpath = vim.fn.fnamemodify(file, ":." .. git_root)
-    else
-        relpath = vim.fn.expand("%:.")
+-- Yank the file path, plus the line range in Visual mode (e.g. "file.lua:12-18")
+local function yank_path(path)
+    if vim.fn.mode():match("[vV\22]") then
+        local first, last = vim.fn.line("v"), vim.fn.line(".")
+        first, last = math.min(first, last), math.max(first, last)
+        path = path .. ":" .. (first == last and first or first .. "-" .. last)
     end
-
-    return "./" .. relpath
+    vim.fn.setreg("+", path)
+    vim.notify("Yanked: " .. path)
 end
 
--- format visual range, e.g., "12-18"
-local function get_visual_range()
-    local start_line = vim.fn.line("v")
-    local end_line = vim.fn.line(".")
-    if start_line > end_line then
-        start_line, end_line = end_line, start_line
-    end
-    if start_line == end_line then
-        return tostring(start_line)
-    else
-        return string.format("%d-%d", start_line, end_line)
-    end
-end
+vim.keymap.set({ "n", "x" }, "<leader>yp", function()
+    yank_path(vim.fn.expand("%:p"))
+end, { desc = "Yank absolute path" })
+vim.keymap.set({ "n", "x" }, "<leader>yr", function()
+    yank_path("./" .. vim.fn.expand("%:."))
+end, { desc = "Yank relative path" })
 
--- Copy text to clipboard
-local function copy_to_clipboard(text)
-    vim.fn.setreg("+", text)
-    vim.notify("Yanked: " .. text)
-end
-
--- yank absolute path (and visual line range if applicable)
-local function yank_absolute()
-    local path = get_absolute_path()
-    if vim.fn.mode():match("[vV]") then
-        path = path .. ":" .. get_visual_range()
-    end
-    copy_to_clipboard(path)
-end
-
--- yank relative path (and visual line range if applicable)
-local function yank_relative()
-    local path = get_relative_path()
-    if vim.fn.mode():match("[vV]") then
-        path = path .. ":" .. get_visual_range()
-    end
-    copy_to_clipboard(path)
-end
-
-vim.keymap.set({ "n", "v" }, "<leader>yp", yank_absolute, { desc = "Yank absolute path" })
-vim.keymap.set({ "n", "v" }, "<leader>yr", yank_relative, { desc = "Yank relative path" })
-
+-- Autocommands ===============================================================
 vim.api.nvim_create_autocmd("VimResized", {
     group = augroup,
     callback = function()
@@ -228,12 +170,69 @@ vim.api.nvim_create_autocmd("VimResized", {
     desc = "Resize splits when window is resized",
 })
 
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = augroup,
+    callback = function()
+        vim.hl.hl_op()
+    end,
+    desc = "Highlight yanked text",
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+    group = augroup,
+    command = "startinsert",
+    desc = "Start terminal in Insert mode",
+})
+
+vim.api.nvim_create_autocmd("ModeChanged", {
+    group = augroup,
+    -- \22 is CTRL-V, the mode name for blockwise Visual
+    pattern = { "*:[V\22]*", "[V\22]*:*" },
+    callback = function()
+        vim.wo.relativenumber = vim.wo.number and vim.fn.mode():match("^[V\22]") ~= nil
+    end,
+    desc = "Relative line numbers in linewise and blockwise Visual mode",
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = augroup,
+    callback = function(event)
+        if vim.bo[event.buf].buftype ~= "" then
+            return
+        end
+        local root = vim.fs.root(event.buf, ".git")
+        if root and root ~= vim.fn.getcwd() then
+            vim.fn.chdir(root)
+        end
+    end,
+    desc = "Change directory to the git root of the current file",
+})
+
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+    group = augroup,
+    pattern = { "grep", "vimgrep" },
+    command = "cwindow",
+    desc = "Open quickfix window after :grep",
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    group = augroup,
+    callback = function()
+        local line = vim.fn.line([['"]])
+        local skip = vim.bo.filetype:match("commit") or vim.bo.filetype == "gitrebase"
+        if not skip and line >= 1 and line <= vim.fn.line("$") then
+            vim.cmd([[normal! g`"zz]])
+        end
+    end,
+    desc = "Restore cursor position when opening a file",
+})
+
 -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'.
 -- Do on `FileType` to always override these changes from filetype plugins.
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
     callback = function()
-        vim.cmd("setlocal formatoptions-=c formatoptions-=o")
+        vim.bo.formatoptions = vim.bo.formatoptions:gsub("[co]", "")
     end,
     desc = "Proper 'formatoptions'",
 })
@@ -241,17 +240,10 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
     pattern = {
-        "netrw",
-        "help",
-        "lspinfo",
-        "man",
-        "notify",
-        "qf",
-        "query",
-        "startuptime",
-        "tsplayground",
-        "checkhealth",
         "fugitiveblame",
+        "help",
+        "nvim-undotree",
+        "qf",
     },
     callback = function(event)
         vim.bo[event.buf].buflisted = false

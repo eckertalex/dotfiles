@@ -16,12 +16,10 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 vim.pack.add({
     "https://github.com/nvim-treesitter/nvim-treesitter",
-    "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
     "https://github.com/nvim-treesitter/nvim-treesitter-context",
 })
 
 local languages = {
-    "astro",
     "bash",
     "css",
     "diff",
@@ -35,9 +33,11 @@ local languages = {
     "gomod",
     "gosum",
     "gowork",
+    "graphql",
     "html",
     "java",
     "javascript",
+    "json",
     "json5",
     "kotlin",
     "php",
@@ -51,66 +51,39 @@ local languages = {
     "zsh",
 }
 
-local function isnt_installed(lang)
-    return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
-end
-local to_install = vim.tbl_filter(isnt_installed, languages)
-if #to_install > 0 then
-    require("nvim-treesitter").install(to_install)
-end
+-- Skips parsers that are already installed
+require("nvim-treesitter").install(languages)
 
--- Enable tree-sitter after opening a file for a target language
-local ts_filetypes = {}
-for _, lang in ipairs(languages) do
-    for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
-        table.insert(ts_filetypes, ft)
-    end
-end
 vim.api.nvim_create_autocmd("FileType", {
     group = augroup,
-    pattern = ts_filetypes,
     callback = function(event)
-        vim.treesitter.start(event.buf)
+        -- Fails when there is no parser for this filetype
+        if not pcall(vim.treesitter.start, event.buf) then
+            return
+        end
+        vim.wo[0][0].foldmethod = "expr"
+        vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end,
-    desc = "Start tree-sitter",
+    desc = "Start tree-sitter highlighting, folds and indent",
 })
-
-vim.api.nvim_create_autocmd("FileType", {
-    group = augroup,
-    pattern = ts_filetypes,
-    callback = function()
-        vim.opt_local.foldmethod = "expr"
-        vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
-        vim.opt_local.indentexpr = "nvim_treesitter#indent()"
-    end,
-    desc = "Enable tree-sitter foldexpr and indentexpr",
-})
-
-require("nvim-treesitter-textobjects").setup({
-    select = {
-        lookahead = true,
-    },
-})
-local select_maps = {
-    ["af"] = "@function.outer",
-    ["if"] = "@function.inner",
-    ["ac"] = "@class.outer",
-    ["ic"] = "@class.inner",
-    ["aa"] = "@parameter.outer",
-    ["ia"] = "@parameter.inner",
-    ["ai"] = "@conditional.outer",
-    ["ii"] = "@conditional.inner",
-    ["al"] = "@loop.outer",
-    ["il"] = "@loop.inner",
-    ["ab"] = "@block.outer",
-    ["ib"] = "@block.inner",
-}
-for key, query in pairs(select_maps) do
-    vim.keymap.set({ "x", "o" }, key, function()
-        require("nvim-treesitter-textobjects.select").select_textobject(query, "textobjects")
-    end, { desc = "Select " .. query })
-end
 
 require("treesitter-context").setup({
     max_lines = 3,
 })
+
+vim.pack.add({ "https://github.com/JoosepAlviste/nvim-ts-context-commentstring" })
+require("ts_context_commentstring").setup({
+    enable_autocmd = false,
+})
+
+-- Built-in `gc` resolves 'commentstring' through `vim.filetype.get_option()`,
+-- so hook in there to get context-aware comments (e.g. JSX in TSX files)
+local get_option = vim.filetype.get_option
+---@diagnostic disable-next-line: duplicate-set-field
+vim.filetype.get_option = function(filetype, option)
+    if option == "commentstring" then
+        return require("ts_context_commentstring.internal").calculate_commentstring() or get_option(filetype, option)
+    end
+    return get_option(filetype, option)
+end
