@@ -1,0 +1,17 @@
+bat
+fd-find
+fzf
+gcc
+gh
+git
+git-delta
+hyperfine
+ImageMagick
+jq
+lazygit
+ripgrep
+sqlite
+stow
+tree
+tree-sitter-cli
+zsh
