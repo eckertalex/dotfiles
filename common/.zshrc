@@ -44,6 +44,8 @@ fi
 # fzf
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh"
 [[ -r "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh" ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
+# Fedora ships the key bindings here, and completion as _fzf in the default fpath
+[[ -r /usr/share/fzf/shell/key-bindings.zsh ]] && source /usr/share/fzf/shell/key-bindings.zsh
 export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-range :500 {}'"
 # Use the terminal's colors, so fzf follows its light/dark theme
 export FZF_DEFAULT_OPTS="--color=base16"
@@ -55,7 +57,7 @@ ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 source "$XDG_DATA_HOME/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 source "$HOME/.zsh_alias"
-source "$HOME/.zshrc.local"
+[[ -r "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
 source "$HOME/.zsh_vi"
 source "$HOME/.zsh_prompt"
 
