@@ -48,9 +48,6 @@ export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always --line-ran
 # Use the terminal's colors, so fzf follows its light/dark theme
 export FZF_DEFAULT_OPTS="--color=base16"
 
-# Ctrl-f
-bindkey -s '^f' "tmux-sessionizer\n"
-
 # plugins
 source "$XDG_DATA_HOME/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
