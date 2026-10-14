@@ -3,6 +3,7 @@
 [column]
 	ui = auto
 [commit]
+	gpgsign = true
 	template = ~/.config/git/message
 	verbose = true
 [core]
@@ -14,10 +15,15 @@
 	prune = true
 	pruneTags = true
 	all = true
+; signs with the SSH key from 1Password, set in ~/.config/git/local
+[gpg]
+	format = ssh
 [help]
 	autocorrect = prompt
 [include]
 	path = ~/.config/git/alias
+	; op-ssh-sign path, per OS (mac/ or linux/)
+	path = ~/.config/git/os
 	path = ~/.config/git/local
 [includeIf "gitdir:~/.dotfiles/"]
 	path = ~/.config/git/private

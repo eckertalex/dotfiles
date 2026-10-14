@@ -1,0 +1,4 @@
+[gpg "ssh"]
+	program = "/opt/1Password/op-ssh-sign"
+
+; vim: set ts=4 sw=4 filetype=gitconfig
