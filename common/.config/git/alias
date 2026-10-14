@@ -16,6 +16,7 @@
 	pl = pull
 	pf = push --force-with-lease
 	rb = rebase
+	sync = !git-sync
 	; one-line log
 	l = log -5 --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
 	; detailed log
