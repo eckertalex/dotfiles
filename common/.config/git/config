@@ -32,7 +32,7 @@
 [interactive]
 	diffFilter = delta --color-only
 [diff]
-	tool = nvimdiff
+	tool = nvim
 	algorithm = histogram
 	colorMoved = default
 	colorMovedWS = allow-indentation-change
@@ -44,6 +44,9 @@
 [difftool]
 	prompt = false
 	trustExitCode = true
+; nvim's built-in difftool plugin (packadd in init.lua). With -d: one nvim, changed files in quickfix
+[difftool "nvim"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
 [merge]
 	tool = fugitive
 	ff = only

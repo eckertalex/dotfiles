@@ -69,7 +69,13 @@ vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
 -- built-in plugins ===========================================================
+vim.cmd.packadd("cfilter")
+-- `nvim -d dir1 dir2` (`git difftool -d`) lists changed files in quickfix
+vim.cmd.packadd("nvim.difftool")
 vim.cmd.packadd("nvim.undotree")
+
+-- oil.nvim handles directories
+vim.g.loaded_nvim_dir_plugin = 1
 
 -- ui2 ========================================================================
 require("vim._core.ui2").enable()
