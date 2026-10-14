@@ -5,11 +5,6 @@ alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
 alias shellclean="rm -rf $XDG_DATA_HOME/zsh/zcompdump* $XDG_DATA_HOME/zsh/plugins $HOME/.zcompcache $XDG_CACHE_HOME/zsh-git-aliases"
 
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-
 alias nuke-ds-store="find . -type f -name '*.DS_Store' -ls -delete"
 
 alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
@@ -52,17 +47,15 @@ alias tree="tree -Fav -I '.git' --dirsfirst"
 # git
 alias g=git
 
-# Mirror every `git` alias and `git-*` script in ~/.local/bin as a
-# `g`-prefixed shell alias, cached and only rebuilt when either changes.
+# Mirror every `git` alias as a `g`-prefixed shell alias, cached and only
+# rebuilt when the git alias file changes.
 () {
 	local cache="$XDG_CACHE_HOME/zsh-git-aliases"
 	local gitalias="$XDG_CONFIG_HOME/git/alias"
-	local bin="$HOME/.local/bin"
 
-	if [[ ! -r "$cache" || "$gitalias" -nt "$cache" || "$bin" -nt "$cache" ]]; then
-		local scripts=($bin/git-*(N:t))
+	if [[ ! -r "$cache" || "$gitalias" -nt "$cache" ]]; then
 		local al
-		for al in $(git --list-cmds=alias 2>/dev/null) ${scripts#git-}; do
+		for al in $(git --list-cmds=alias 2>/dev/null); do
 			print -- "alias g$al=\"git $al\""
 		done > "$cache"
 	fi

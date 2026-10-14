@@ -12,6 +12,7 @@
 	sw = switch
 	swc = switch -c
 	swm = "!git switch $(git-main-branch)"
+	swcc = !git-swcc
 	pl = pull
 	pf = push --force-with-lease
 	rb = rebase
@@ -22,6 +23,6 @@
 	d = diff
 	whorank = shortlog --summary --numbered --no-merges
 	; list aliases
-	alias = "!git config -l | grep alias | cut -c 7-"
+	alias = "!git --list-cmds=alias"
 
 ; vim: set ts=4 sw=4 filetype=gitconfig
