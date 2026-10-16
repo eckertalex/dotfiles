@@ -7,6 +7,7 @@
 	cnf = commit --amend --no-edit
 	; remove last commit, keep changes staged
 	uncommit = reset --soft HEAD~1
+	b = branch
 	bd = branch -d
 	bdf = branch -D
 	sw = switch
@@ -16,6 +17,7 @@
 	pl = pull
 	pf = push --force-with-lease
 	rb = rebase
+	rbm = "!git rebase $(git-main-branch)"
 	sync = !git-sync
 	; one-line log
 	l = log -5 --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
