@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+# create these first so stow doesn't symlink the whole folder and tools dump
+# untracked files in here. not needed for nvim, it doesn't write garbage there
+mkdir -p ~/.config ~/.config/lazygit ~/.local/bin
+
 echo "Stowing common..."
 stow -R common
 
