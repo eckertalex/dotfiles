@@ -2,7 +2,7 @@
 
 git:
   diffRenderers:
-    - command: delta --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - command: delta --{{colorScheme}} --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 gui:
   showRandomTip: false
   nerdFontsVersion: "3"
