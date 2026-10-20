@@ -1,4 +1,7 @@
+ImageMagick
 bat
+clang
+clang-tools-extra
 fd-find
 fzf
 gcc
@@ -6,7 +9,6 @@ gh
 git
 git-delta
 hyperfine
-ImageMagick
 jq
 lazygit
 ripgrep
