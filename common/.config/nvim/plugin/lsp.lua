@@ -80,20 +80,23 @@ vim.pack.add({ "https://github.com/stevearc/conform.nvim" })
 require("conform").setup({
     default_format_opts = { lsp_format = "fallback" },
     format_on_save = function(bufnr)
-        local ignore_filetypes = { "sql", "java", "c", "cpp" }
-        if vim.tbl_contains(ignore_filetypes, vim.bo[bufnr].filetype) then
+        local ft = vim.bo[bufnr].filetype
+        if vim.tbl_contains({ "sql", "java" }, ft) then
             return
         end
         if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
             return
         end
-        local bufname = vim.api.nvim_buf_get_name(bufnr)
-        if bufname:match("/node_modules/") then
+        if vim.api.nvim_buf_get_name(bufnr):match("/node_modules/") then
             return
         end
-        return { timeout_ms = 3000 }
+        local c_like = vim.tbl_contains({ "c", "cpp", "objc" }, ft)
+        return { timeout_ms = 3000, lsp_format = c_like and "never" or "fallback" }
     end,
     formatters_by_ft = {
+        c = { "clang-format" },
+        cpp = { "clang-format" },
+        objc = { "clang-format" },
         css = { "prettier" },
         go = { "gofmt" },
         graphql = { "prettier" },
@@ -107,6 +110,14 @@ require("conform").setup({
         typescript = { "prettier" },
         typescriptreact = { "prettier" },
         yaml = { "prettier" },
+    },
+    formatters = {
+        ["clang-format"] = {
+            -- Only projects that opt in with a .clang-format get formatted
+            condition = function(_, ctx)
+                return vim.fs.root(ctx.dirname, ".clang-format") ~= nil
+            end,
+        },
     },
 })
 

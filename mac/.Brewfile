@@ -1,4 +1,5 @@
 brew "bat"
+brew "clang-format"
 brew "coreutils"
 brew "fd"
 brew "fzf"
