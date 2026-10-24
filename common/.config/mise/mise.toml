@@ -5,6 +5,8 @@ pnpm = "12.11.2"
 "github:JohnnyMorganz/StyLua" = "2.6.0"
 "npm:wrangler" = "4.149.0"
 uv = "0.13.0"
+usage = "6.12.1"
+codex = "0.161.0"
 
 # LSPs
 "github:luals/lua-language-server" = "3.19.1"
@@ -19,7 +21,6 @@ ty = "0.0.86"
 go = "1.27.2"
 node = "26.11.1"
 python = "3.15.0"
-usage = "6.12.1"
 odin = "dev-2026-10"
 
 [tool_alias]
