@@ -6,7 +6,6 @@ vim.pack.add({
 })
 
 vim.lsp.enable({
-    "clangd",
     "cssls",
     "eslint",
     "gopls",
