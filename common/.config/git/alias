@@ -15,6 +15,7 @@
 	swm = "!git switch $(git-main-branch)"
 	swcc = !git-swcc
 	pl = pull
+	p = push
 	pf = push --force-with-lease
 	rb = rebase
 	rbm = "!git rebase $(git-main-branch)"
