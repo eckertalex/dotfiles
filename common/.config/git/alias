@@ -19,6 +19,7 @@
 	pf = push --force-with-lease
 	rb = rebase
 	rbm = "!git rebase $(git-main-branch)"
+	rst = restore
 	sync = !git-sync
 	; one-line log
 	l = log -5 --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset'
