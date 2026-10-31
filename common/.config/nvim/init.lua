@@ -10,6 +10,8 @@ vim.g.maplocalleader = ","
 
 vim.o.undofile = true
 vim.o.writebackup = false
+-- Source a trusted .nvim.lua from the cwd (`:trust` to allow or deny it)
+vim.o.exrc = true
 
 -- UI =========================================================================
 vim.o.breakindent = true
@@ -41,9 +43,21 @@ vim.o.foldmethod = "indent"
 vim.o.foldnestmax = 10
 
 -- Editing ====================================================================
+vim.o.autowrite = true
 vim.o.expandtab = true
 -- Drop the default "-uu" so ~/.config/ripgrep/rc (hidden files, no .git) and .gitignore apply
 vim.o.grepprg = "rg --vimgrep --smart-case"
+-- build.sh at the git root (see :bcd). Odin and typed C errors before the defaults
+vim.o.makeprg = "./build.sh"
+vim.opt.errorformat:prepend({
+    -- go vet prefixes type errors with "vet: "
+    "vet: %f:%l:%c: %m",
+    "%f(%l:%c) %trror: %m",
+    "%f(%l:%c) %tarning: %m",
+    "%f(%l:%c) %m",
+    "%f:%l:%c: %trror: %m",
+    "%f:%l:%c: %tarning: %m",
+})
 vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.formatoptions = "rqnl1j"
 vim.o.ignorecase = true
@@ -168,6 +182,60 @@ vim.keymap.set({ "n", "x" }, "<leader>yr", function()
     yank_path("./" .. vim.fn.expand("%:."))
 end, { desc = "Yank relative path" })
 
+-- Commands ===================================================================
+local make_job
+-- For <leader>xx to repeat
+local make_args = ""
+vim.api.nvim_create_user_command("Make", function(opts)
+    make_args = opts.args
+    local efm = vim.o.errorformat
+    local cmd = vim.fn.expandcmd(vim.o.makeprg .. " " .. opts.args)
+    -- 'autowrite' only covers the built-in :make
+    vim.cmd("silent! wall")
+    if make_job then
+        make_job:kill(15)
+    end
+    vim.notify("Make: " .. cmd)
+    local job
+    -- Where :make would run (see :bcd)
+    local cwd = vim.fn.getcwd()
+    -- One stream, so "Entering directory" stays before its errors
+    local argv = { vim.o.shell, vim.o.shellcmdflag, cmd .. " 2>&1" }
+    job = vim.system(argv, { cwd = cwd, text = true }, function(result)
+        vim.schedule(function()
+            -- A newer :Make killed this one
+            if make_job ~= job then
+                return
+            end
+            make_job = nil
+            local lines = vim.split(result.stdout or "", "\n", { trimempty = true })
+            vim.fn.setqflist({}, " ", { title = cmd, lines = lines, efm = efm })
+            local ok = result.code == 0
+            local status = ("Make: %s (exit %d)"):format(ok and "done" or "failed", result.code)
+            local level = ok and vim.log.levels.INFO or vim.log.levels.ERROR
+            local has_errors = vim.iter(vim.fn.getqflist()):any(function(item)
+                return item.valid == 1
+            end)
+            if has_errors then
+                vim.cmd("copen")
+                vim.notify(status, level)
+            else
+                -- No errors, e.g. a program's output, so show it
+                vim.cmd("cclose")
+                local output = vim.tbl_filter(function(line)
+                    return not line:find("Entering directory", 1, true)
+                end, lines)
+                vim.notify(table.concat(vim.list_extend({ status }, output), "\n"), level)
+            end
+        end)
+    end)
+    make_job = job
+end, { nargs = "*", complete = "file", desc = "Run 'makeprg' asynchronously" })
+
+vim.keymap.set("n", "<leader>xx", function()
+    vim.cmd("Make " .. make_args)
+end, { desc = "Repeat last :Make" })
+
 -- Autocommands ===============================================================
 vim.api.nvim_create_autocmd("VimResized", {
     group = augroup,
@@ -220,9 +288,9 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
     group = augroup,
-    pattern = { "grep", "vimgrep" },
+    pattern = { "grep", "vimgrep", "make" },
     command = "cwindow",
-    desc = "Open quickfix window after :grep",
+    desc = "Open quickfix window after :grep and :make",
 })
 
 vim.api.nvim_create_autocmd("BufReadPost", {
