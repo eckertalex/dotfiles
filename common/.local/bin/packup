@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# Install everything from the package lists, then upgrade. Same command on every machine.
+# Usage: packup
+
+set -euo pipefail
+
+# package names from a list file, skipping blank lines and comments
+packages() {
+    grep -vE '^[[:space:]]*(#|$)' "$1" || true
+}
+
+case "$(uname -s)" in
+    Darwin)
+        brew update
+        brew bundle --global
+        brew upgrade
+        brew cleanup
+        ;;
+    Linux)
+        packages ~/.dnf-packages | xargs -r sudo dnf install -y
+        sudo dnf upgrade --refresh -y
+
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        packages ~/.flatpak-packages | xargs -r flatpak install -y --noninteractive flathub
+        flatpak update -y
+        flatpak uninstall --unused -y
+        ;;
+    *)
+        echo "Unsupported OS: $(uname -s)" >&2
+        exit 1
+        ;;
+esac
