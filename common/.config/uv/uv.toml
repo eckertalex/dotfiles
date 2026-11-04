@@ -1,0 +1,3 @@
+# mise owns Python. uv uses whatever mise put on PATH and never downloads its own.
+python-preference = "only-system"
+python-downloads = "never"
