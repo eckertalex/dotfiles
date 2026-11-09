@@ -5,7 +5,9 @@ alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
 alias shellclean="rm -rf $XDG_DATA_HOME/zsh/zcompdump* $XDG_DATA_HOME/zsh/plugins $HOME/.zcompcache $XDG_CACHE_HOME/zsh-git-aliases"
 
-alias nuke-ds-store="find . -type f -name '*.DS_Store' -ls -delete"
+nuke-ds-store() {
+  fd --hidden --no-ignore --type f --exclude node_modules --glob '.DS_Store' "${1:-.}" --exec-batch rm -v
+}
 
 alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
 alias print-path='echo $PATH | tr ":" "\n"'
