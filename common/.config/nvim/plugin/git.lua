@@ -4,6 +4,15 @@ vim.pack.add({
     "https://github.com/nvim-mini/mini.diff",
 })
 
+-- rhubarb's omnifunc hits the GitHub API synchronously; keep it out of
+-- 'autocomplete' and use <C-x><C-o> to trigger it manually.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "gitcommit",
+    callback = function()
+        vim.opt_local.complete:remove("o")
+    end,
+})
+
 vim.keymap.set("n", "<leader>gb", "<cmd>Git blame<cr>", { desc = "Blame file" })
 
 require("mini.diff").setup()
