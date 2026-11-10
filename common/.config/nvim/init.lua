@@ -1,4 +1,4 @@
-local augroup = require("utils").augroup
+local augroup = vim.api.nvim_create_augroup("config-init", {})
 
 -- Load filetype plugins now instead of after init.lua, so FileType autocmds
 -- below run after them and can override what they set
@@ -10,6 +10,7 @@ vim.g.maplocalleader = ","
 
 vim.o.undofile = true
 vim.o.writebackup = false
+vim.o.swapfile = false
 -- Source a trusted .nvim.lua from the cwd (`:trust` to allow or deny it)
 vim.o.exrc = true
 
@@ -22,34 +23,35 @@ vim.o.linebreak = true
 vim.o.number = true
 vim.o.scrolloff = 4
 vim.o.sidescrolloff = 4
+vim.o.smoothscroll = true
 vim.o.signcolumn = "yes"
 vim.o.splitbelow = true
 vim.o.splitkeep = "screen"
 vim.o.splitright = true
 vim.o.winborder = "rounded"
+vim.o.pumborder = "rounded"
 vim.o.wrap = false
 
 vim.opt.fillchars:append("eob: ")
 vim.o.list = true
 vim.o.listchars = "tab:> ,extends:…,precedes:…,nbsp:␣"
-vim.o.pumblend = 10
 vim.o.pumheight = 10
-vim.o.winblend = 10
 vim.opt.shortmess:append("Wc")
 
-vim.o.foldlevel = 10
+vim.o.foldlevel = 99
 vim.o.foldcolumn = "1"
 vim.o.foldmethod = "indent"
 vim.o.foldnestmax = 10
 
 -- Editing ====================================================================
+vim.o.confirm = true
 vim.o.autowrite = true
 vim.o.expandtab = true
 -- Drop the default "-uu" so ~/.config/ripgrep/rc (hidden files, no .git) and .gitignore apply
 vim.o.grepprg = "rg --vimgrep --smart-case"
 -- build.sh at the git root (see :bcd). Odin and typed C errors before the defaults
 vim.o.makeprg = "./build.sh"
-vim.opt.errorformat:prepend({
+vim.o.errorformat = table.concat({
     -- go vet prefixes type errors with "vet: "
     "vet: %f:%l:%c: %m",
     "%f(%l:%c) %trror: %m",
@@ -57,7 +59,8 @@ vim.opt.errorformat:prepend({
     "%f(%l:%c) %m",
     "%f:%l:%c: %trror: %m",
     "%f:%l:%c: %tarning: %m",
-})
+    vim.o.errorformat,
+}, ",")
 vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 vim.o.formatoptions = "rqnl1j"
 vim.o.ignorecase = true
@@ -141,9 +144,6 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 
--- notes
-vim.keymap.set("n", "<leader>n", "<cmd>drop ~/code/work/notes.md<cr>", { desc = "Notes" })
-
 -- better indenting
 vim.keymap.set("x", "<", "<gv")
 vim.keymap.set("x", ">", ">gv")
@@ -213,6 +213,7 @@ vim.api.nvim_create_user_command("Make", function(opts)
             local ok = result.code == 0
             local status = ("Make: %s (exit %d)"):format(ok and "done" or "failed", result.code)
             local level = ok and vim.log.levels.INFO or vim.log.levels.ERROR
+            ---@param item vim.fn.getqflist.ret.item
             local has_errors = vim.iter(vim.fn.getqflist()):any(function(item)
                 return item.valid == 1
             end)
@@ -299,7 +300,17 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         local line = vim.fn.line([['"]])
         local skip = vim.bo.filetype:match("commit") or vim.bo.filetype == "gitrebase"
         if not skip and line >= 1 and line <= vim.fn.line("$") then
-            vim.cmd([[normal! g`"zz]])
+            vim.cmd([[normal! g`"]])
+            -- Center later: at startup, ftplugins setting window options
+            -- afterwards reset the view
+            local win = vim.api.nvim_get_current_win()
+            vim.schedule(function()
+                if vim.api.nvim_win_is_valid(win) then
+                    vim.api.nvim_win_call(win, function()
+                        vim.cmd("normal! zz")
+                    end)
+                end
+            end)
         end
     end,
     desc = "Restore cursor position when opening a file",
@@ -338,15 +349,6 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.spell = true
     end,
     desc = "Wrap and check spelling in text-like files",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    group = augroup,
-    pattern = { "json", "jsonc", "json5", "markdown" },
-    callback = function()
-        vim.opt_local.conceallevel = 0
-    end,
-    desc = "Set conceallevel to 0 for JSON and Markdown files",
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`

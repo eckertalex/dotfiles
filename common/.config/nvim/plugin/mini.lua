@@ -4,6 +4,7 @@ vim.pack.add({
     "https://github.com/nvim-mini/mini.hipatterns",
     "https://github.com/nvim-mini/mini.icons",
     "https://github.com/nvim-mini/mini.indentscope",
+    "https://github.com/nvim-mini/mini.cursorword",
 })
 
 require("mini.icons").setup()
@@ -29,7 +30,7 @@ miniclue.setup({
         { mode = "n", keys = "<Leader>s", desc = "+Search" },
         { mode = "x", keys = "<Leader>s", desc = "+Search" },
         { mode = "n", keys = "<Leader>t", desc = "+Terminal" },
-        { mode = "n", keys = "<Leader>x", desc = "+Diagnostics" },
+        { mode = "n", keys = "<Leader>x", desc = "+Quickfix" },
         { mode = "n", keys = "<Leader>y", desc = "+Yank" },
         { mode = "x", keys = "<Leader>y", desc = "+Yank" },
         miniclue.gen_clues.builtin_completion(),
@@ -103,3 +104,5 @@ hipatterns.setup({
 })
 
 require("mini.indentscope").setup()
+
+require("mini.cursorword").setup()

@@ -1,4 +1,4 @@
-local augroup = require("utils").augroup
+local augroup = vim.api.nvim_create_augroup("config-lsp", {})
 
 vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig",
@@ -35,36 +35,36 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if client:supports_method("textDocument/completion") then
             vim.lsp.completion.enable(true, client.id, buf, { autotrigger = true })
         end
-
-        if client:supports_method("textDocument/documentHighlight") then
-            local highlight_group = vim.api.nvim_create_augroup("lsp-highlight-" .. buf, {})
-            vim.api.nvim_create_autocmd("CursorHold", {
-                group = highlight_group,
-                buffer = buf,
-                callback = vim.lsp.buf.document_highlight,
-                desc = "Highlight references of the word under cursor",
-            })
-            vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter" }, {
-                group = highlight_group,
-                buffer = buf,
-                callback = vim.lsp.buf.clear_references,
-                desc = "Clear reference highlights",
-            })
-        end
     end,
-    desc = "Attach LSP keymaps, completion and reference highlights",
+    desc = "Attach LSP keymaps and completion",
 })
 
 vim.keymap.set("n", "<leader>xh", function()
     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = "Toggle inlay hints" })
 
+local last_report = {}
+
 vim.api.nvim_create_autocmd("LspProgress", {
     group = augroup,
     callback = function(event)
         local value = event.data.params.value
-        vim.api.nvim_echo({ { value.message or "done" } }, false, {
-            id = "lsp" .. event.data.client_id,
+        local token = event.data.params.token
+        if value.kind == "report" then
+            local now = vim.uv.now()
+            if now - (last_report[token] or 0) < 500 then
+                return
+            end
+            last_report[token] = now
+        end
+
+        if value.kind == "end" then
+            last_report[token] = nil
+        end
+
+        local message = value.message or (value.kind == "end" and "done" or "")
+        vim.api.nvim_echo({ { message } }, false, {
+            id = "lsp" .. token,
             kind = "progress",
             source = "vim.lsp",
             title = value.title,

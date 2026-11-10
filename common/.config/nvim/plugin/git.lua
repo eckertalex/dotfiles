@@ -1,3 +1,5 @@
+local augroup = vim.api.nvim_create_augroup("config-git", {})
+
 vim.pack.add({
     "https://github.com/tpope/vim-fugitive",
     "https://github.com/tpope/vim-rhubarb",
@@ -7,6 +9,7 @@ vim.pack.add({
 -- rhubarb's omnifunc hits the GitHub API synchronously; keep it out of
 -- 'autocomplete' and use <C-x><C-o> to trigger it manually.
 vim.api.nvim_create_autocmd("FileType", {
+    group = augroup,
     pattern = "gitcommit",
     callback = function()
         vim.opt_local.complete:remove("o")

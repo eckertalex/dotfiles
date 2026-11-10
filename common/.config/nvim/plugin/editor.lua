@@ -19,5 +19,3 @@ quicker.setup({
 })
 
 vim.pack.add({ "https://github.com/MagicDuck/grug-far.nvim" })
-
-vim.pack.add({ "https://github.com/MeanderingProgrammer/render-markdown.nvim" })

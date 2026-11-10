@@ -1,4 +1,4 @@
-local augroup = require("utils").augroup
+local augroup = vim.api.nvim_create_augroup("config-treesitter", {})
 
 vim.api.nvim_create_autocmd("PackChanged", {
     group = augroup,
@@ -64,9 +64,8 @@ vim.api.nvim_create_autocmd("FileType", {
         end
         vim.wo[0][0].foldmethod = "expr"
         vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
-        vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
     end,
-    desc = "Start tree-sitter highlighting, folds and indent",
+    desc = "Start tree-sitter highlighting and folds",
 })
 
 require("treesitter-context").setup({
