@@ -6,6 +6,7 @@ fd-find
 fzf
 gcc
 gh
+gh
 git
 git-delta
 hyperfine

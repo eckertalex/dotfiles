@@ -12,6 +12,7 @@ vim.lsp.enable({
     "html",
     "jsonls",
     "lua_ls",
+    "ols",
     "ruff",
     "tsc",
     "ty",
