@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Install everything from the package lists, then upgrade. Same command on every machine.
-# Usage: packup
 
 set -euo pipefail
 
