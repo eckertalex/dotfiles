@@ -3,21 +3,18 @@
 alias zbench="for i in {1..10}; do; /usr/bin/time $SHELL -lic exit; done"
 alias hbench="hyperfine --warmup 3 \"$SHELL -lic exit\""
 
-alias shellclean="rm -rf $XDG_DATA_HOME/zsh/zcompdump* $XDG_DATA_HOME/zsh/plugins $HOME/.zcompcache $XDG_CACHE_HOME/zsh-git-aliases"
+alias shellclean="rm -rf $XDG_DATA_HOME/zsh/zcompdump* $XDG_DATA_HOME/zsh/plugins $HOME/.zcompcache"
 
 nuke-ds-store() {
   fd --hidden --no-ignore --type f --exclude node_modules --glob '.DS_Store' "${1:-.}" --exec-batch rm -v
 }
 
-alias print-fpath='for fp in $fpath; do echo $fp; done; unset fp'
-alias print-path='echo $PATH | tr ":" "\n"'
+alias print-fpath='print -l $fpath'
+alias print-path='print -l $path'
 alias hstat="history 0 | awk '{print \$2}' | sort | uniq -c | sort -n -r | head"
 
 # lazygit
-if (( $+commands[lazygit] )); then
-	alias lazygit="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
-	alias lzg="lazygit --use-config-dir=\"$XDG_CONFIG_HOME/lazygit\""
-fi
+alias lzg=lazygit
 
 # utils
 alias cp="cp -vi"
@@ -30,9 +27,7 @@ if (( $+commands[gsed] )); then
 fi
 
 # Homebrew
-if (( $+commands[brew] )); then
-	alias brewinfo="brew leaves | xargs brew desc --eval-all"
-fi
+alias brewinfo="brew leaves | xargs brew desc"
 
 # ls
 if (( $+commands[gls] )); then
@@ -46,22 +41,27 @@ alias ll="ls -lh"
 alias tree="tree -Fav -I '.git' --dirsfirst"
 
 # git
-alias g=git
+# A function, not an alias, so it also works inside `each`
+g() { git "$@" }
+compdef g=git
 
-# Mirror every `git` alias as a `g`-prefixed shell alias, cached and only
-# rebuilt when the git alias file changes.
-() {
-	local cache="$XDG_CACHE_HOME/zsh-git-aliases"
-	local gitalias="$XDG_CONFIG_HOME/git/alias"
-
-	if [[ ! -r "$cache" || "$gitalias" -nt "$cache" ]]; then
-		local al
-		for al in $(git --list-cmds=alias 2>/dev/null); do
-			print -- "alias g$al=\"git $al\""
-		done > "$cache"
+# Run a command in each git repo below the current dir, or only in the named ones.
+#   each git pull
+#   each repo-a repo-b -- git fetch
+each() {
+	local -a dirs
+	local i=${@[(i)--]}
+	if (( i <= $# )); then
+		dirs=("${@[1,i-1]}"); shift $i
+	else
+		dirs=(*/(N))
 	fi
-
-	source "$cache"
+	local d
+	for d in $dirs; do
+		[[ -e $d/.git ]] || continue
+		print -P "%F{cyan}== ${d%/} ==%f"
+		(cd "$d" && "$@")
+	done
 }
 
 # vim: set ts=4 sw=4
