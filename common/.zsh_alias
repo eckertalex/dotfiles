@@ -43,22 +43,4 @@ alias tree="tree -Fav -I '.git' --dirsfirst"
 # git
 alias g="git"
 
-# Run a command in each git repo below the current dir, or only in the named ones,
-# in parallel via GNU parallel (8 jobs). Output is prefixed with the repo name.
-#   each git pull
-#   each repo-a repo-b -- git fetch
-each() {
-	local -a repos
-	local i=${@[(i)--]}
-	if (( i <= $# )); then
-		repos=(${^@[1,i-1]%/}/.git(N:h))
-		shift $i
-	else
-		repos=(*/.git(N:h))
-	fi
-	(( $#repos )) || return 0
-
-	parallel -j 8 -k --tagstring $'\e[36m{}\e[0m' "cd {} && ${(j: :)${(@q)@}}" ::: $repos
-}
-
 # vim: set ts=4 sw=4

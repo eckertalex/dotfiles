@@ -1,0 +1,52 @@
+#!/usr/bin/env zsh
+
+usage() {
+	cat <<EOF
+Usage: each [repo...] [--] command [args...]
+
+Run a command in parallel (8 jobs) in every git repo directly below the
+current directory, or only in the named repos. Output is grouped per repo
+and prefixed with its name.
+
+Examples:
+  each git pull
+  each repo-a repo-b -- git fetch
+
+Options:
+  -h, --help  Show this help message
+EOF
+}
+
+case "${1:-}" in
+	-h | --help)
+		usage
+		exit 0
+		;;
+	"" | --)
+		usage >&2
+		exit 2
+		;;
+esac
+
+repos=()
+i=${@[(i)--]}
+if (( i <= $# )); then
+	for name in ${@[1,i-1]%/}; do
+		if [[ -e $name/.git ]]; then
+			repos+=($name)
+		else
+			echo "each: not a git repo: $name" >&2
+			exit 2
+		fi
+	done
+	shift $i
+	(( $# )) || { usage >&2; exit 2 }
+else
+	repos=(*/.git(N:h))
+fi
+(( $#repos )) || exit 0
+
+tag='{}'
+[[ -t 1 ]] && tag=$'\e[36m{}\e[0m'
+
+parallel -j 8 -k --tagstring $tag "cd {} && ${(j: :)${(@q)@}}" ::: $repos
