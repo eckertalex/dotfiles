@@ -59,19 +59,18 @@ if [ "${#gone[@]}" -eq 0 ]; then
   exit 0
 fi
 
-echo "Found ${#gone[@]} stale branch(es)."
+echo "Found ${#gone[@]} stale branch(es):"
+printf '  %s\n' "${gone[@]}"
+echo
 
 deleted=0
 kept=0
 delete_all=0
 
 for branch in "${gone[@]}"; do
-  echo
-  echo "$branch"
-  git log -1 --format='  %h %s (%cr, %an)' "$branch"
-
   if [ "$delete_all" -eq 0 ]; then
-    read -r -p "Delete? [y]es / [N]o / [a]ll / [q]uit: " answer </dev/tty
+    echo "Delete $branch?"
+    read -r -p "[y]es / [N]o / [a]ll remaining / [q]uit: " answer </dev/tty
     case "$answer" in
       y | Y) ;;
       a | A) delete_all=1 ;;
