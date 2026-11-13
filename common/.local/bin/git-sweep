@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+Usage: git sweep [options]
+
+Find local branches whose upstream is gone and offer to delete them
+one by one. Fetches and prunes all remotes first.
+
+Options:
+  -n, --no-fetch  Skip fetching and pruning remotes
+  -h, --help      Show this help message
+EOF
+}
+
+do_fetch=1
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n | --no-fetch) do_fetch=0 ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+if [ "$do_fetch" -eq 1 ]; then
+  echo "Fetching and pruning remotes..."
+  git fetch --all --prune --quiet
+fi
+
+# Branches checked out in any worktree (including the current one) have a
+# worktree path and can't be deleted, so skip them.
+gone=()
+skipped=()
+while IFS='|' read -r branch track worktree; do
+  [ "$track" = "[gone]" ] || continue
+  if [ -n "$worktree" ]; then
+    skipped+=("$branch")
+  else
+    gone+=("$branch")
+  fi
+done < <(git for-each-ref \
+  --format='%(refname:short)|%(upstream:track)|%(worktreepath)' refs/heads/)
+
+if [ "${#skipped[@]}" -gt 0 ]; then
+  echo "Skipping (checked out): ${skipped[*]}"
+fi
+
+if [ "${#gone[@]}" -eq 0 ]; then
+  echo "No stale branches found."
+  exit 0
+fi
+
+echo "Found ${#gone[@]} stale branch(es)."
+
+deleted=0
+kept=0
+delete_all=0
+
+for branch in "${gone[@]}"; do
+  echo
+  echo "$branch"
+  git log -1 --format='  %h %s (%cr, %an)' "$branch"
+
+  if [ "$delete_all" -eq 0 ]; then
+    read -r -p "Delete? [y]es / [N]o / [a]ll / [q]uit: " answer </dev/tty
+    case "$answer" in
+      y | Y) ;;
+      a | A) delete_all=1 ;;
+      q | Q) break ;;
+      *)
+        kept=$((kept + 1))
+        continue
+        ;;
+    esac
+  fi
+
+  # -D because squash/rebase-merged branches look unmerged to git.
+  git branch -D "$branch"
+  deleted=$((deleted + 1))
+done
+
+echo
+echo "Deleted: $deleted, kept: $kept."
