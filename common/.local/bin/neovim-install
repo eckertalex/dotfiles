@@ -5,13 +5,38 @@
 # Installs to ~/.local/share/nvim-bin and symlinks
 # the binary to ~/.local/bin/nvim.
 # Keeps an install log at ~/.local/share/nvim-bin/install.log.
-#
-# Usage:
-#   neovim-install           # installs stable (default)
-#   neovim-install nightly   # installs nightly
-#   neovim-install v0.10.3   # installs a specific version
 
 set -euo pipefail
+
+usage() {
+  cat <<EOF
+Usage: neovim-install [stable|nightly|v<version>]
+
+Install or update Neovim from GitHub releases.
+
+  neovim-install            # stable (default)
+  neovim-install nightly    # nightly
+  neovim-install v0.10.3    # specific version
+
+Options:
+  -h, --help  Show this help message
+EOF
+}
+
+CHANNEL="${1:-stable}"
+
+case "$CHANNEL" in
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  nightly | stable) ;;
+  v[0-9]*) ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -32,25 +57,10 @@ case "$OS/$ARCH" in
     ;;
 esac
 
-
-CHANNEL="${1:-stable}"
-
-case "$CHANNEL" in
-  nightly|stable) ;;
-  v[0-9]*) ;;
-  *)
-    echo "Usage: neovim-install [nightly|stable|v<version>]" >&2
-    echo "  neovim-install            # stable (default)" >&2
-    echo "  neovim-install nightly    # nightly" >&2
-    echo "  neovim-install v0.10.3    # specific version" >&2
-    exit 1
-    ;;
-esac
-
 DOWNLOAD_URL="https://github.com/neovim/neovim/releases/download/$CHANNEL/$TARBALL"
 INSTALL_DIR="$HOME/.local/share/nvim-bin"
+INSTALL_LOG="$INSTALL_DIR/install.log"
 BIN_DIR="$HOME/.local/bin"
-TAR_FILE="/tmp/$TARBALL"
 
 # Show current version if installed
 if [[ -x "$INSTALL_DIR/bin/nvim" ]]; then
@@ -59,29 +69,34 @@ else
   echo "No existing Neovim installation found"
 fi
 
+# Download and unpack next to the install dir, so the existing install is
+# only replaced once the new one is fully unpacked.
+mkdir -p "$(dirname "$INSTALL_DIR")"
+STAGING="$(mktemp -d "$INSTALL_DIR.XXXXXX")"
+trap 'rm -rf "$STAGING"' EXIT
+
 echo "Downloading $CHANNEL from GitHub..."
-curl -fsSL "$DOWNLOAD_URL" -o "$TAR_FILE"
+curl -fsSL "$DOWNLOAD_URL" -o "$STAGING/$TARBALL"
 
 # macOS quarantine flag prevents unsigned binaries from running
 if [[ "$MACOS" == true ]]; then
-  xattr -c "$TAR_FILE"
+  xattr -c "$STAGING/$TARBALL"
 fi
 
+mkdir "$STAGING/nvim"
+tar xzf "$STAGING/$TARBALL" -C "$STAGING/nvim" --strip-components=1
+
 echo "Installing to $INSTALL_DIR..."
-# Preserve install log across reinstalls
-INSTALL_LOG="$INSTALL_DIR/install.log"
-[[ -f "$INSTALL_LOG" ]] && cp "$INSTALL_LOG" /tmp/nvim-install.log
+if [[ -f "$INSTALL_LOG" ]]; then
+  mv "$INSTALL_LOG" "$STAGING/nvim/install.log"
+fi
 rm -rf "$INSTALL_DIR"
-mkdir -p "$INSTALL_DIR"
-[[ -f /tmp/nvim-install.log ]] && mv /tmp/nvim-install.log "$INSTALL_LOG"
-tar xzf "$TAR_FILE" -C "$INSTALL_DIR" --strip-components=1
+mv "$STAGING/nvim" "$INSTALL_DIR"
 
 mkdir -p "$BIN_DIR"
 ln -sf "$INSTALL_DIR/bin/nvim" "$BIN_DIR/nvim"
 
-rm -f "$TAR_FILE"
-
 VERSION="$("$INSTALL_DIR/bin/nvim" --version | head -1)"
-echo "$(date +%Y-%m-%d) $VERSION ($CHANNEL)" >> "$INSTALL_DIR/install.log"
+echo "$(date +%Y-%m-%d) $VERSION ($CHANNEL)" >> "$INSTALL_LOG"
 
 echo "Installed: $VERSION"

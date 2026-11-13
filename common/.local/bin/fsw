@@ -4,8 +4,6 @@
 
 set -euo pipefail
 
-if ! git rev-parse --git-dir &>/dev/null; then
-    echo "Error: not a git repository" >&2
-    exit 1
-fi
-git branch | fzf --prompt="Switch to branch ⟫ " --height=~20% --layout=reverse --no-sort --border | xargs -r git switch
+branches=$(git branch --format='%(refname:short)')
+branch=$(fzf --prompt="Switch to branch ⟫ " --height=~20% --layout=reverse --no-sort --border <<<"$branches")
+git switch "$branch"

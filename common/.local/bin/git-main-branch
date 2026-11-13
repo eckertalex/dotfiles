@@ -4,11 +4,9 @@
 
 set -euo pipefail
 git rev-parse --git-dir &>/dev/null || exit
-ref=""
 for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
-  if git show-ref -q --verify $ref; then
-    echo ${ref##*/}
-    unset ref
+  if git show-ref -q --verify "$ref"; then
+    echo "${ref##*/}"
     exit 0
   fi
 done
