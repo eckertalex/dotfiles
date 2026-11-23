@@ -19,11 +19,6 @@ case "$(uname -s)" in
     Linux)
         packages ~/.dnf-packages | xargs -r sudo dnf install -y
         sudo dnf upgrade --refresh -y
-
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        packages ~/.flatpak-packages | xargs -r flatpak install -y --noninteractive flathub
-        flatpak update -y
-        flatpak uninstall --unused -y
         ;;
     *)
         echo "Unsupported OS: $(uname -s)" >&2
